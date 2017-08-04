@@ -1,0 +1,4 @@
+common有一个线上的公用git地址（已存在组件除了修bug不允许修改，只允许以他为基础去拓展其他插件）
+每个project也都维护一个公共地址
+项目开发完成以后，提交common和project这两个项目，发布的时候先发布common，再发布project（否则依赖的common没上线，会导致错误）
+为了项目迁移考虑，引用common得有一个统一的前置URL路径

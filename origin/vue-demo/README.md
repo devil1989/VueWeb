@@ -33,9 +33,9 @@ src:原始文件夹
 		assets:图片+样式+icon font
 			image:图片
 			style：样式
-		components:项目内的组件
+		components:项目内的组件（vue组件，多个vue组件合成一个网页）
 		model:数据请求+数据结构转化 (Model)
-		views：.vue文件 (View)
+		pages：.vue文件 (对应各个网页)
 		store：操作store的各个js(ViewModel)
 			actions:执行的操作（包含异步）
 			mutations：action中包含执行对应的mutation
