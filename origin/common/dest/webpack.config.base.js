@@ -1,16 +1,16 @@
 var path = require('path');
 var process = require('process');
 
-var glob = require('glob');
+// var glob = require('glob');
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+// var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var precss = require('precss');
+// var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
 module.exports  = {
     resolveLoader: {
-        root: path.join(__dirname, '../../node_modules')
+        root: path.join(__dirname, '../../node_modules')//__dirname 获得当前文件所在目录的完整目录名;__filename变量获取当前模块文件的带有完整绝对路径的文件名
     },
     loaders: {
         scriptLoader: {
@@ -31,9 +31,9 @@ module.exports  = {
             loader: 'url?limit=1000&name=images/[hash].[ext]'
         }
     },
-    postcss: function() {
-        return [precss, autoprefixer];
-    },
+    // postcss: function() {
+    //     return [precss, autoprefixer];
+    // },
     'html-minifier-loader': {
         removeComments: true,
         collapseWhitespace: true,
@@ -45,29 +45,17 @@ module.exports  = {
         minifyCSS: true,
         removeScriptTypeAttributes: true,
         removeStyleLinkTypeAttributes: true
-    }
-};
+    },
 
-/**
- * resolve entry
- */
-module.exports.resolveEntry = function (globpath, suffix, context) {
-    if (context) {
-        globpath = path.join(context, globpath);
+    //resolve entry
+    resolveEntry:function (globpath, suffix, context) {
+        if (context) {
+            globpath = path.join(context, globpath);
+        }
+        return glob.sync(globpath).reduce((prev, curr) => {
+            var basename = path.basename(curr, suffix);
+            prev[basename] = curr;
+            return prev;
+        }, {});
     }
-    return glob.sync(globpath).reduce((prev, curr) => {
-        var basename = path.basename(curr, suffix);
-        prev[basename] = curr;
-        return prev;
-    }, {});
-};
-
-/**
- * decide build mode
- */
-module.exports.decideBuildMode = function () {
-    var isProduction = process.env.NODE_ENV == 'production' || process.argv.some(val => {
-        return val === '-p';
-    });
-    return isProduction ? 'p' : 'd';
 };

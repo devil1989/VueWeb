@@ -2,3 +2,31 @@ common有一个线上的公用git地址（已存在组件除了修bug不允许修改，只允许以他为基础去
 每个project也都维护一个公共地址
 项目开发完成以后，提交common和project这两个项目，发布的时候先发布common，再发布project（否则依赖的common没上线，会导致错误）
 为了项目迁移考虑，引用common得有一个统一的前置URL路径
+
+webpack：
+	webpack如何调试
+	打包环境划分
+	热插拔+sourcemap方便开发调试
+	支持异步加载（以免一个页面太大）
+	es6，sass支持
+	js，css压缩
+	模块分块打包
+	文件拷贝 ok
+	CommonsChunkPlugin：把所有公共页面的模块抽离出来放到common这个文件中去
+	extract-text-webpack-plugin：希望项目的样式能不要被打包到脚本中，而是独立出来作为.css
+	html-webapck-plugin：生产html的插件：每次生成的html，里面的script、link后面会动态添加hash，防止html中的文件缓存
+
+项目构建考虑点：
+	1.技术架构考虑
+	2.项目路径迁移考虑
+	3.公共框架迁移考虑
+	4.项目SEO，性能考虑（是否用node做中间层）
+	5.项目可拓展性考虑
+	6.项目可调式
+
+
+
+--display-error-details
+
+
+

@@ -1,53 +1,57 @@
-<template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
-
 <script>
+import { actions } from '../store';
+
 export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    vuex: {
+        actions: actions,
+        getters: {
+            // 过滤后的会话列表
+            sessions: ({ sessions, filterKey }) => {
+                let result = sessions.filter(session => session.user.name.includes(filterKey));
+                return result;
+            },
+            // 当前会话index
+            currentId: ({ currentSessionId }) => currentSessionId
+        }
     }
-  }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
+<template>
+<div class="list">
+    <ul>
+        <li v-for="item in sessions" :class="{ active: item.id === currentId }" @click="selectSession(item.id)">
+            <img class="avatar"  width="30" height="30" :alt="item.user.name" :src="item.user.img">
+            <p class="name">{{item.user.name}}</p>
+        </li>
+    </ul>
+</div>
+</template>
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+<style scoped lang="less">
+.list {
+    li {
+        padding: 12px 15px;
+        border-bottom: 1px solid #292C33;
+        cursor: pointer;
+        transition: background-color .1s;
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        &.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+    .avatar, .name {
+        vertical-align: middle;
+    }
+    .avatar {
+        border-radius: 2px;
+    }
+    .name {
+        display: inline-block;
+        margin: 0 0 0 15px;
+    }
 }
 </style>
