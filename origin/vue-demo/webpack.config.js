@@ -16,10 +16,9 @@ var config = {
     entry:entrys(__dirname+"/src/pages/*.js"),//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
     output: {//输出文件
         path: __dirname+filePath+"/pages",//,//path指定了本地构建地址(打包后的输出路径)
-        publicPath:__dirname+filePath+"/pages",//publicPath指定的是构建后在html里的路径（比如webpack-dev-server热插拔时的html访问地址）
+        // publicPath:__dirname+filePath+"/pages",//publicPath指定的是构建后在html里src和href的路径的基础地址（HtmlWebpackPlugin这个插件就是用这个publicPath来生成对应的html）
         chunkFilename: "[name].js",//没有在entry中列出来，确需要打包的文件的文件名，例如文件中的js的文件中require的js文件
         filename: '[name].js'////文件打包后的名字
-        // hash: true
     },
     module: {//资源加载器，什么样的资源对应什么样的加载器，加载器后面支持？加参数，多个加载器之间用！来连接 （用于处理文件的转义）
         loaders: [
@@ -40,28 +39,26 @@ var config = {
         ]
     },
     plugins:[
-        
-        // new HtmlWebpackPlugin({//需要放到热插拔前面
-        //     // template: __dirname+'/src/pages/index.html'
-        // }),
-        // new CopyWebpackPlugin([{//文件拷贝
+        new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
+        }),
+        // new CopyWebpackPlugin([{//文件拷贝，它会影响HtmlWebpackPlugin的执行
         //     from: __dirname + '/src/assets',
         //     to:__dirname+'/build/assets'
         // },{
         //     from: __dirname + '/src/pages',
         //     to:__dirname+'/build/pages'
         // }]),
-        new webpack.HotModuleReplacementPlugin()//热插拔：配置1
+        new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
         
         // //dev和product环境设置，process.env.NODE_ENV表示当前的环境
         // new webpack.DefinePlugin({
         //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')//默认是生产环境打包方式
         // })
     ],
-    devServer:{//热插拔：配置2(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --hot --inline")
-        inline:true,
-        contentBase:__dirname+filePath+"/pages",
-        hot:true,
+    devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
+        // inline:true,
+        contentBase:"./build/pages"//localhost：8080对应的地址
+        // hot:true
     },
     devtool: 'eval-source-map'//启用source-map方便调试
 };
