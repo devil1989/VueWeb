@@ -2,24 +2,24 @@
 //如果想要执行其他配置，需要命令 webpack --config webpack.pro.js（其他配置文件）
 var path = require('path');//webpack中自带的require，模块加载器
 var webpack = require('webpack');
-var process = require("process");
+var process = require("process");//环境管理
+
 var entrys = require('webpack-glob-entry');//把entry数组化，把所有的里面的文件都展开
 var ExtractTextPlugin = require('extract-text-webpack-plugin');//css提取到单个文件
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); // 提取公共模块
 var CopyWebpackPlugin = require('copy-webpack-plugin'); // 拷贝文件
 var HtmlWebpackPlugin = require('html-webpack-plugin'); // 自动写入将引用写入html
-var WebpackDevServer = require("webpack-dev-server");//热插拔
 var filePath = (process.env.NODE_ENV === 'production')?"/dest":'/build';//编译打包路径
 
 
-
-module.exports = {
+var config = {
     entry:entrys(__dirname+"/src/pages/*.js"),//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
     output: {//输出文件
-        path: __dirname+filePath,//,//path指定了本地构建地址(打包后的输出路径)
-        publicPath:__dirname+filePath,//publicPath指定的是构建后在html里的路径（比如webpack-dev-server热插拔时的html访问地址）
-        chunkFilename: "pages/[name].js",//没有在entry中列出来，确需要打包的文件的文件名，例如文件中的js的文件中require的js文件
-        filename: 'pages/[name].js'////文件打包后的名字
+        path: __dirname+filePath+"/pages",//,//path指定了本地构建地址(打包后的输出路径)
+        publicPath:__dirname+filePath+"/pages",//publicPath指定的是构建后在html里的路径（比如webpack-dev-server热插拔时的html访问地址）
+        chunkFilename: "[name].js",//没有在entry中列出来，确需要打包的文件的文件名，例如文件中的js的文件中require的js文件
+        filename: '[name].js'////文件打包后的名字
+        // hash: true
     },
     module: {//资源加载器，什么样的资源对应什么样的加载器，加载器后面支持？加参数，多个加载器之间用！来连接 （用于处理文件的转义）
         loaders: [
@@ -40,15 +40,17 @@ module.exports = {
         ]
     },
     plugins:[
-        new HtmlWebpackPlugin(),//需要放到热插拔前面
-        //文件拷贝
-        new CopyWebpackPlugin([{
-            from: __dirname + '/src/assets',
-            to:__dirname+'/build/assets'
-        },{
-            from: __dirname + '/src/pages',
-            to:__dirname+'/build/pages'
-        }]),
+        
+        // new HtmlWebpackPlugin({//需要放到热插拔前面
+        //     // template: __dirname+'/src/pages/index.html'
+        // }),
+        // new CopyWebpackPlugin([{//文件拷贝
+        //     from: __dirname + '/src/assets',
+        //     to:__dirname+'/build/assets'
+        // },{
+        //     from: __dirname + '/src/pages',
+        //     to:__dirname+'/build/pages'
+        // }]),
         new webpack.HotModuleReplacementPlugin()//热插拔：配置1
         
         // //dev和product环境设置，process.env.NODE_ENV表示当前的环境
@@ -56,28 +58,19 @@ module.exports = {
         //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')//默认是生产环境打包方式
         // })
     ],
-    devServer:{//热插拔：配置2；热插拔还需要在package.json中的scripts属性中添加（"start": "webpack-dev-server --hot --inline --info --progress -d --config ./webpack.config.js"）
-        contentBase:__dirname+"/build/pages",// 基础目录
-        // historyApiFallback: true,//不跳转
+    devServer:{//热插拔：配置2(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --hot --inline")
         inline:true,
+        contentBase:__dirname+filePath+"/pages",
         hot:true,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:8066',
-                changeOrigin: true
-            }
-        }
     },
-    devtool: 'eval-source-map'//source-map
+    devtool: 'eval-source-map'//启用source-map方便调试
 };
 
+module.exports = config;
 
 
-// new WebpackDevServer(webpack(module.exports),{
-//     contentBase:__dirname+"/build/pages",// 基础目录
-//     inline:true,
-//     hot:true,
-// }).listen(8080, "localhost", function() {});
+
+
 
 // // 生产环境，运行npm run build则执行这里
 // if (process.env.NODE_ENV === 'production') {
@@ -142,15 +135,15 @@ module.exports = {
 // "url-loader": "^0.5.9",//处理图片，支持图片条件限制
 // "vue": "^2.4.2",//vue基础
 // "webpack": "^2.2.0",//webpack基础
-// "webpack-dev-server": "^2.6.1",//热插拔
-// webpack-dev-middleware  热插拔
+// "webpack-dev-server": "^2.6.1",//webpack通过这个来实现服务器配置
 // "webpack-glob-entry": "^2.1.1",//通用入口，能把模糊路径转成所有的路径的数组
 // "webpack-merge": "^4.1.0"//文件合并
 // "extract-text-webpack-plugin": "^3.0.0",//希望项目的样式能不要被打包到脚本中，而是独立出来作为.css
 // process,环境设置时候需要
-// webpack 和webpack-dev-server都需要全局安装，再局部安装
-    // "webpack-dev-middleware": "^1.8.3",
-    // "webpack-hot-middleware": "^2.12.2",
+// webpack 需要全局安装（-g），再局部安装
+
+
+
 
 //待做功能 webpack：（）
 //     webpack如何调试 ok  //http://blog.csdn.net/neoveee/article/details/73321392?utm_source=itdadao&utm_medium=referral
@@ -171,4 +164,6 @@ module.exports = {
 // 配置变动了，webpack-dev-server也没用，得重新webpack打包，再npm start
 
 
-//webpack-dev-server --hot --inline --info --progress -d --config ./webpack.config.js
+//webpack --watch  --dev : 
+//      这种模式使用webpack自己的watch方法来完成，监听package.json中entry配置的文件的变化。你需要添加–watch –dev
+//      该模式除了会监听entry文件的变化。当我们自定义的webpack.config.js(通过–config传入)文件内容变化的时候会自动退出编译，要求用户重启!

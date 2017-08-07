@@ -17,11 +17,16 @@ var setName =(name)=>{
 	window.name=name;
 }
 
-let p=220;
+let p=7788;
 
 function getName(){
+	var str="103541";
 	return window.name
 }
 function getAge(){
+	var age=5623;
 	return window.name
 }
+
+
+name=532

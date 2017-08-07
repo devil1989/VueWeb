@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "44bd6a22bbb966578c7d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d95a9453ab6b97db4556"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -700,7 +700,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "E:\\myProject\\VueWeb\\origin\\vue-demo/build";
+/******/ 	__webpack_require__.p = "D:\\myGit\\VueWeb\\origin\\vue-demo/build/pages";
 /******/
 /******/ 	// __webpack_hash__
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
@@ -714,7 +714,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n// polyfill\n// import 'babel-polyfill';\n\n// import Vue from 'vue';\n// import App from './App';\n// import store from './store';\n\n// Vue.config.devtools = true;\n\n// new Vue({\n//     el: 'body',\n//     components: { App },\n//     store: store\n// });\n\nvar setName = function setName(name) {\n\twindow.name = name;\n};\n\nvar p = 220;\n\nfunction getName() {\n\treturn window.name;\n}\nfunction getAge() {\n\treturn window.name;\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMvaW5kZXguanM/ZDM4YSJdLCJuYW1lcyI6WyJzZXROYW1lIiwibmFtZSIsIndpbmRvdyIsInAiLCJnZXROYW1lIiwiZ2V0QWdlIl0sIm1hcHBpbmdzIjoiOztBQUFBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUEsSUFBSUEsVUFBUyxTQUFUQSxPQUFTLENBQUNDLElBQUQsRUFBUTtBQUNwQkMsUUFBT0QsSUFBUCxHQUFZQSxJQUFaO0FBQ0EsQ0FGRDs7QUFJQSxJQUFJRSxJQUFFLEdBQU47O0FBRUEsU0FBU0MsT0FBVCxHQUFrQjtBQUNqQixRQUFPRixPQUFPRCxJQUFkO0FBQ0E7QUFDRCxTQUFTSSxNQUFULEdBQWlCO0FBQ2hCLFFBQU9ILE9BQU9ELElBQWQ7QUFDQSIsImZpbGUiOiIwLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gcG9seWZpbGxcclxuLy8gaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XHJcblxyXG4vLyBpbXBvcnQgVnVlIGZyb20gJ3Z1ZSc7XHJcbi8vIGltcG9ydCBBcHAgZnJvbSAnLi9BcHAnO1xyXG4vLyBpbXBvcnQgc3RvcmUgZnJvbSAnLi9zdG9yZSc7XHJcblxyXG4vLyBWdWUuY29uZmlnLmRldnRvb2xzID0gdHJ1ZTtcclxuXHJcbi8vIG5ldyBWdWUoe1xyXG4vLyAgICAgZWw6ICdib2R5JyxcclxuLy8gICAgIGNvbXBvbmVudHM6IHsgQXBwIH0sXHJcbi8vICAgICBzdG9yZTogc3RvcmVcclxuLy8gfSk7XHJcblxyXG52YXIgc2V0TmFtZSA9KG5hbWUpPT57XHJcblx0d2luZG93Lm5hbWU9bmFtZTtcclxufVxyXG5cclxubGV0IHA9MjIwO1xyXG5cclxuZnVuY3Rpb24gZ2V0TmFtZSgpe1xyXG5cdHJldHVybiB3aW5kb3cubmFtZVxyXG59XHJcbmZ1bmN0aW9uIGdldEFnZSgpe1xyXG5cdHJldHVybiB3aW5kb3cubmFtZVxyXG59XHJcblxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyAuL3NyYy9wYWdlcy9pbmRleC5qcyJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///0\n");
+eval("\n\n// polyfill\n// import 'babel-polyfill';\n\n// import Vue from 'vue';\n// import App from './App';\n// import store from './store';\n\n// Vue.config.devtools = true;\n\n// new Vue({\n//     el: 'body',\n//     components: { App },\n//     store: store\n// });\n\nvar setName = function setName(name) {\n\twindow.name = name;\n};\n\nvar p = 7788;\n\nfunction getName() {\n\tvar str = \"103541\";\n\treturn window.name;\n}\nfunction getAge() {\n\tvar age = 5623;\n\treturn window.name;\n}\n\nname = 532;//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMvaW5kZXguanM/ZDM4YSJdLCJuYW1lcyI6WyJzZXROYW1lIiwibmFtZSIsIndpbmRvdyIsInAiLCJnZXROYW1lIiwic3RyIiwiZ2V0QWdlIiwiYWdlIl0sIm1hcHBpbmdzIjoiOztBQUFBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUEsSUFBSUEsVUFBUyxTQUFUQSxPQUFTLENBQUNDLElBQUQsRUFBUTtBQUNwQkMsUUFBT0QsSUFBUCxHQUFZQSxJQUFaO0FBQ0EsQ0FGRDs7QUFJQSxJQUFJRSxJQUFFLElBQU47O0FBRUEsU0FBU0MsT0FBVCxHQUFrQjtBQUNqQixLQUFJQyxNQUFJLFFBQVI7QUFDQSxRQUFPSCxPQUFPRCxJQUFkO0FBQ0E7QUFDRCxTQUFTSyxNQUFULEdBQWlCO0FBQ2hCLEtBQUlDLE1BQUksSUFBUjtBQUNBLFFBQU9MLE9BQU9ELElBQWQ7QUFDQTs7QUFHREEsT0FBSyxHQUFMIiwiZmlsZSI6IjAuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBwb2x5ZmlsbFxyXG4vLyBpbXBvcnQgJ2JhYmVsLXBvbHlmaWxsJztcclxuXHJcbi8vIGltcG9ydCBWdWUgZnJvbSAndnVlJztcclxuLy8gaW1wb3J0IEFwcCBmcm9tICcuL0FwcCc7XHJcbi8vIGltcG9ydCBzdG9yZSBmcm9tICcuL3N0b3JlJztcclxuXHJcbi8vIFZ1ZS5jb25maWcuZGV2dG9vbHMgPSB0cnVlO1xyXG5cclxuLy8gbmV3IFZ1ZSh7XHJcbi8vICAgICBlbDogJ2JvZHknLFxyXG4vLyAgICAgY29tcG9uZW50czogeyBBcHAgfSxcclxuLy8gICAgIHN0b3JlOiBzdG9yZVxyXG4vLyB9KTtcclxuXHJcbnZhciBzZXROYW1lID0obmFtZSk9PntcclxuXHR3aW5kb3cubmFtZT1uYW1lO1xyXG59XHJcblxyXG5sZXQgcD03Nzg4O1xyXG5cclxuZnVuY3Rpb24gZ2V0TmFtZSgpe1xyXG5cdHZhciBzdHI9XCIxMDM1NDFcIjtcclxuXHRyZXR1cm4gd2luZG93Lm5hbWVcclxufVxyXG5mdW5jdGlvbiBnZXRBZ2UoKXtcclxuXHR2YXIgYWdlPTU2MjM7XHJcblx0cmV0dXJuIHdpbmRvdy5uYW1lXHJcbn1cclxuXHJcblxyXG5uYW1lPTUzMlxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyAuL3NyYy9wYWdlcy9pbmRleC5qcyJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///0\n");
 
 /***/ })
 /******/ ]);
