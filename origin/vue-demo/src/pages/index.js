@@ -14,7 +14,7 @@
 // });
 // 
 require("../assets/css/reset.css");
-require("../assets/css/base.scss");
+// require("../assets/css/base.scss");
 
 var setName =(name)=>{
 	window.name=name;
