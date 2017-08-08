@@ -9,10 +9,13 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');//css提取到单
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); // 提取公共模块
 var CopyWebpackPlugin = require('copy-webpack-plugin'); // 拷贝文件
 var HtmlWebpackPlugin = require('html-webpack-plugin'); // 自动写入将引用写入html
-var filePath = (process.env.NODE_ENV === 'production')?"/dest":'/build';//编译打包路径
-
-
-var config = {
+var isDev = (process.env.NODE_ENV === 'production')?false:true;
+var filePath = isDev?"/build":'/dest';//编译打包路径
+var copyPath=__dirname + '/src/assets/images';//需要拷贝的文件路径
+var copyTargetPath=__dirname+filePath+'/assets/images';//目标文件生成路径
+// var stylePath=filePath+"/assets/css";//css生成路径
+var config;
+var commonConfig = {
     entry:entrys(__dirname+"/src/pages/*.js"),//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
     output: {//输出文件
         path: __dirname+filePath+"/pages",//,//path指定了本地构建地址(打包后的输出路径)
@@ -30,39 +33,68 @@ var config = {
                   presets: ['es2015']
                 }
             },
-            //.css 文件使用 style-loader 和 css-loader 来处理
-            { test: /\.css$/, loader: 'style-loader!css-loader' },
-            //.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理
-            { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-            //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
-            { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+            {
+                test: /\.(scss|sass|css)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
+                loader: ExtractTextPlugin.extract({//如果js中require了多个css文件，nameExtractTextPlugin会把多个css文件合并成一个，这个css是否压缩，主要看use里面的第一个匹配项的设置是否压缩
+                    fallback: "style-loader",
+                    use: [{
+                        loader:"css-loader",//"css-loader!sass-loader?sourceMap"
+                        options:{
+                            minimize: true //.css文件的css压缩
+                        }
+                    },{
+                        loader:"sass-loader?sourceMap",//"css-loader!sass-loader?sourceMap"
+                        options:{
+                            minimize: true //sass文件转css后的css压缩
+                        }
+                    }]
+                })//css-loader!postcss-loader!sass-loader (支持postcss)
+            },
+            // { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+            
+            { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}//图片文件使用 url-loader 来处理，小于8kb的直接转为base64
         ]
-    },
-    plugins:[
-        new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
-        }),
-        // new CopyWebpackPlugin([{//文件拷贝，它会影响HtmlWebpackPlugin的执行
-        //     from: __dirname + '/src/assets',
-        //     to:__dirname+'/build/assets'
-        // },{
-        //     from: __dirname + '/src/pages',
-        //     to:__dirname+'/build/pages'
-        // }]),
-        new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
-        
-        // //dev和product环境设置，process.env.NODE_ENV表示当前的环境
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')//默认是生产环境打包方式
-        // })
-    ],
-    devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
-        // inline:true,
-        contentBase:"./build/pages"//localhost：8080对应的地址
-        // hot:true
-    },
-    devtool: 'eval-source-map'//启用source-map方便调试
+    }
 };
 
+
+
+if(isDev){
+    config = Object.assign(commonConfig,{
+        plugins:[
+            new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
+            }),
+            // new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
+            //     from: copyPath,
+            //     to:copyTargetPath
+            // }]),
+            new webpack.optimize.UglifyJsPlugin({//会对js包括js中require进去的css进行压缩（注意：不包括单独.css文件的压缩）
+              compress: {warnings: false }
+            }),
+            new ExtractTextPlugin("[name].css"),//把js中引用require('./css/plan.css')的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会再html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
+            new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
+        ],
+        devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
+            contentBase:"./build/pages"//localhost：8080对应的地址
+        },
+        devtool: 'eval-source-map'//启用source-map方便调试
+    })
+}else{
+    config = Object.assign(commonConfig,{
+        plugins:[
+            new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
+                hash:true,
+                minify:{
+                    "html-minifier":true
+                }
+            })
+            // new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
+            //     from: copyPath,
+            //     to:copyTargetPath
+            // }])
+        ]
+    });
+}
 module.exports = config;
 
 
@@ -128,8 +160,10 @@ module.exports = config;
 // "css-loader": "^0.28.4",//处理css中的url（）等
 // "html-webpack-plugin": "^2.30.1",//生产html的插件，每次生成的html，里面的script、link后面会动态添加hash，防止html中的文件缓存
 // "sass-loader": "^6.0.6",//处理css预处理器sass的转化
+// node-sass : sass转化需要用到
 // "style-loader": "^0.18.2",//把css插入style标签
 // "url-loader": "^0.5.9",//处理图片，支持图片条件限制
+// file-loader:url-loader以来file-loader
 // "vue": "^2.4.2",//vue基础
 // "webpack": "^2.2.0",//webpack基础
 // "webpack-dev-server": "^2.6.1",//webpack通过这个来实现服务器配置
@@ -148,17 +182,24 @@ module.exports = config;
 //     文件拷贝 ok
 //     es6，ok
 //     热插拔+sourcemap方便开发调试 ok
-
-//     js，css压缩
-//     支持异步加载（以免一个页面太大），模块分块打包
-//     sass支持
+//     extract-text-webpack-plugin：希望项目的样式能不要被打包到脚本中，而是独立出来作为.css 
+//     
+//     html-webapck-plugin：生产html的插件：每次生成的html，里面的script、link后面会动态添加hash，防止html中的文件缓存 ok
+//     sass支持 ok
+//     js，css压缩 ok 
+//     
+//     一个页面分多个css和多个js（模块分块打包）
+//     支持异步加载（以免一个页面太大）
 //     CommonsChunkPlugin：把所有公共页面的模块抽离出来放到common这个文件中去
-//     extract-text-webpack-plugin：希望项目的样式能不要被打包到脚本中，而是独立出来作为.css
-//     html-webapck-plugin：生产html的插件：每次生成的html，里面的script、link后面会动态添加hash，防止html中的文件缓存
+//     
+//     
+//     postcss和autoprefixer使用
+
 
 //注意事项：
 // npm start没有启动浏览器是无法访问localhost地址的
 // 配置变动了，webpack-dev-server也没用，得重新webpack打包，再npm start
+// 插件或者webpack的很多问题，都是因为插件和webpack的版本不匹配
 
 
 //webpack --watch  --dev : 

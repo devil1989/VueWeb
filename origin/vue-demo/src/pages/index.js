@@ -12,12 +12,15 @@
 //     components: { App },
 //     store: store
 // });
+// 
+require("../assets/css/reset.css");
+require("../assets/css/base.scss");
 
 var setName =(name)=>{
 	window.name=name;
 }
 
-let p=5203344;
+let p=52220;
 
 function getName(){
 	var str="103541";
