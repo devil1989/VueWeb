@@ -1,9 +1,9 @@
 <script>
-import { actions } from '../store';
+import store from '../pages/index.store';
 
 export default {
     vuex: {
-        actions: actions,
+        actions: store.actions,
         getters: {
             user: ({ user }) => user,
             filterKey: ({ filterKey }) => filterKey
@@ -24,42 +24,11 @@ export default {
         <p class="name">{{user.name}}</p>
     </header>
     <footer>
-        <input class="search" type="text" placeholder="search user..." @keyup="onKeyup | debounce 150">
+        <input class="search" type="text" placeholder="search user..." >
     </footer>
 </div>
 </template>
 
-<style scoped lang="less">
-.card {
-    padding: 12px;
-    border-bottom: solid 1px #24272C;
+<style scoped lang="sass">
 
-    footer {
-        margin-top: 10px;
-    }
-
-    .avatar, .name {
-        vertical-align: middle;
-    }
-    .avatar {
-        border-radius: 2px;
-    }
-    .name {
-        display: inline-block;
-        margin: 0 0 0 15px;
-        font-size: 16px;
-    }
-    .search {
-        padding: 0 10px;
-        width: 100%;
-        font-size: 12px;
-        color: #fff;
-        height: 30px;
-        line-height: 30px;
-        border: solid 1px #3a3a3a;
-        border-radius: 4px;
-        outline: none;
-        background-color: #26292E;
-    }
-}
 </style>

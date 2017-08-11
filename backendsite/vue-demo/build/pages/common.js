@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f1c8f7d48d1425e1080a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "bd06ded70acbf1267296"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -238,7 +238,7 @@
 /******/ 				};
 /******/ 			});
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = 1;
+/******/ 			var chunkId = 2;
 /******/ 			{ // eslint-disable-line no-lone-blocks
 /******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
@@ -706,23 +706,24 @@
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(3)(__webpack_require__.s = 3);
+/******/ 	return hotCreateRequire(26)(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */,
-/* 2 */
+/******/ ({
+
+/***/ 21:
 /***/ (function(module, exports) {
 
-eval("function webpackEmptyContext(req) {\n\tthrow new Error(\"Cannot find module '\" + req + \"'.\");\n}\nwebpackEmptyContext.keys = function() { return []; };\nwebpackEmptyContext.resolve = webpackEmptyContext;\nmodule.exports = webpackEmptyContext;\nwebpackEmptyContext.id = 2;//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMgXi4qXFwvbGlic1xcL2FqYXgkPzVkNjQiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0EsdUNBQXVDLFdBQVc7QUFDbEQ7QUFDQTtBQUNBIiwiZmlsZSI6IjIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJmdW5jdGlvbiB3ZWJwYWNrRW1wdHlDb250ZXh0KHJlcSkge1xuXHR0aHJvdyBuZXcgRXJyb3IoXCJDYW5ub3QgZmluZCBtb2R1bGUgJ1wiICsgcmVxICsgXCInLlwiKTtcbn1cbndlYnBhY2tFbXB0eUNvbnRleHQua2V5cyA9IGZ1bmN0aW9uKCkgeyByZXR1cm4gW107IH07XG53ZWJwYWNrRW1wdHlDb250ZXh0LnJlc29sdmUgPSB3ZWJwYWNrRW1wdHlDb250ZXh0O1xubW9kdWxlLmV4cG9ydHMgPSB3ZWJwYWNrRW1wdHlDb250ZXh0O1xud2VicGFja0VtcHR5Q29udGV4dC5pZCA9IDI7XG5cblxuLy8vLy8vLy8vLy8vLy8vLy8vXG4vLyBXRUJQQUNLIEZPT1RFUlxuLy8gLi9zcmMvcGFnZXMgXi4qXFwvbGlic1xcL2FqYXgkXG4vLyBtb2R1bGUgaWQgPSAyXG4vLyBtb2R1bGUgY2h1bmtzID0gMSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///2\n");
+eval("function webpackEmptyContext(req) {\n\tthrow new Error(\"Cannot find module '\" + req + \"'.\");\n}\nwebpackEmptyContext.keys = function() { return []; };\nwebpackEmptyContext.resolve = webpackEmptyContext;\nmodule.exports = webpackEmptyContext;\nwebpackEmptyContext.id = 21;//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMgXi4qXFwvbGlic1xcL2FqYXgkPzVkNjQiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0EsdUNBQXVDLFdBQVc7QUFDbEQ7QUFDQTtBQUNBIiwiZmlsZSI6IjIxLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZnVuY3Rpb24gd2VicGFja0VtcHR5Q29udGV4dChyZXEpIHtcblx0dGhyb3cgbmV3IEVycm9yKFwiQ2Fubm90IGZpbmQgbW9kdWxlICdcIiArIHJlcSArIFwiJy5cIik7XG59XG53ZWJwYWNrRW1wdHlDb250ZXh0LmtleXMgPSBmdW5jdGlvbigpIHsgcmV0dXJuIFtdOyB9O1xud2VicGFja0VtcHR5Q29udGV4dC5yZXNvbHZlID0gd2VicGFja0VtcHR5Q29udGV4dDtcbm1vZHVsZS5leHBvcnRzID0gd2VicGFja0VtcHR5Q29udGV4dDtcbndlYnBhY2tFbXB0eUNvbnRleHQuaWQgPSAyMTtcblxuXG4vLy8vLy8vLy8vLy8vLy8vLy9cbi8vIFdFQlBBQ0sgRk9PVEVSXG4vLyAuL3NyYy9wYWdlcyBeLipcXC9saWJzXFwvYWpheCRcbi8vIG1vZHVsZSBpZCA9IDIxXG4vLyBtb2R1bGUgY2h1bmtzID0gMiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///21\n");
 
 /***/ }),
-/* 3 */
+
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n        value: true\n});\n//全局配置\nvar pathConfig = { //路径全局设定，以免以后全局迁移网站的时候，或者修改common和其他项目相对位置的时候，改起来麻烦\n        sub1: \"../commom\", //vue-demo项目子文件访问common\n        sub2: \"../../common\", //src内部子文件访问common\n        sub3: \"../../../common\", //pages内部子文件访问common\n        sub4: \"../../../../common\" //暂时还没那么深，用不到\n};\n// 备注：此时common和其他项目是平行，所以用这种结构，如果common放在项目第一层文件夹的时候，所有的配置都得往前修改一级\n// common目录结构别随便改，好麻烦的（首先common内部相互引用得改【手动慢慢改】，其次其他所有项目对common中改变层级的某些文件的引用得修改【某些文件原来用sub2，得改成sub1或者其他变量】）\n\nvar ajax = !(function webpackMissingModule() { var e = new Error(\"Cannot find module \\\".\\\"\"); e.code = 'MODULE_NOT_FOUND'; throw e; }());\n\nexports.default = {\n        ajax: ajax,\n        pathConfig: pathConfig\n};//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMvY29tbW9uLmpzPzIzM2EiXSwibmFtZXMiOlsicGF0aENvbmZpZyIsInN1YjEiLCJzdWIyIiwic3ViMyIsInN1YjQiLCJhamF4Il0sIm1hcHBpbmdzIjoiOzs7OztBQUFBO0FBQ0EsSUFBSUEsYUFBVyxFQUFDO0FBQ1JDLGNBQUssV0FERSxFQUNVO0FBQ2pCQyxjQUFLLGNBRkUsRUFFYTtBQUNwQkMsY0FBSyxpQkFIRSxFQUdnQjtBQUN2QkMsY0FBSyxvQkFKRSxDQUltQjtBQUpuQixDQUFmO0FBTUE7QUFDQTs7QUFFQSxJQUFJQyxPQUFLLDZIQUFUOztrQkFLZTtBQUNYQSxjQUFLQSxJQURNO0FBRVhMLG9CQUFXQTtBQUZBLEMiLCJmaWxlIjoiMy5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8v5YWo5bGA6YWN572uXHJcbnZhciBwYXRoQ29uZmlnPXsvL+i3r+W+hOWFqOWxgOiuvuWumu+8jOS7peWFjeS7peWQjuWFqOWxgOi/geenu+e9keermeeahOaXtuWAme+8jOaIluiAheS/ruaUuWNvbW1vbuWSjOWFtuS7lumhueebruebuOWvueS9jee9rueahOaXtuWAme+8jOaUuei1t+adpem6u+eDplxyXG4gICAgICAgIHN1YjE6XCIuLi9jb21tb21cIiwvL3Z1ZS1kZW1v6aG555uu5a2Q5paH5Lu26K6/6ZeuY29tbW9uXHJcbiAgICAgICAgc3ViMjpcIi4uLy4uL2NvbW1vblwiLC8vc3Jj5YaF6YOo5a2Q5paH5Lu26K6/6ZeuY29tbW9uXHJcbiAgICAgICAgc3ViMzpcIi4uLy4uLy4uL2NvbW1vblwiLC8vcGFnZXPlhoXpg6jlrZDmlofku7borr/pl65jb21tb25cclxuICAgICAgICBzdWI0OlwiLi4vLi4vLi4vLi4vY29tbW9uXCIsLy/mmoLml7bov5jmsqHpgqPkuYjmt7HvvIznlKjkuI3liLBcclxufTtcclxuLy8g5aSH5rOo77ya5q2k5pe2Y29tbW9u5ZKM5YW25LuW6aG555uu5piv5bmz6KGM77yM5omA5Lul55So6L+Z56eN57uT5p6E77yM5aaC5p6cY29tbW9u5pS+5Zyo6aG555uu56ys5LiA5bGC5paH5Lu25aS555qE5pe25YCZ77yM5omA5pyJ55qE6YWN572u6YO95b6X5b6A5YmN5L+u5pS55LiA57qnXHJcbi8vIGNvbW1vbuebruW9lee7k+aehOWIq+maj+S+v+aUue+8jOWlvem6u+eDpueahO+8iOmmluWFiGNvbW1vbuWGhemDqOebuOS6kuW8leeUqOW+l+aUueOAkOaJi+WKqOaFouaFouaUueOAke+8jOWFtuasoeWFtuS7luaJgOaciemhueebruWvuWNvbW1vbuS4reaUueWPmOWxgue6p+eahOafkOS6m+aWh+S7tueahOW8leeUqOW+l+S/ruaUueOAkOafkOS6m+aWh+S7tuWOn+adpeeUqHN1YjLvvIzlvpfmlLnmiJBzdWIx5oiW6ICF5YW25LuW5Y+Y6YeP44CR77yJXHJcblxyXG52YXIgYWpheD1yZXF1aXJlKHBhdGhDb25maWcuc3ViMytcIi9saWJzL2FqYXhcIik7XHJcblxyXG5cclxuXHJcblxyXG5leHBvcnQgZGVmYXVsdCB7XHJcbiAgICBhamF4OmFqYXgsXHJcbiAgICBwYXRoQ29uZmlnOnBhdGhDb25maWdcclxufVxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyAuL3NyYy9wYWdlcy9jb21tb24uanMiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///3\n");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n        value: true\n});\n//全局配置\nvar pathConfig = { //路径全局设定，以免以后全局迁移网站的时候，或者修改common和其他项目相对位置的时候，改起来麻烦\n        sub1: \"../commom\", //vue-demo项目子文件访问common\n        sub2: \"../../common\", //src内部子文件访问common\n        sub3: \"../../../common\", //pages内部子文件访问common\n        sub4: \"../../../../common\" //暂时还没那么深，用不到\n};\n// 备注：此时common和其他项目是平行，所以用这种结构，如果common放在项目第一层文件夹的时候，所有的配置都得往前修改一级\n// common目录结构别随便改，好麻烦的（首先common内部相互引用得改【手动慢慢改】，其次其他所有项目对common中改变层级的某些文件的引用得修改【某些文件原来用sub2，得改成sub1或者其他变量】）\n\nvar ajax = !(function webpackMissingModule() { var e = new Error(\"Cannot find module \\\".\\\"\"); e.code = 'MODULE_NOT_FOUND'; throw e; }());\n\nexports.default = {\n        ajax: ajax,\n        pathConfig: pathConfig\n};//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvcGFnZXMvY29tbW9uLmpzPzIzM2EiXSwibmFtZXMiOlsicGF0aENvbmZpZyIsInN1YjEiLCJzdWIyIiwic3ViMyIsInN1YjQiLCJhamF4Il0sIm1hcHBpbmdzIjoiOzs7OztBQUFBO0FBQ0EsSUFBSUEsYUFBVyxFQUFDO0FBQ1JDLGNBQUssV0FERSxFQUNVO0FBQ2pCQyxjQUFLLGNBRkUsRUFFYTtBQUNwQkMsY0FBSyxpQkFIRSxFQUdnQjtBQUN2QkMsY0FBSyxvQkFKRSxDQUltQjtBQUpuQixDQUFmO0FBTUE7QUFDQTs7QUFFQSxJQUFJQyxPQUFLLDZIQUFUOztrQkFLZTtBQUNYQSxjQUFLQSxJQURNO0FBRVhMLG9CQUFXQTtBQUZBLEMiLCJmaWxlIjoiMjYuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvL+WFqOWxgOmFjee9rlxyXG52YXIgcGF0aENvbmZpZz17Ly/ot6/lvoTlhajlsYDorr7lrprvvIzku6XlhY3ku6XlkI7lhajlsYDov4Hnp7vnvZHnq5nnmoTml7blgJnvvIzmiJbogIXkv67mlLljb21tb27lkozlhbbku5bpobnnm67nm7jlr7nkvY3nva7nmoTml7blgJnvvIzmlLnotbfmnaXpurvng6ZcclxuICAgICAgICBzdWIxOlwiLi4vY29tbW9tXCIsLy92dWUtZGVtb+mhueebruWtkOaWh+S7tuiuv+mXrmNvbW1vblxyXG4gICAgICAgIHN1YjI6XCIuLi8uLi9jb21tb25cIiwvL3NyY+WGhemDqOWtkOaWh+S7tuiuv+mXrmNvbW1vblxyXG4gICAgICAgIHN1YjM6XCIuLi8uLi8uLi9jb21tb25cIiwvL3BhZ2Vz5YaF6YOo5a2Q5paH5Lu26K6/6ZeuY29tbW9uXHJcbiAgICAgICAgc3ViNDpcIi4uLy4uLy4uLy4uL2NvbW1vblwiLC8v5pqC5pe26L+Y5rKh6YKj5LmI5rex77yM55So5LiN5YiwXHJcbn07XHJcbi8vIOWkh+azqO+8muatpOaXtmNvbW1vbuWSjOWFtuS7lumhueebruaYr+W5s+ihjO+8jOaJgOS7peeUqOi/meenjee7k+aehO+8jOWmguaenGNvbW1vbuaUvuWcqOmhueebruesrOS4gOWxguaWh+S7tuWkueeahOaXtuWAme+8jOaJgOacieeahOmFjee9rumDveW+l+W+gOWJjeS/ruaUueS4gOe6p1xyXG4vLyBjb21tb27nm67lvZXnu5PmnoTliKvpmo/kvr/mlLnvvIzlpb3purvng6bnmoTvvIjpppblhYhjb21tb27lhoXpg6jnm7jkupLlvJXnlKjlvpfmlLnjgJDmiYvliqjmhaLmhaLmlLnjgJHvvIzlhbbmrKHlhbbku5bmiYDmnInpobnnm67lr7ljb21tb27kuK3mlLnlj5jlsYLnuqfnmoTmn5Dkupvmlofku7bnmoTlvJXnlKjlvpfkv67mlLnjgJDmn5Dkupvmlofku7bljp/mnaXnlKhzdWIy77yM5b6X5pS55oiQc3ViMeaIluiAheWFtuS7luWPmOmHj+OAke+8iVxyXG5cclxudmFyIGFqYXg9cmVxdWlyZShwYXRoQ29uZmlnLnN1YjMrXCIvbGlicy9hamF4XCIpO1xyXG5cclxuXHJcblxyXG5cclxuZXhwb3J0IGRlZmF1bHQge1xyXG4gICAgYWpheDphamF4LFxyXG4gICAgcGF0aENvbmZpZzpwYXRoQ29uZmlnXHJcbn1cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gLi9zcmMvcGFnZXMvY29tbW9uLmpzIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///26\n");
 
 /***/ })
-/******/ ]);
+
+/******/ });

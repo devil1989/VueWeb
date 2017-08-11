@@ -1,9 +1,9 @@
 <script>
-import { actions } from '../store';
+import store from '../pages/index.store';
 
 export default {
     vuex: {
-        actions: actions,
+        actions: store.actions,
         getters: {
             // 过滤后的会话列表
             sessions: ({ sessions, filterKey }) => {
@@ -20,7 +20,7 @@ export default {
 <template>
 <div class="list">
     <ul>
-        <li v-for="item in sessions" :class="{ active: item.id === currentId }" @click="selectSession(item.id)">
+        <li v-for="item in sessions" :class="{ active: item.id === currentId }" >
             <img class="avatar"  width="30" height="30" :alt="item.user.name" :src="item.user.img">
             <p class="name">{{item.user.name}}</p>
         </li>
@@ -28,30 +28,6 @@ export default {
 </div>
 </template>
 
-<style scoped lang="less">
-.list {
-    li {
-        padding: 12px 15px;
-        border-bottom: 1px solid #292C33;
-        cursor: pointer;
-        transition: background-color .1s;
+<style scoped lang="sass">
 
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-        &.active {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-    }
-    .avatar, .name {
-        vertical-align: middle;
-    }
-    .avatar {
-        border-radius: 2px;
-    }
-    .name {
-        display: inline-block;
-        margin: 0 0 0 15px;
-    }
-}
 </style>

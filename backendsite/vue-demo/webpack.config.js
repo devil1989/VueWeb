@@ -3,23 +3,69 @@
 var path = require('path');//webpack中自带的require，模块加载器
 var webpack = require('webpack');
 var process = require("process");//环境管理
-
-var entrys = require('webpack-glob-entry');//把entry数组化，把所有的里面的文件都展开
+var glob = require("glob");
 var ExtractTextPlugin = require('extract-text-webpack-plugin');//css提取到单个文件
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); // 提取公共模块
 var CopyWebpackPlugin = require('copy-webpack-plugin'); // 拷贝文件
 var HtmlWebpackPlugin = require('html-webpack-plugin'); // 自动写入将引用写入html
 var isDev = (process.env.NODE_ENV === 'production')?false:true;//set NODE_ENV=production&&webpack --progress --colors命令设置了production环境，并且执行了webpack
 var filePath = isDev?"/build":'/dest';//编译打包路径
-var copyImageFromPath=__dirname + '/src/assets/image';//需要拷贝的文件路径
-var copyImageTargetPath=__dirname+filePath+'/assets/image';//目标文件生成路径
-var config;
+var copyImageFromPath=__dirname + '/src/assets/images';//需要拷贝的文件路径
+var copyImageTargetPath=__dirname+filePath+'/assets/images';//目标文件生成路径
+var config,entrysInfo;
+
+function resolveEntry (globpath, suffix, context) {
+    if (context) {
+        globpath = path.join(context, globpath);
+    }
+    return glob.sync(globpath).reduce((prev, curr) => {
+        var basename = path.basename(curr, suffix);
+        prev[basename] = curr;
+        return prev;
+    }, {});
+};
+
+function getAllHtmlWebpackPlugin (){//多个页面入口，需要有新建多个HtmlWebpackPlugin插件对象
+    var arr=[];
+    entrysInfo=resolveEntry('./src/pages/*.js', '.js', __dirname);//resolveEntry('./scripts/!(ui|mock|_)*.js', '.js', __dirname);【可以忽略某些，也可以多选】
+    /*entrysInfo的内容格式是
+    {
+        "common":"D:/myGit/VueWeb/backendsite/vue-demo/src/pages/common.js",//chunk的名称就是文件名（不包括后缀）
+        "index":"D:/myGit/VueWeb/backendsite/vue-demo/src/pages/index.js"
+    }*/
+    var keys=Object.keys(entrysInfo)||[];
+    
+    keys.forEach(function(val){
+        if(val.indexOf(".store")!=-1){//*.store.js不是入口，虽然也放在pages文件中，需要删除掉，没必要为它多创建一个插件对象
+            return;
+        }
+        var configObj={//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
+            filename:val+".html",
+            chunks:[val],
+            hash:true
+        }
+        if(!isDev){//生产环境打包，需要html压缩，所以得传入这个配置
+            configObj.minify={
+                "html-minifier":true//
+            }
+        }
+        arr.push(new HtmlWebpackPlugin(configObj));
+    });
+
+    return arr;
+}
+
+var HtmlWebpackPluginArray=getAllHtmlWebpackPlugin();
+
+
+
+
 var commonConfig = {
-    entry:entrys(__dirname+"/src/pages/*.js"),//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
+    entry:entrysInfo,//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
     output: {//输出文件
         path: __dirname+filePath+"/pages",//,//path指定了本地构建地址(打包后的输出路径)
         // publicPath:__dirname+filePath+"/pages",//publicPath指定的是构建后在html里src和href的路径的基础地址（HtmlWebpackPlugin这个插件就是用这个publicPath来生成对应的html）
-        chunkFilename: "[name].js",//没有在entry中列出来，确需要打包的文件的文件名，例如文件中的js的文件中require的js文件
+        chunkFilename: "[name].js",//没有在entry中列出来，却需要打包的文件的文件名，例如文件中的js的文件中require的js文件
         filename: '[name].js'////文件打包后的名字
     },
     module: {//资源加载器，什么样的资源对应什么样的加载器，加载器后面支持？加参数，多个加载器之间用！来连接 （用于处理文件的转义）
@@ -71,16 +117,15 @@ var cloneConfig=Object.assign({},commonConfig);//深度克隆
 
 if(isDev){
     config = Object.assign(cloneConfig,{
-        plugins:[
-            new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
-            }),
+        plugins:HtmlWebpackPluginArray.concat([
             new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
                 from: copyImageFromPath,//拷贝图片
                 to:copyImageTargetPath
+                // ignor:["*.js"] 忽略.js文件
             }]),
-            new ExtractTextPlugin("[name].css"),//把js中引用require('./css/plan.css')的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会再html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
+            new ExtractTextPlugin("[name].css"),//把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
             new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
-        ],
+        ]),
         devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
             contentBase:"./build/pages"//localhost：8080对应的地址
         },
@@ -88,13 +133,13 @@ if(isDev){
     })
 }else{
     config = Object.assign(commonConfig,{
-        plugins:[
-            new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
-                hash:true,
-                minify:{
-                    "html-minifier":true//
-                }
-            }),
+        plugins:HtmlWebpackPluginArray.concat([
+            // new HtmlWebpackPlugin({//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控）） 这个插件已经在HtmlWebpackPluginArray中创建了
+            //     hash:true,
+            //     minify:{
+            //         "html-minifier":true//
+            //     }
+            // }),
             new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
                 from: copyImageFromPath,//拷贝图片
                 to:copyImageTargetPath
@@ -103,7 +148,7 @@ if(isDev){
               compress: {warnings: false }
             }),
             new ExtractTextPlugin("[name].css")
-        ]
+        ])
     });
 }
 module.exports = config;//执行webpack打包

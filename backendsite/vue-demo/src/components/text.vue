@@ -1,9 +1,9 @@
 <script>
-import { actions } from '../store';
+import store from '../pages/index.store';
 
 export default {
     vuex: {
-        actions: actions
+        actions: store.actions
     },
     data () {
         return {
@@ -23,23 +23,10 @@ export default {
 
 <template>
 <div class="text">
-    <textarea placeholder="按 Ctrl + Enter 发送" v-model="content" @keyup="onKeyup"></textarea>
+    <textarea placeholder="按 Ctrl + Enter 发送" v-model="content"></textarea>
 </div>
 </template>
 
-<style lang="less" scoped>
-.text {
-    height: 160px;
-    border-top: solid 1px #ddd;
+<style lang="sass" scoped>
 
-    textarea {
-        padding: 10px;
-        height: 100%;
-        width: 100%;
-        border: none;
-        outline: none;
-        font-family: "Micrsofot Yahei";
-        resize: none;
-    }
-}
 </style>
