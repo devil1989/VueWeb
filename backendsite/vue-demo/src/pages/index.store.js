@@ -85,7 +85,7 @@ store.watch(
     }
 );
 
-var actions = {
+var actions = {//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作）
     initData: ({ dispatch }) => dispatch('INIT_DATA'),
     sendMessage: ({ dispatch }, content) => dispatch('SEND_MESSAGE', content),
     selectSession: ({ dispatch }, id) => dispatch('SELECT_SESSION', id),

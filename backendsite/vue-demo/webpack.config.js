@@ -1,3 +1,10 @@
+/*
+ author:chenjiajie
+ date:2017/08/12
+ description:webpack配置文件
+ help guide：http://www.cnblogs.com/yxy99/p/5852987.html （比较详细的webpack资料）
+ */
+
 //默认打webpack命令，执行的是该文件里面的内容
 //如果想要执行其他配置，需要命令 webpack --config webpack.pro.js（其他配置文件）
 var path = require('path');//webpack中自带的require，模块加载器
@@ -61,6 +68,7 @@ var HtmlWebpackPluginArray=getAllHtmlWebpackPlugin();
 
 
 var commonConfig = {
+    context:__dirname,//工程路径，默认就是当前文件夹所在位置__dirname，这行是多余的，如果想更改工程路径起始位置，就在这里配置
     entry:entrysInfo,//源文件,具体的entry设置https://www.npmjs.com/package/webpack-glob-entry
     output: {//输出文件
         path: __dirname+filePath+"/pages",//,//path指定了本地构建地址(打包后的输出路径)
@@ -68,7 +76,7 @@ var commonConfig = {
         chunkFilename: "[name].js",//没有在entry中列出来，却需要打包的文件的文件名，例如文件中的js的文件中require的js文件
         filename: '[name].js'////文件打包后的名字
     },
-    module: {//资源加载器，什么样的资源对应什么样的加载器，加载器后面支持？加参数，多个加载器之间用！来连接 （用于处理文件的转义）
+    module: {//模块配置[用于文件的转化，例如es6，sass，less，coffee等转化](资源加载器，什么样的资源对应什么样的加载器，加载器后面支持？加参数，多个加载器之间用！来连接 （用于处理文件的转义）)
         loaders: [
             {//支持es6
                  test: /\.js$/,//一个必须满足的条件
@@ -217,6 +225,7 @@ module.exports = config;//执行webpack打包
 // npm start没有启动浏览器是无法访问localhost地址的
 // 配置变动了，webpack-dev-server也没用，得重新webpack打包，再npm start
 // 插件或者webpack的很多问题，都是因为插件和webpack的版本不匹配
+// 一般遇到安装插件的问题，只要把node_modules文件删除，然后再cnpm install，就可以重新按照package.json重新安装所有插件了
 // 
 /* webpack都是通过js入口来对其他资源文件实施操作的，入口肯定是js文件，比如想单独设置处理一个common.css文件,
    那必须先搞一个common.js作为一个公共页面载体，在里面require这个css，通过这个js和ExtractTextPlugin来处理common.css（改文件可能是sass，需要处理）,
