@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<!-- <script src="common.js"></script> -->
+	<script src="../../../common/libs/vue/vue.js"></script>
+	<script src="./common.js"></script>
+
 	<!-- <link rel="stylesheet" href="../../../common/styles/bootstrap.min.css">
 	<link rel="stylesheet" href="../../../common/styles/reset.css"> -->
 	<title>Document</title>
@@ -10,403 +12,65 @@
 </head>
 <body>
 	
-	<div id="app">
-	    <div class="sidebar">
-	        <card></card>
-	        <list></list>
-	    </div>
-	    <div class="main">
-	        <message></message>
-	        <text></text>
-	    </div>
-	</div>
-
-
-	<div class="page-wrapper" style="display: none">
+	<div id="app" class="page-wrapper" >
 		<h1 class="internet-school-title">
-			组织机构设置
+			组织机构设置{{message}}
 		</h1>
 
 		<div class="content-wrapper">
-			<div class="internet-school-nav">
-				<div class="school-nav school-nav-sub1"><!-- 业务域层级 -->
-					<h2>网校<i class="direction-icon"></i></h2>
-					<ul class="school-content-list">
-						<li class="internet-school-nav-item line-start "><!-- 机构层级 -->
-							<div class="school-nav current-nav ">
-								<!-- <i class="dashline-absolute-top"></i> -->
-								<i class="dashline-absolute-bottom"></i>
-								<span class="hide float-left fold-icon">-</span>
-								<span class="float-left fold-icon">+</span>
-								<h3 class="float-left">机构-沿途</h3>
-							</div>
-							<ul class="school-content-item space-indent-1 ">
-								<li class=""><!-- 业务单元层级 如果业务单元需要折叠，需要给这li元素添加calss：fold-item -->
-									<div class="school-nav ">
-										<!-- <i class="dashline-absolute-top"></i>	 -->
-										<i class="dashline-absolute-bottom"></i>
-										<i class="dashline-absolute-left"></i>
-										<span class="hide float-left fold-icon">-</span>
-										<span class="float-left fold-icon">+</span>
-										<h3 class="float-left">业务单元-A</h3>
-									</div>
-									<ul class="school-content-item space-indent-1">
-										<li class="fold-item"><!-- 业务单元层级 -->
-											<div class="school-nav first-child">
-												<!-- <i class="dashline-absolute-top"></i>	 -->
-												<i class="dashline-absolute-bottom"></i>
-												<i class="dashline-absolute-left"></i>
-												<span class="hide float-left fold-icon">-</span>
-												<span class="float-left fold-icon">+</span>
-												<h3 class="float-left">职能单元-A</h3>
-											</div>
-										</li>
-										<li><!-- 业务单元层级 -->
-											<div class="school-nav have-no-child">
-												<i class="dashline-absolute-top"></i>	
-												<i class="dashline-absolute-left"></i>
-												<i class="dashline-absolute-bottom"></i>
-												<span class="hide float-left fold-icon">-</span>
-												<span class="float-left fold-icon">+</span>
-												<h3 class="float-left">职能单元-B</h3>
-											</div>
-											<ul class="">
-											</ul>
-										</li>
-										<li class="line-end"><!-- 业务单元层级 -->
-											<div class="school-nav have-no-child last-child">
-												<i class="dashline-absolute-top"></i>	
-												<i class="dashline-absolute-left"></i>
-												<!-- <i class="dashline-absolute-bottom"></i> -->
-												<span class="hide float-left fold-icon">-</span>
-												<span class="float-left fold-icon">+</span>
-												<h3 class="float-left">职能单元-C</h3>
-											</div>
-											<ul class="">
-											</ul>
-										</li>
-									</ul>
-								</li>
-								<li class="fold-item"><!-- 业务单元层级 -->
-									<div class="school-nav ">
-										<i class="dashline-absolute-top"></i>	
-										<i class="dashline-absolute-left"></i>
-										<i class="dashline-absolute-bottom"></i>
-										<span class="hide float-left fold-icon">-</span>
-										<span class="float-left fold-icon">+</span>
-										<h3 class="float-left">业务单元-B</h3>
-									</div>
-									<ul class="">
-									</ul>
-								</li>
-								<li class="fold-item line-end"><!-- 业务单元层级 -->
-									<div class="school-nav ">
-										<i class="dashline-absolute-top"></i>	
-										<i class="dashline-absolute-left"></i>
-										<!-- <i class="dashline-absolute-bottom"></i> -->
-										<span class="hide float-left fold-icon">-</span>
-										<span class="float-left fold-icon">+</span>
-										<h3 class="float-left">业务单元-C</h3>
-									</div>
-									<ul class="">
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<li class="internet-school-nav-item line-end"><!-- 机构层级 -->
-							<div class="school-nav">
-								<i class="dashline-absolute-top"></i>	
-								<!-- <i class="dashline-absolute-bottom"></i> -->
-								<span class="hide float-left fold-icon">-</span>
-								<span class="float-left fold-icon">+</span>
-								<h3 class="float-left">机构-2</h3>
-							</div>
-							<ul class="hide">
-								<li><!-- 业务单元层级 -->
-									<div class="school-nav">
-										<span class="hide float-left fold-icon">-</span>
-										<span class="float-left fold-icon">+</span>
-										<h3 class="float-left">业务单元-A</h3>
-									</div>
-									<ul class="">
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-
+			<!-- <Navigation></Navigation> -->
 			<div class="internet-school-content">
 				<div class="content-item tree-level-1">
-					<div class="tree-level-1-title">
-						<h2>基本信息</h2> <span class="basic-btns basic-add-btns">+新增业务单元</span>
-					</div>
-					<div class="tree-level-1-info">
-						<ul>
-							<li>
-								<span>组织代码:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织名称:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织所属层:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织代码:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织名称:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织所属层:</span>
-								<span>2345</span>
-							</li>
-							<li>
-								<span>组织所属层:</span>
-								<span>2345</span>
-							</li>
-						</ul>
-						<div class="btns-out-wrapper">
-							<div class="btns-wrapper">
-								<span class="basic-btns">编辑本组织</span>
-								<span class="basic-btns">删除本组织</span>
-							</div>
+					<div style="display: none">
+						<div class="tree-level-1-title">
+							<h2>基本信息</h2> <span class="basic-btns basic-add-btns">+新增业务单元</span>
 						</div>
-							
-					</div>
-
-					<div class="table-wrapper">
-						<div>本组织名称</div>
-						<div class="table-list-detail">
+						<div class="tree-level-1-info">
 							<ul>
-								<li class="table-attr-name"><div class="list-user-sname"><span>用户名</span></div><div class="list-user-name"><span>姓名</span></div><div class="list-user-classid"><span>班级</span></div></li>
-								<li><div class="list-user-sname"><span>uese</span></div><div class="list-user-name"><span>陈佳杰</span></div><div class="list-user-classid text-align-left"><span>302班</span></div></li>
+								<li>
+									<span>组织代码:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织名称:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织所属层:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织代码:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织名称:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织所属层:</span>
+									<span>2345</span>
+								</li>
+								<li>
+									<span>组织所属层:</span>
+									<span>2345</span>
+								</li>
 							</ul>
-						</div>
-
-						<div class="table-list-extra">
-							<div class="table-list-extra-desc"><span>共6页,共219条</span></div>
-							<div class="table-list-extra-info">
-								<div class="table-list-page-num">
-									<span class="page-prev page-direction">上一页</span>
-									<ul>
-										<li class="current-page-index"><span>1</span></li>
-										<li><span>2</span></li>
-										<li><span>3</span></li>
-										<li><span>4</span></li>
-										<li><span>5</span></li>
-										<li><span>...</span></li>
-										<li><span>23</span></li>
-									</ul>
-									<span class="page-next page-direction">下一页</span>
-								</div>
-									
-								<div class="table-list-extra-jump">
-									<span >跳到</span>
-									<input class="table-list-detail-page" type="text">
-									<span>页</span>
-									<span class="table-list-confirm">确定</span>
+							<div class="btns-out-wrapper">
+								<div class="btns-wrapper">
+									<span class="basic-btns">编辑本组织</span>
+									<span class="basic-btns">删除本组织</span>
 								</div>
 							</div>
+								
 						</div>
-						
 					</div>
+					<!-- <TableList></TableList> -->
 				</div>
 			</div>
 		</div>
 	</div>
 
-	
-	
-	<!-- 业务逻辑整理：
-		1.最后一层不需要前置的加减符号（虚线和位置都得改）
-		2.最后一层元素相互之间不用竖线连在一起，但是中间层需要
-	-->
-	<!-- 左侧菜单栏 -->
-	<style lang="sass" scoped>
-		/*变量（class变量和属性值变量）+嵌套+import导入*/
-		.content-wrapper{
-			overflow: hidden;
-			position: relative;
-			width: 100%;
-			font-size: 0.7rem;
-		}
-
-		h1{
-			padding: 0.6rem;
-			border-bottom: 0.1rem solid #F4F4F4;
-			font-size:0.8rem;
-		}
-		
-		.page-wrapper{
-			height:100%;
-			width:100%;
-			/*padding:0.6rem;*/
-			border:1px solid #000;
-			overflow: hidden;
-		}
-		.school-content-list{
-			overflow: hidden;
-			height: 100%;
-		}
-
-		/******左侧公共菜单栏目 start******/
-
-			/******左侧公共菜单栏目 common start******/
-			.fold-item>ul.school-content-item{
-				display: none;
-			}
-
-			.internet-school-nav .have-no-child .fold-icon{/*没有子元素，直接隐藏加减号*/
-				visibility: hidden;
-				/*margin-left: 0.3rem;*/
-			}
-
-			/*隐藏加减符号的时候，需要拉伸对应的虚线*/
-			/*.have-no-child.first-child .dashline-absolute-bottom{
-				height: 1rem;
-			}
-			.have-no-child.last-child .dashline-absolute-top{
-				height: 1rem;
-			}
-			.have-no-child  .dashline-absolute-top{
-				height: 1rem;
-			}
-			.have-no-child  .dashline-absolute-bottom{
-				height: 1rem;
-			}*/
-
-			/*.have-no-child和last-child同层级*/
-			/*最后一层或者虽然不是最后一层但是折叠了，就需要把上下的虚线隐藏*/
-			.have-no-child .dashline-absolute-bottom,.have-no-child .dashline-absolute-top,.fold-item>.school-nav>.dashline-absolute-top,.fold-item>.school-nav>.dashline-absolute-bottom{
-				display: none;
-			}
-			/*没有子元素的时候，横向的虚线得延长*/
-			.have-no-child .dashline-absolute-left{
-				width: 1.4rem;
-			}
-
-			.school-nav{/*通用的头部title*/
-				position: relative;
-				overflow: hidden;
-				margin-bottom: 1px;
-			}
-			.internet-school-nav-item{
-				margin-bottom: 1px;
-			}
-			.school-content-item{/*包含某个节点的所有子元素的标签ul，如果某个节点没有下个兄弟节点，那他的侧边虚线会超出*/
-				border-left:1px #AEAEAE dashed;
-			}
-
-			/*折叠虚线 start*/
-			/*line-start和line-end是li元素层级*/
-			.dashline-absolute-left{
-				display: block;
-				height:0.7rem;
-				width: 0.7rem;
-				border-bottom:1px #AEAEAE dashed;
-				position: absolute;
-				top: 0.35rem;/*0.7除以2*/
-				left: 0rem;
-				z-index: 100;
-			}
-			.dashline-absolute-top{
-				display: block;
-				height:0.7rem;
-				width: 0.7rem;
-				border-left:1px #AEAEAE dashed;
-				position: absolute;
-				top: 0rem;
-				left: 0.95rem;
-				z-index: 100;
-			}
-			.dashline-absolute-bottom{
-				display: block;
-				height:0.7rem;
-				width: 0.7rem;
-				border-left:1px #AEAEAE dashed;
-				position: absolute;
-				bottom: 0rem;
-				left: 0.95rem;
-				z-index: 100;
-			}
-			.space-indent-1{/*缩进最小单位距离*/
-				margin-left:0.95rem;
-			}
-			/*折叠虚线 end*/
-
-			.internet-school-nav{
-				background-color: #F7F7F7;
-				float:left;
-				overflow: hidden;
-				margin-left: 0.6rem;
-				margin-top: 2px;
-			}
-			.internet-school-nav h2{
-				height: 2.5rem;
-				line-height: 2.5rem;
-			}
-			..internet-school-nav .school-conten-title{
-				float:left;
-			}
-			.internet-school-nav .hide{
-				display:none;
-			}
-			.internet-school-nav .float-left{
-				float:left;
-			}
-
-			.internet-school-nav .current-nav{
-				padding-right: 3.6rem;
-				background-color: #ECECEC;
-			}
-			
-			.internet-school-nav .school-content-item{
-				overflow: hidden;
-			}
-			.internet-school-nav .fold-icon{
-				cursor: pointer;
-				margin: 0.65rem 0.3rem 0.6rem 0.6rem;
-				display: block;
-				height:0.7rem;
-				width: 0.7rem;
-				border:1px solid #AEAEAE;
-				line-height: 0.7rem;
-				text-align: center;
-				color: #AEAEAE;
-				font-size:0.7rem;
-			}
-
-			.school-nav h3,.school-nav h4,.school-nav h5,.school-nav h6{
-				display: block;
-				height: 2rem;
-				line-height: 2.0rem;
-			}
-
-			/******左侧公共菜单栏目 common end******/
-			
-			/******左侧公共菜单栏目 具体业务 start******/
-			.school-nav-sub1{
-				position: absolute;
-				height: 100%;
-				width: 9rem;
-				padding-left: 0.5rem;
-				background-color: #F7F7F7;
-				margin-bottom:0rem;
-				margin-top: 0.1rem;
-			}
-			/******左侧公共菜单栏目 具体业务 end******/
-		
-		
-		/******左侧公共菜单栏目 end******/
-	</style>
 
 	<!-- 右侧信息展示栏 -->
 	<style lang="sass" scoped>
@@ -474,133 +138,7 @@
 
 	</style>
 
-	<!-- 底部table -->
-	<style lang="sass" scoped>
-		.table-wrapper{
-			padding-bottom: 2rem;
-		}
-		.table-wrapper span{
-			font-size: 0.6rem;
-		}
-		.text-align-left{
-			text-align: left;
-		}
-		.table-list-detail{
-			overflow: hidden;
-		}
-		.table-list-detail div{
-			float: left;
-			height: 2rem;
-			padding: 0.1rem;
-			line-height: 2rem;
-			text-align: center;
-			border:1px solid #E4E4E4;
-			border-right: none;
-			border-top: none;
-		}
-		.list-user-sname{
-			width: 7rem;
-		}
-		.list-user-name{
-			width: 7em;
-		}
-		.table-list-detail .table-attr-name div{
-			border-top: 1px solid #E4E4E4;
-		}
-		.table-list-detail div.list-user-classid{
-			width: 26.8rem;
-			border-right: 1px solid #E4E4E4;
-		}
-		.table-list-extra{
-			overflow: hidden;
-			width: 100%;
-			height: 2rem;
-			line-height: 2rem;
-			margin-top: 0.5rem;
-		}
-		.table-list-extra-desc{
-			float: left;
-		}
-		.table-list-extra-info{
-			overflow: hidden;
-			float: right;
-			position: relative;
-		}
-		.table-list-extra-info,{
-			overflow: hidden;
-			float: left;
-		}
-		.table-list-page-num{
-			overflow: hidden;
-			float: left;
-		}
-		.table-list-extra-jump{
-			overflow: hidden;
-			float: left;
-		}
-		.table-list-page-num ul{
-			overflow: hidden;
-		}
-		.table-list-page-num ul li{
-			text-align: center;
-			border: 1px solid #E4E4E4;
-			border-left: none;
-			float: left;
-			height: 1.2rem;
-			/*padding:0.3rem;*/
-			width: 1.2rem;
-			line-height: 1.2rem;
-			margin-top: 0.4rem;
-			color: #6B98AB;
-			cursor: pointer;
-		}
-		.table-list-page-num ul li.current-page-index{
-			cursor: default;
-		}
-		.table-list-detail-page{
-			height: 1rem;
-			width: 2rem;
-			line-height: 1rem;
-			text-align: center;
-		}
-		.table-list-page-num .page-prev,.table-list-page-num ul,.table-list-page-num .page-next{
-			float: left;
-		}
-		.page-direction{
-			padding:0rem 0.6rem;
-			height: 1.2rem;
-			line-height: 1.2rem;
-			margin: 0.4rem 0rem 0rem;
-			border:1px solid #E4E4E4;
-			color: #6B98AB;
-		}
-		.page-prev{
-			border-top-left-radius: 0.3rem;
-			border-bottom-left-radius: 0.3rem;
-		}
-		.page-next{
-			border-top-right-radius: 0.3rem;
-			border-bottom-right-radius: 0.3rem;
-			border-left: none;
-		}
-		.table-list-extra-jump{
-			margin-left: 0.5rem;
-		}
-		.table-list-extra-jump span{
-			margin: 0 0.2rem;
-		}
-		.current-page-index{
-			background-color: #F2F2F2;
-			color: #868686;
-		}
-		.table-list-confirm{
-			color: #6B98AB;
-			border:1px solid #E4E4E4;
-			border-radius: 0.3rem;
-			padding: 0.2rem 0.6rem;
-			cursor: pointer;
-		}
-	</style>
+
 	<script src="index.js"></script>
 </body>
 </html>

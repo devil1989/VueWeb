@@ -19,6 +19,8 @@ var isDev = (process.env.NODE_ENV === 'production')?false:true;//set NODE_ENV=pr
 var filePath = isDev?"/build":'/dest';//编译打包路径
 var copyImageFromPath=__dirname + '/src/assets/images';//需要拷贝的文件路径
 var copyImageTargetPath=__dirname+filePath+'/assets/images';//目标文件生成路径
+var htmlFileCopyPath=__dirname + '/src/pages';
+var htmlFileTargetPath=__dirname + filePath + '/pages';
 var config,entrysInfo;
 
 function resolveEntry (globpath, suffix, context) {
@@ -48,6 +50,7 @@ function getAllHtmlWebpackPlugin (){//多个页面入口，需要有新建多个
         }
         var configObj={//生成html （热插拔：配置1（没有这个动态生成html文件，热插拔无法正常监控））
             filename:val+".html",
+            template:__dirname+"/src/pages/"+val+".html",//对应的html，必须制定，否则就产生一个内容为空，只有js引用的html文件
             chunks:[val],
             hash:true
         }
@@ -82,9 +85,17 @@ var commonConfig = {
                  test: /\.js$/,//一个必须满足的条件
                  exclude: /node_modules/,//不处理的文件
                  loader: 'babel-loader',//用哪个加载器处理
-                 options: {
+                 exclude: /(node_modules|bower_components)/,//千万别忘了指向否则会默认访问webpack下面的es2015，就报错了
+                 options: {//options
                   presets: ['es2015']
                 }
+            },
+            {
+                test:/\.html$/,
+                loader:'html-loader'
+                // options:{
+                //     minimize: isDev?false:true
+                // }
             },
             {
                 test: /\.(scss|sass|css)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
