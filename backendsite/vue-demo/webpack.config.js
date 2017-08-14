@@ -59,7 +59,7 @@ function getAllHtmlWebpackPlugin (){//多个页面入口，需要有新建多个
                 "html-minifier":true//
             }
         }
-        arr.push(new HtmlWebpackPlugin(configObj));
+        arr.push(new HtmlWebpackPlugin(configObj));//该插件作用是按照入口的chunk名称，生成对应的html文件，该html文件可以指定对应的html（这个html文件中，会自动插入该chunk的js）
     });
 
     return arr;
@@ -128,6 +128,11 @@ var commonConfig = {
             
             { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}//图片文件使用 url-loader 来处理，小于8kb的直接转为base64
         ]
+    },
+    resolve: {
+        alias: {
+        'vue': __dirname+'/../node_modules/vue/dist/vue.js'//用node_modules文件夹里面的vue/dist/vue。js来编译，vue执行的时候只需要运行时，打包的时候做编译即可，可以节省vue的size
+        }
     }
 };
 var cloneConfig=Object.assign({},commonConfig);//深度克隆

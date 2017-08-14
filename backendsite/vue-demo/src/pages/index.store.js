@@ -2,9 +2,9 @@
  * Vuex
  * http://vuex.vuejs.org/zh-cn/intro.html
  */
-// import Vue from 'vue';
+import Vue from 'vue';
 import Vuex from 'vuex';
-// Vue.use(Vuex);
+Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
 
@@ -37,6 +37,8 @@ const store = new Vuex.Store({
 export default {
     store:store//还可以放其他属性
 };
+
+
 
 // vuex使用指南
 // Vue.use(Vuex);

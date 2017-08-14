@@ -1,16 +1,18 @@
 {
   "name": "vue-demo",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "projects plugins setting",
   "author": "JeffreyChen",
   "private": true,
   "scripts": {
-    "debug": "set NODE_ENV=production&&node --inspect --debug-brk webpack.config.js ",
-    "start": "webpack-dev-server --progress --colors --hot --inline  ",
-    "build": "webpack --progress --colors",
-    "dest": "set NODE_ENV=production&&webpack --progress --colors"
+    "debug": "set NODE_ENV=production&&node --inspect --debug-brk vue-demo/webpack.config.js",
+    "start": "webpack-dev-server --progress --colors --hot --inline --config vue-demo/webpack.config.js",
+    "build": "webpack --progress --colors --config vue-demo/webpack.config.js",
+    "dest": "set NODE_ENV=production&&webpack --progress --colors  --config vue-demo/webpack.config.js"
   },
   "dependencies": {
+    "babel-polyfill": "^6.13.0",
+    "babel-runtime": "^6.0.0",
     "vue": "^2.1.0",
     "vue-router": "^2.1.1",
     "vuex": "^2.0.0"
