@@ -185,11 +185,13 @@ if(isDev){
             }]),
             // extraCss,
             extraSass,//把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
-            new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
+            new webpack.HotModuleReplacementPlugin()//热插拔：配置2(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline --content-base vue-demo/build/)
         ]),
-        devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
-            contentBase:"./build/pages"//localhost：8080对应的地址
-        },
+
+        // 这里的devServer完全没什么卵用;需要在package.json的scripts设置命令
+        // devServer:{//热插拔：
+        //     contentBase:"./build/pages"//localhost：8080对应的地址
+        // },
         devtool: 'eval-source-map'//启用source-map方便调试
     })
 }else{
