@@ -1,0 +1,54 @@
+{
+	"crm/org/CreateNode":{
+
+		"case1":{
+			"data": {
+			    "nodeList": [{
+			      "id": 1,
+			      "isActive": 1,
+			      "nodeName": "",
+			      "nodeAttr": [],
+			      "children": [{
+			        "id": 1,
+			        "isActive": 1,
+			        "nodeAttr": [],
+			        "nodeName": "",
+			        "parentId": 0,
+			        "children": []
+			      }, {
+			        "id": 1,
+			        "isActive": 1,
+			        "nodeAttr": [],
+			        "nodeName": "",
+			        "parentId": 0,
+			        "children": []
+			      }]
+			    }, {
+			      "id": 1,
+			      "isActive": 1,
+			      "nodeName": "",
+			      "nodeAttr": [],
+			      "parentId": 0,
+			      "children": [{
+			        "id": 1,
+			        "isActive": 1,
+			        "nodeName": "",
+			        "nodeAttr": [],
+			        "parentId": 0,
+			        "children": []
+			      }, {
+			        "id": 1,
+			        "isActive": 1,
+			        "nodeAttr": [],
+			        "nodeName": "",
+			        "parentId": 0,
+			        "children": []
+			      }]
+
+			    }],
+			    "status": 0,
+			    "message": ""
+		  	}
+		}
+	}
+}

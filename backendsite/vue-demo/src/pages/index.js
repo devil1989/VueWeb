@@ -1,6 +1,11 @@
 // polyfill
 // import 'babel-polyfill';
 
+// 三种import方式
+// import { createStore, applyMiddleware,bindActionCreators } from 'redux'//redux 基础
+// import store from './store/detail'//该页面对应的store
+// import * as DetailActions from './actions/detail'//该页面对应的action
+
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 import SchoolTable from '../components/table/table.js';//页面需要的组件
@@ -9,6 +14,7 @@ import Contents from '../components/content/content.js';//页面需要的组件
 require("../assets/styles/index.scss");//每个js对应该页面的一个css
 
 Vue.config.devtools = true;
+
 
 var indexPage=(function(){
     // var ajax=window.utils&&window.utils.ajax;
@@ -21,7 +27,7 @@ var indexPage=(function(){
     //         this.initData();
     //     }
     // }
-    
+
     var IndexPageVue=new Vue({
         el: '#app',
         store: storeInfo.store,
@@ -31,11 +37,37 @@ var indexPage=(function(){
             "Cont":SchoolTable
         },
         data:{
-            message:"hello hujiang"
+            message:"hello hujiang",
+            getParam:function(){
+                debugger
+                var self=this;
+                return {
+                    isMock:true,
+                    mockUrl:"index-mock.js?case=10",
+                    url:"crm/GetNodeByUserId",
+                    type:"get",
+                    data:{userid:1},
+                    success:function(data){
+                        self.success(data);
+                    },
+                    error:function(data){
+                        self.error(data);
+                    }
+                };
+            },
+            success:function(data){
+                this.$store
+            },
+            error:function(data){
+
+            }
+        },
+        beforeMount:function(a,b,c,d,e){
+            debugger
+
+            var param=this.$data.getParam();
+            hj.request(param);
         }
-        // render:function(){
-        //     // return "";
-        // }
     });
 
     return IndexPageVue;

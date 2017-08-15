@@ -285,6 +285,7 @@ module.exports = config;//执行webpack打包
 // 配置变动了，webpack-dev-server也没用，得重新webpack打包，再npm start
 // 插件或者webpack的很多问题，都是因为插件和webpack的版本不匹配
 // 一般遇到安装插件的问题，只要把node_modules文件删除，然后再cnpm install，就可以重新按照package.json重新安装所有插件了
+// webpack最坑爹坑的地方，require和reuire.ensure都tm不支持变量代替路径，而且require是在node_modules里面的，所以webpack只能引用webpack所安装的那个文件夹以内的文件
 // 
 /* webpack都是通过js入口来对其他资源文件实施操作的，入口肯定是js文件，比如想单独设置处理一个common.css文件,
    那必须先搞一个common.js作为一个公共页面载体，在里面require这个css，通过这个js和ExtractTextPlugin来处理common.css（改文件可能是sass，需要处理）,

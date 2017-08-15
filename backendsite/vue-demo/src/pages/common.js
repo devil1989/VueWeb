@@ -10,11 +10,11 @@ var pathConfig={//路径全局设定，以免以后全局迁移网站的时候�
 
 // var ajaxPath=pathConfig.sub4+"/libs/ajax.js";
 // var vuePath=pathConfig.sub4+"/libs/vue/vue.js";
-require("../../../common/libs/ajax.js");//为什么这行屌代码总是报错，因为common这个文件在webpack所安装的项目之外，而js中的require和impor又依赖webpack；需要把weipack安装到common目录同级
+require("../../../common/utils/utils.js");//为什么这行屌代码总是报错，因为common这个文件在webpack所安装的项目之外，而js中的require和impor又依赖webpack；需要把weipack安装到common目录同级
+require("../../../common/utils/model.js");//公共的model模块，依赖于utils.js，需要放后面
 require("../../../common/styles/base.scss");
 require("../../../common/styles/reset.css");
 // require("../../../common/styles/bootstrap.min.css");
-
 
 export default {
     pathConfig:pathConfig

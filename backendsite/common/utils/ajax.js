@@ -151,12 +151,12 @@ function ajax(options) {
         before = options.before || function() {}, //发送之前执行的函数
         error = options.error || function() {}, //错误执行的函数
         success = options.success || function() {}, //请求成功的回调函数
-    var timeout_bool = false, //是否请求超时
+        timeout_bool = false, //是否请求超时
         timeout_flag = null, //超时标识
         xhr = null; //xhr对角
     setData();
     before();
-    
+
     if (dataType === "jsonp") {
         createJsonp();
     } else {
@@ -164,6 +164,7 @@ function ajax(options) {
     }
         
 }
+
 
 export default ajax;
 

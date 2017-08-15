@@ -5,9 +5,10 @@ export default {
     // vuex: {
 
     // },
-    // data:function(){
-    //     return {};
-    // },
+    data:function(){
+    	
+        return {};
+    },
     // methods: {
     // },
     template:templates
