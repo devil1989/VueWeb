@@ -1,7 +1,5 @@
 require("./table.scss");
-require("./table.vue");
-// import table from "table.scss";
-// document.getElementsByClassName("table-wrapper")
+var templates=require("./table.html");
 export default {
     // vuex: {
 
@@ -11,7 +9,7 @@ export default {
     // },
     // methods: {
     // },
-    // template:'div'
+    template:templates
 };
 
 

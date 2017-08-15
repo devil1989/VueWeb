@@ -3,8 +3,9 @@
 
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
-import Table from '../components/table/table.js';//页面需要的组件
+import SchoolTable from '../components/table/table.js';//页面需要的组件
 import Nav from '../components/nav/nav.js';//页面需要的组件
+import Contents from '../components/content/content.js';//页面需要的组件
 require("../assets/styles/index.scss");//每个js对应该页面的一个css
 
 Vue.config.devtools = true;
@@ -20,13 +21,14 @@ var indexPage=(function(){
     //         this.initData();
     //     }
     // }
-    debugger
+    
     var IndexPageVue=new Vue({
         el: '#app',
         store: storeInfo.store,
         components: {
-            "TableList":Table,
-            "Navigation":Nav
+            "Navigation":Nav,
+            "Contents":Contents,
+            "Cont":SchoolTable
         },
         data:{
             message:"hello hujiang"

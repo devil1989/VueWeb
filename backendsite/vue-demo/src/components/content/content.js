@@ -1,6 +1,5 @@
-require("./nav.scss");
-var templates=require("./nav.html");
-
+require("./content.scss");
+var templates=require("./content.html");
 export default {
     // vuex: {
 

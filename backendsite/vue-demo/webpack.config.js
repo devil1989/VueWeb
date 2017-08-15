@@ -19,6 +19,8 @@ var isDev = (process.env.NODE_ENV === 'production')?false:true;//set NODE_ENV=pr
 var filePath = isDev?"/build":'/dest';//编译打包路径
 var copyImageFromPath=__dirname + '/src/assets/images';//需要拷贝的文件路径
 var copyImageTargetPath=__dirname+filePath+'/assets/images';//目标文件生成路径
+var copyCssFromPath=__dirname + '/src/assets/styles';//需要拷贝的文件路径
+var copyCssTargetPath=__dirname+filePath+'/assets/styles';//目标文件生成路径
 var htmlFileCopyPath=__dirname + '/src/pages';
 var htmlFileTargetPath=__dirname + filePath + '/pages';
 var config,entrysInfo;
@@ -67,6 +69,10 @@ function getAllHtmlWebpackPlugin (){//多个页面入口，需要有新建多个
 
 var HtmlWebpackPluginArray=getAllHtmlWebpackPlugin();
 
+var extraSass= new ExtractTextPlugin("[name].css");
+// var extraCss= new ExtractTextPlugin("[name].css");
+            
+
 
 
 
@@ -87,20 +93,43 @@ var commonConfig = {
                  loader: 'babel-loader',//用哪个加载器处理
                  exclude: /(node_modules|bower_components)/,//千万别忘了指向否则会默认访问webpack下面的es2015，就报错了
                  options: {//options
-                  presets: ['es2015']
+                    presets: ['es2015']
                 }
             },
             {
                 test:/\.html$/,
-                loader:'html-loader'
-                // options:{
-                //     minimize: isDev?false:true
-                // }
+                loader:'html-loader',
+                options:{
+                    minimize: isDev?false:true
+                }
+            },
+
+            {
+                test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
+                loaders: [
+                    //小于10KB的图片会自动转成dataUrl，
+                    'url?limit=10000&name=img/[hash:8].[name].[ext]',
+                    'image?{bypassOnDebug:true, progressive:true,optimizationLevel:3,pngquant:{quality:"65-80",speed:4}}'
+                ]
             },
             {
+                test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
+                loader: 'url?limit=10000&name=fonts/[hash:8].[name].[ext]'
+            },
+
+            // {
+            //     test: /\.(css)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
+            //     loader: extraCss.extract(["css-loader"])
+            // },
+            // {
+            //     test: /\.(scss)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
+            //     loader: extraSass.extract(["css-loader","sass-loader"])//css-loader!postcss-loader!sass-loader (postcss要放在css-loader之后，sass-loader之前)
+            // },
+
+            {
                 test: /\.(scss|sass|css)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
-                loader: ExtractTextPlugin.extract({//如果js中require了多个css文件，nameExtractTextPlugin会把多个css文件合并成一个，这个css是否压缩，主要看use里面的第一个匹配项的设置是否压缩
-                    fallback: "style-loader",
+                loader: extraSass.extract({//如果js中require了多个css文件，nameExtractTextPlugin会把多个css文件合并成一个，这个css是否压缩，主要看use里面的第一个匹配项的设置是否压缩
+                    fallback: "style-loader",//!postcss-loader
                     use: [{
                         loader:"css-loader",//"css-loader!sass-loader?sourceMap"
                         options:{
@@ -124,6 +153,10 @@ var commonConfig = {
                     }
                 }
             },
+            // {
+            //     test: /\.(eot|svg|ttf|woff)$/, 
+            //     loader: 'url?limit=1000&name=fonts/[name].[ext]'
+            // },
             // { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},//简单的sass支持
             
             { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}//图片文件使用 url-loader 来处理，小于8kb的直接转为base64
@@ -131,7 +164,7 @@ var commonConfig = {
     },
     resolve: {
         alias: {
-        'vue': __dirname+'/../node_modules/vue/dist/vue.js'//用node_modules文件夹里面的vue/dist/vue。js来编译，vue执行的时候只需要运行时，打包的时候做编译即可，可以节省vue的size
+            'vue': __dirname+'/../node_modules/vue/dist/vue.js'//用node_modules文件夹里面的vue/dist/vue。js来编译，vue执行的时候只需要运行时，打包的时候做编译即可，可以节省vue的size
         }
     }
 };
@@ -146,8 +179,12 @@ if(isDev){
                 from: copyImageFromPath,//拷贝图片
                 to:copyImageTargetPath
                 // ignor:["*.js"] 忽略.js文件
+            },{
+                from: copyCssFromPath,//拷贝css
+                to:copyCssTargetPath
             }]),
-            new ExtractTextPlugin("[name].css"),//把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
+            // extraCss,
+            extraSass,//把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
             new webpack.HotModuleReplacementPlugin()//热插拔：配置2（注意：热插拔不支持html内容改变的监控）
         ]),
         devServer:{//热插拔：配置3(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline")
@@ -167,11 +204,15 @@ if(isDev){
             new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
                 from: copyImageFromPath,//拷贝图片
                 to:copyImageTargetPath
+            },{
+                from: copyCssFromPath,
+                to:copyCssTargetPath
             }]),
             new webpack.optimize.UglifyJsPlugin({//会对js包括js中require进去的css进行压缩（注意：不包括单独.css文件的压缩）
               compress: {warnings: false }
             }),
-            new ExtractTextPlugin("[name].css")
+            // extraCss,
+            extraSass
         ])
     });
 }
