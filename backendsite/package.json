@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "debug": "set NODE_ENV=production&&node --inspect --debug-brk vue-demo/webpack.config.js",
-    "start": "webpack-dev-server --progress --colors --hot --inline --content-base vue-demo/build/ --config vue-demo/webpack.config.js",
+    "start": "webpack-dev-server --progress --colors --content-base vue-demo/build/ --config vue-demo/webpack.config.js",
     "build": "webpack --progress --colors --config vue-demo/webpack.config.js",
     "dest": "set NODE_ENV=production&&webpack --progress --colors  --config vue-demo/webpack.config.js"
   },

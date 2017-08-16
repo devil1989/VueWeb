@@ -40,7 +40,6 @@
  *mock数据用法：hj.request()
  */
 function model(opts){//对ajax进行二次封装，添加环境区分和mock请求
-	debugger
 	if(opts.isMock){//是否需要mock
 
 		//mockUrl是直接到pages文件夹下，只要指定文件名加参数即可，例如
@@ -50,7 +49,10 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
 		var detailCase=(mockUrl.match(new RegExp("[\?\&]" + "case" + "=([^\&]+)", "i")) || [])[1];
 
 		//少年们千万注意，json是不支持任何注释的，不支持//和/**/，千万别犯傻
-        require.ensure(["../../vue-demo/mock/index-mock.json"],function(data,a,b,c){//require.ensure以当前文件地址为基准，而不是打包合并后的地址+url
+        require.ensure(["../../vue-demo/mock/index-mock.js"],function(require){//require.ensure以当前文件地址为基准，而不是打包合并后的地址+url
+
+        	var backData=require("../../vue-demo/mock/index-mock.js");
+        	var data=backData.default.data;
 
         	if(!data){
         		console.log("mock请求url不对，mock数据的url以pages文件夹为base文件夹;mock url例子:index.store.js?case=casename");
@@ -61,7 +63,7 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
 
         	if(!key){
         		console.log("mock数据不存在，请在"+url+"这个文件中添加对应的"+key+"属性以及它的mock数据");
-        		success(data[key]);
+        		opts.success(data[key]);
         	}
 
         	if(!detailCase){
@@ -72,10 +74,10 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
         		if(!caseName){//如果没有case属性，name下面的各
         			console.log("mock数据不存在，请在"+url+"的"+key+"属性中添加对应mock数据");
         		}
-        		success(data[key][caseName]);
+        		opts.success(data[key][caseName]);
         	}
         	else{
-        		success(data[key][detailCase]);
+        		opts.success(data[key][detailCase]);
         	}
         });
     }

@@ -36,38 +36,24 @@ var indexPage=(function(){
             "Contents":Contents,
             "Cont":SchoolTable
         },
-        data:{
-            message:"hello hujiang",
-            getParam:function(){
-                debugger
-                var self=this;
-                return {
-                    isMock:true,
-                    mockUrl:"index-mock.js?case=10",
-                    url:"crm/GetNodeByUserId",
-                    type:"get",
-                    data:{userid:1},
-                    success:function(data){
-                        self.success(data);
-                    },
-                    error:function(data){
-                        self.error(data);
-                    }
-                };
-            },
-            success:function(data){
-                this.$store
-            },
-            error:function(data){
-
+        data:function(){
+            return {}
+        },
+        computed:{
+            nav:function(){
+                return state.nav;
             }
         },
-        beforeMount:function(a,b,c,d,e){
-            debugger
-
-            var param=this.$data.getParam();
-            hj.request(param);
+        beforeMount:function(){
+            
+        },
+        mounted:function(){
+            this.$store.dispatch("initData");
+        },
+        methods:{//this.$options.methods来获取
+            
         }
+
     });
 
     return IndexPageVue;
@@ -82,7 +68,7 @@ export default {}
 /******Vue 使用简易指南******/
 
 // //自定义指令，表单指令先不介绍，不怎么用
-// 属性绑定：v-bind:(可以直接简写成：) ; 如何传入变量（<span v-bind:class="'ui-'+pop"></span>）//其中ui-在引号内，是字符串，pop是变量
+// 属性绑定：v-bind:(可以直接简写成：) ; 如何传入变量（<span v-bind:class="'ui-'+pop"></span>）//其中ui-在引号内，是字符串，pop是变量  
 // 事件绑定：v-on:（可以直接简写成@）；如何绑定事件（<span @click.="'ui-'+pop"></span>），//.stop表示事件修饰符，
 //                 //事件修饰符
 //                     .stop：stopPropagation

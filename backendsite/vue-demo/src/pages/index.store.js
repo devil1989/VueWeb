@@ -5,27 +5,70 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
-const store = new Vuex.Store({
-    state: {
 
+// 一般而言，我们需要将store下的state放在computed中，将组件自身的state，不需要像vuex这样动态的、传递的放在 data 下即可。
+const store = new Vuex.Store({
+    state: {//看看https://cn.vuejs.org/v2/guide/reactivity.html，别乱加默认值
+        nav:{
+            hasInit:false,//是否以及初始化，初始化以后会有data属性
+            data:null
+        },
+        // nav:{
+        //     status:0,
+        //     nodeList:[{nodeName:"jeffrey"}]
+        // },//左侧树
+        tables:{
+            hasInit:false,
+        },//底部table（多个）
+        Infos:{
+            hasInit:false,
+        },//右侧具体信息（多个）
+        pops:{
+            hasInit:false,
+        }//弹框（多个）
     },
-    mutations: {
+    mutations: {//store.commit
+        "INIT_DATA":function(state,payload){
+            state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
+            state.nav.hasInit=true;
+        },
+        "test":function(state,payload){
+            debugger
+            state.nav.status++;
+        }
         // SET_FILTER_KEY (state, value) {
         //     state.filterKey = value;
         // }
     },
-    actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作）
-        // initData:function(dispatch){
-        //     var param=this.getters.getParam();
-        //     hj.request(param);
-        // } 
-        // sendMessage: ({ dispatch }, content) => dispatch('SEND_MESSAGE', content),
-        // selectSession: ({ dispatch }, id) => dispatch('SELECT_SESSION', id),
-        // search: ({ dispatch }, value) => dispatch('SET_FILTER_KEY', value)
+    actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
+        initData:function(store){
+            var param=store.getters.getParams(store);//不用自动调用
+            hj.request(param);
+        }
     },
     getters:{
-        
-    },
+        getParams:function(){
+            return function (store){
+                return {
+                    isMock:true,
+                    mockUrl:"index-mock.js?case=case1",
+                    url:"crm/org/CreateNode",
+                    type:"get",
+                    data:{userid:1},
+                    success:function(data){
+                        store.commit({
+                            type:"INIT_DATA",
+                            initData:data.data,
+                            store:store
+                        })//执行mutations中的对应行为
+                    },
+                    error:function(data){
+                        console.log("请求导侧边航栏数据数百");
+                    }
+                };
+            } 
+        }
+    }
     
 });
 

@@ -362,7 +362,8 @@ h1 {
   float: left;
   margin-top: 0.2rem;
   padding-left: 1.2rem;
-  margin-left: 9rem; }
+  margin-left: 9rem;
+  height: 200rem; }
 
 .internet-school-content h2 {
   height: 2.5rem;
