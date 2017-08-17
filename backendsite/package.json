@@ -4,11 +4,13 @@
   "description": "projects plugins setting",
   "author": "JeffreyChen",
   "private": true,
+  "bin": { "p": "npm run p"},
   "scripts": {
     "debug": "set NODE_ENV=production&&node --inspect --debug-brk vue-demo/webpack.config.js",
+    "stop": "taskkill /f /im node.exe",
     "start": "webpack-dev-server --progress --colors --content-base vue-demo/build/ --config vue-demo/webpack.config.js",
-    "build": "webpack --progress --colors --config vue-demo/webpack.config.js",
-    "dest": "set NODE_ENV=production&&webpack --progress --colors  --config vue-demo/webpack.config.js"
+    "test": "webpack --progress --colors --config vue-demo/webpack.config.js",
+    "p": "set NODE_ENV=production&&webpack --progress --colors  --config vue-demo/webpack.config.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.13.0",

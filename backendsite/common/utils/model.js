@@ -49,9 +49,11 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
 		var detailCase=(mockUrl.match(new RegExp("[\?\&]" + "case" + "=([^\&]+)", "i")) || [])[1];
 
 		//少年们千万注意，json是不支持任何注释的，不支持//和/**/，千万别犯傻
-        require.ensure(["../../vue-demo/mock/index-mock.js"],function(require){//require.ensure以当前文件地址为基准，而不是打包合并后的地址+url
+		//ensure中的是依赖的js文件，ensure中不支持任何变量，
+		//ensure的callback中require进来的js，都是异步加载的js，他们会合ensure中的依赖项打包在一起，但是依赖的js不会执行，只会执行ensure的callback中require的js文件
+        require.ensure([],function(require){//require.ensure以当前文件地址为基准，而不是打包合并后的地址+url //"../../vue-demo/mock/index-mock.js"
 
-        	var backData=require("../../vue-demo/mock/index-mock.js");
+        	var backData=require("../../vue-demo/mock/"+url);//require加载模块的时候，需要一个基础的路径，require会把这个路径下的所有文件都作为模块处理（require.context可以支持完全的变量）
         	var data=backData.default.data;
 
         	if(!data){

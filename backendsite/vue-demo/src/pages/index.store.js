@@ -32,8 +32,7 @@ const store = new Vuex.Store({
             state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
             state.nav.hasInit=true;
         },
-        "test":function(state,payload){
-            debugger
+        "UPDATENAV":function(state,payload){
             state.nav.status++;
         }
         // SET_FILTER_KEY (state, value) {
@@ -41,33 +40,37 @@ const store = new Vuex.Store({
         // }
     },
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
-        initData:function(store){
-            var param=store.getters.getParams(store);//不用自动调用
-            hj.request(param);
+        initData:function(store,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
+        },
+
+        getNodeData:function(store,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
         }
     },
-    getters:{
-        getParams:function(){
-            return function (store){
-                return {
-                    isMock:true,
-                    mockUrl:"index-mock.js?case=case1",
-                    url:"crm/org/CreateNode",
-                    type:"get",
-                    data:{userid:1},
-                    success:function(data){
-                        store.commit({
-                            type:"INIT_DATA",
-                            initData:data.data,
-                            store:store
-                        })//执行mutations中的对应行为
-                    },
-                    error:function(data){
-                        console.log("请求导侧边航栏数据数百");
-                    }
-                };
-            } 
-        }
+    getters:{//getters里面的函数会自动调用 
+        // getParams:function(){
+        //     //因为getParams会自动执行，所以里面需要返回一个funciton，这样才能从外面传参数进来，而且传进来的参数只能有一个
+        //     return function (objA){//这个objA就是上面
+        //         return {
+        //             isMock:true,
+        //             mockUrl:"index-mock.js?case=case1",
+        //             url:"crm/org/CreateNode",
+        //             type:"get",
+        //             data:{userid:1},
+        //         };
+        //     } 
+        // }
     }
     
 });

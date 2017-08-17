@@ -1,3 +1,5 @@
+//组织结构升级API
+
 // 一、组织架构
 // 1、获取所有节点
 //    1.1 获取所有节点接口（给前端树形结构）
@@ -62,7 +64,7 @@
 
 //  2、 获取节点详细信息
 // url ：
-// http://local.backend.hujiang.com/crm/org/GetNodeInfo?nodeId=2
+// http://local.backend.hujiang.com/crm/org/GetNodeInfo?nodeId=2 (这里的nodeId就是上面节点的id)
 // Response
 {
   "data": {
@@ -242,14 +244,14 @@
 
 // 4、删除节点
 // Request
-// {
-//  nodeId:1，
-// }
+{
+ nodeId:1,
+}
 // Response
-// {
-//  status:0,
-//  message:""
-// }
+{
+ status:0,
+ message:""
+}
 
 
 //5、获取节点成员接口
@@ -327,3 +329,7 @@
   "message": "success",
   "status": 0
 }
+
+
+
+

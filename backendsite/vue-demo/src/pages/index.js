@@ -48,10 +48,41 @@ var indexPage=(function(){
             
         },
         mounted:function(){
-            this.$store.dispatch("initData");
+            var options=this.$options;
+            var component=this.$children[0];
+            var store=this.$store;
+            var params=options.methods.getParams();
+            //dispatch支持promise，但是前提是把initData这个action封装成promise
+            this.$store.dispatch("initData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
+                store.commit({
+                    type:"INIT_DATA",
+                    initData:data.data,
+                    store:store
+                });//执行mutations中的对应行为
+                component.updateComponent(data.data);
+                var nodeParam=options.methods.getNodeParam();
+                store.dispatch("getNodeData",{"param":nodeParam}).then(function(){
+                    
+                },function(){
+
+                });//获取节点信息
+            },function(){
+                console.log("请求导侧边航栏数据数百");
+            });
         },
         methods:{//this.$options.methods来获取
-            
+            getParams:function(){
+                return {
+                    isMock:true,
+                    mockUrl:"index-mock.js?case=case1",
+                    url:"crm/org/CreateNode",
+                    type:"get",
+                    data:{userid:1},
+                };
+            },
+            getNodeParam:function(){
+                return {nodeId:2};
+            }
         }
 
     });

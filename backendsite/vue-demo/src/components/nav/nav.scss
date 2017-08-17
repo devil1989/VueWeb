@@ -41,19 +41,6 @@ h1{
 	}
 
 	/*隐藏加减符号的时候，需要拉伸对应的虚线*/
-	/*.have-no-child.first-child .dashline-absolute-bottom{
-		height: 1rem;
-	}
-	.have-no-child.last-child .dashline-absolute-top{
-		height: 1rem;
-	}
-	.have-no-child  .dashline-absolute-top{
-		height: 1rem;
-	}
-	.have-no-child  .dashline-absolute-bottom{
-		height: 1rem;
-	}*/
-
 	/*.have-no-child和last-child同层级*/
 	/*最后一层或者虽然不是最后一层但是折叠了，就需要把上下的虚线隐藏*/
 	.have-no-child .dashline-absolute-bottom,.have-no-child .dashline-absolute-top,.fold-item>.school-nav>.dashline-absolute-top,.fold-item>.school-nav>.dashline-absolute-bottom{
@@ -68,6 +55,20 @@ h1{
 		position: relative;
 		overflow: hidden;
 		margin-bottom: 1px;
+	}
+	.school-nav-sub1>.school-content-item>li>.school-nav>.dashline-absolute-left{//最外层不需要左边的虚线
+		display:none;
+	}
+	.line-start>.school-nav>.dashline-absolute-top,.line-end>.school-nav.have-no-child>.dashline-absolute-bottom{//开始元素不需要向上虚线；底部如果没有子元素不需向下虚线
+		display:none;
+	}
+	li>.school-nav>.reduce-icon,.fold-item>.school-nav>.plus-icon{
+		display:block;
+		font-size:1rem;
+		line-height: 0.5rem;
+	}
+	fold-item>.school-nav>.reduce-icon,li>.school-nav>.plus-icon{
+		display:none !important;
 	}
 	.internet-school-nav-item{
 		margin-bottom: 1px;
@@ -135,7 +136,7 @@ h1{
 	}
 
 	.internet-school-nav .current-nav{
-		padding-right: 3.6rem;
+		
 		background-color: #ECECEC;
 	}
 	
@@ -167,11 +168,15 @@ h1{
 	.school-nav-sub1{
 		position: absolute;
 		height: 100%;
-		width: 9rem;
+		width: auto;
 		padding-left: 0.5rem;
 		background-color: #F7F7F7;
 		margin-bottom:0rem;
 		margin-top: 0.1rem;
+		padding-right:1rem;
+	}
+	.school-nav-sub1>ul.school-content-item{
+		border-left:none;
 	}
 	/******左侧公共菜单栏目 具体业务 end******/
 
