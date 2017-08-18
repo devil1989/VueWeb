@@ -13,34 +13,35 @@ const store = new Vuex.Store({
             hasInit:false,//是否以及初始化，初始化以后会有data属性
             data:null
         },
-        // nav:{
-        //     status:0,
-        //     nodeList:[{nodeName:"jeffrey"}]
-        // },//左侧树
         tables:{
             hasInit:false,
+            data:null//data里面是具体的ajax数据，这个ajax数据结构又是{data:""}这样的
         },//底部table（多个）
         Infos:{
             hasInit:false,
+            data:null
         },//右侧具体信息（多个）
         pops:{
             hasInit:false,
+            data:null
         }//弹框（多个）
     },
     mutations: {//store.commit
-        "INIT_DATA":function(state,payload){
-            state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
+        "initData":function(state,payload){
             state.nav.hasInit=true;
+            state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
         },
-        "UPDATENAV":function(state,payload){
-            state.nav.status++;
+        "updateContent":function(state,payload){
+            state.Infos.hasInit=true;
+            state.Infos.data=payload.data;
+        },
+        "updateTableContent":function(state,payload){
+            state.tables.hasInit=true;
+            state.tables.data=payload.data;
         }
-        // SET_FILTER_KEY (state, value) {
-        //     state.filterKey = value;
-        // }
     },
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
-        initData:function(store,payload){
+        getInitData:function(store,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
                 param.success=resolve;
@@ -50,6 +51,14 @@ const store = new Vuex.Store({
         },
 
         getNodeData:function(store,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
+        },
+        getTableData:function(store,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
                 param.success=resolve;

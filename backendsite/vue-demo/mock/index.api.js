@@ -68,28 +68,36 @@
 // Response
 {
   "data": {
+
+    //基本西右侧的btns
     "btns": [{
       "txt": "新增职能组",
-      "isSub": true
+      "isSub": true//添加的是业务层级的下级
     }, {
       "txt": "新增下级职能单元",
       "isSub": false
     }],
     "info": {
-      "id": 2,
-      "parentId": 0,
-      "nodeName": "沪江",
+
+      //这些都是基本信息
+      "id": 2,//组织代码
+      "nodeName": "沪江",//组织名称
+      "parentName":"父级",//父级组织名称
+      "parentId": 0,//父级组织代码
+      "isActive": true,//是否启用
+
+      //拓展属性，基本信息展示只需要key和value，点击新增的时候才需要其他key的信息
       "nodeAttr": [{
         "id": 2,
-        "name": "沪江",
-        "value": "4",
+        "name": "沪江",//组织所属层 （key）
+        "value": "4",//组织所属层 （value）
         "code": "nodeType",
         "sort": 0,
         "parentId": null,
         "type": null,
         "data": null
       }],
-      "isActive": true,
+      
       "children": null
     }
   },
@@ -254,76 +262,83 @@
 }
 
 
-//5、获取节点成员接口
+//5、获取节点成员接口【分页表结构】
 //Type:Post
 // Request  url:http://local.backend.hujiang.com/crm/org/GetMember
 {
   {
-    "pageNum": 1,
-    "pageSize": 10,
+    "pageNum": 1,//页码
+    "pageSize": 10,//每页多少个
     "paramData": {
-      "groupId": 10138
+      "groupId": 10138 //节点id
     }
   }
 }
 // Response Body 
 {
   "data": {
-    "pagination": {
-      "currentPageIndex": 1,
-      "pageSize": 10,
-      "sortEnum": 0,
-      "totalCount": 36
+    "pagination": {//页码相关信息
+      "currentPageIndex": 1,//当前页码
+      "pageSize": 10,//每页多少个
+      "sortEnum": 0,//？
+      "totalCount": 36//总页数
     },
     "resultData": [{
       "businessRole": 1,
       "email": "lixiaofei@hujiang.com",
-      "userCode": "up_snail",
+      "userCode": "up_snail",//用户名
       "userId": 205,
-      "userName": "李小飞",
-      "userRole": 2
+      "userName": "李小飞",//姓名
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "guoshuai@hujiang.com",
       "userCode": "classbob",
       "userId": 220,
       "userName": "郭帅",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "zhangsuyun@hujiang.com",
       "userCode": "云若昕",
       "userId": 238,
       "userName": "张苏云",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "3373952526@qq.com",
       "userCode": "郑钰凡",
       "userId": 2362,
       "userName": "郑钰凡",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "jili@hujiang.com",
       "userCode": "olina_ji",
       "userId": 2367,
       "userName": "季丽",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "lilin@hujiang.com",
       "userCode": "lilin0821",
       "userId": 2395,
       "userName": "李林",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }, {
       "businessRole": 1,
       "email": "crm10@hujiang.com",
       "userCode": "crm10",
       "userId": 322,
       "userName": "crm10",
-      "userRole": 2
+      "userRole": 2,
+      "userRoleName":"SFA-系统管理员"
     }]
   },
   "message": "success",

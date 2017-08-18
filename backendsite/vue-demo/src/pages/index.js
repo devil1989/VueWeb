@@ -17,16 +17,6 @@ Vue.config.devtools = true;
 
 
 var indexPage=(function(){
-    // var ajax=window.utils&&window.utils.ajax;
-    // var IndexPageComponent={
-    //     components: { Table },
-    //     vuex: {
-    //         actions: storeInfo.actions
-    //     },
-    //     created () {
-    //         this.initData();
-    //     }
-    // }
 
     var IndexPageVue=new Vue({
         el: '#app',
@@ -44,33 +34,27 @@ var indexPage=(function(){
                 return state.nav;
             }
         },
-        beforeMount:function(){
-            
-        },
         mounted:function(){
             var options=this.$options;
             var component=this.$children[0];
             var store=this.$store;
             var params=options.methods.getParams();
             //dispatch支持promise，但是前提是把initData这个action封装成promise
-            this.$store.dispatch("initData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
-                store.commit({
-                    type:"INIT_DATA",
-                    initData:data.data,
-                    store:store
-                });//执行mutations中的对应行为
-                component.updateComponent(data.data);
-                var nodeParam=options.methods.getNodeParam();
-                store.dispatch("getNodeData",{"param":nodeParam}).then(function(){
-                    
-                },function(){
-
-                });//获取节点信息
+            this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
+                if(data.data.status==0){
+                    options.methods.init(store,data.data,component);
+                    options.methods.renderNodeData(store,options);
+                    options.methods.renderTable(store,options);
+                }else{
+                    console.log("!!!请求导侧边航栏数据失败");
+                }
             },function(){
-                console.log("请求导侧边航栏数据数百");
+                console.log("网络原因请求导侧边航栏数据失败");
             });
         },
         methods:{//this.$options.methods来获取
+
+            //获取页面初始信息请求所需要的参数
             getParams:function(){
                 return {
                     isMock:true,
@@ -80,8 +64,154 @@ var indexPage=(function(){
                     data:{userid:1},
                 };
             },
+
+            //获取右侧节点信息请求所需要的参数
             getNodeParam:function(){
-                return {nodeId:2};
+                return {
+                    isMock:true,
+                    mockUrl:"index-mock.js?case=case1",
+                    url:"crm/org/GetNodeInfo",
+                    nodeId:2//节点id
+                };
+            },
+
+            //获取底部table请求所需要的参数
+            getTableParam:function(){
+                return {
+                    "isMock":true,
+                    "mockUrl":"index-mock.js?case=case1",
+                    "url":"crm/org/GetMember",
+                    "pageNum": 1,//页码
+                    "pageSize": 10,//每页多少个
+                    "paramData": {
+                      "groupId": 2 //节点id
+                    }
+                }
+            },
+
+            //获取页面初始信息并渲染
+            init:function(store,targetData,component){
+                store.commit({
+                    type:"initData",
+                    initData:targetData,
+                    store:store
+                });//执行mutations中的对应行为
+                component.updateComponent(targetData);
+            },
+
+            //获取右侧节点信息并渲染
+            renderNodeData:function(store,options){
+                store.dispatch("getNodeData",{"param":this.getNodeParam()}).then(function(innerData){
+                    var conData=innerData.data;
+                    if(innerData.status==0){
+                        store.commit({
+                            type:"updateContent",
+                            data:conData||{},
+                            store:store
+                        });
+                    }
+                    else{
+                        console.log("!!!请求节点数据失败");
+                    }
+                },function(){
+                    console.log("网络原因请求节点数据失败");
+                });//获取节点信息
+            },
+
+            //获取底部用户信息表格数据并渲染
+            renderTable:function(store,options){
+                store.dispatch("getTableData",{"param":this.getTableParam()}).then(function(tableData){
+                    var conData=tableData.data;
+                    if(tableData.status==0){
+                        debugger;
+                        store.commit({
+                            type:"updateTableContent",
+                            data:options.methods.formatData(conData)||{},
+                            store:store
+                        });
+                    }
+                    else{
+                        console.log("!!!请求节点数据失败");
+                    }
+                },function(){
+                    console.log("网络原因请求节点数据失败");
+                });//获取节点信息
+            },
+
+            //格式化数据，把需要展示的数据算出来
+            formatData:function(data){
+                var pageNum = Math.ceil(data.pagination.totalCount/data.pagination.pageSize);
+                var currentPage=data.pagination.currentPageIndex;
+                var len=(data.resultData||[]).length;
+                data.pagination.pageNum=pageNum;//一共有多少页
+                (data.resultData||[]).forEach(function(ele,index){
+                    var idx=index+1;
+                    ele.isCurrent=(idx==pageNum)?true:"";
+                    if(currentPage<4){//从1到currentPage之间没有...,展示1~currentPage+2，
+                        if(idx>0&&(idx<=currentPage+2)){
+                            ele.txt=idx;
+                            ele.isShow=true;
+                        }
+                        else{//看剩下的页码怎么展示
+                            if(currentPage+3<pageNum){//idx到最后一页之间有...
+                                if(pageNum==idx){//展示最后一页
+                                    ele.txt=idx;
+                                    ele.isShow=true;
+                                }else{
+                                    if(idx==pageNum-1){
+                                        ele.txt="...";
+                                        ele.isShow=true;
+                                    }
+                                    else{//中间隐藏的元素
+                                        ele.txt=idx;
+                                        ele.isShow=false;
+                                    }
+                                }
+                            }
+                            else{//所有idx都没有...
+                                ele.txt=idx;
+                                ele.isShow=true;
+                            }
+                        }
+                    }else{//大于4的时候，结构很稳定了1...current-2,current-1,current,current+1,current+2,
+                        if(idx==1){
+                            ele.txt=idx;
+                            ele.isShow=true;
+                        }
+                        else if(idx==2){
+                            ele.txt="...";
+                            ele.isShow=true;
+                        }
+                        else if((idx>=(currentPage-2)&&idx<=(currentPage+2))){//区间内都展示
+                            ele.txt=idx;
+                            ele.isShow=true;
+                        }else{//区间外，如果后面还有2个或以上元素，第一个元素变...
+                            if(pageNum>currentPage+3){//中间有...
+                                if(idx==pageNum-1){
+                                    ele.txt="...";
+                                    ele.isShow=true;
+                                }
+                                else if(idx==pageNum){
+                                    ele.txt=idx;
+                                    ele.isShow=true;
+                                }
+                                else{//中间隐藏的元素
+                                    ele.txt=idx;
+                                    ele.isShow=false;
+                                }
+                            }else{//中间没...
+                                ele.txt=idx;
+                                ele.isShow=true;
+                            }
+                        }
+                    }
+
+                });
+
+                console.log(data.resultData);
+                debugger
+
+                return data
             }
         }
 

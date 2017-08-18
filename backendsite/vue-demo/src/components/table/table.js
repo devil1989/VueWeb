@@ -1,14 +1,9 @@
 require("./table.scss");
 var templates=require("./table.html");
 export default {
-    // vuex: {
-
-    // },
-    // data:function(){
-    //     return {};
-    // },
-    // methods: {
-    // },
+    data:function(){
+        return this.$store.state.tables;
+    },
     template:templates
 };
 

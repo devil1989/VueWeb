@@ -1,36 +1,29 @@
-	<div>
+	<div v-if="hasInit">
 		<div class="tree-level-1-title">
-			<h2>基本信息</h2> <span class="basic-btns basic-add-btns">+新增业务单元</span>
+			<h2>基本信息</h2>
+			<span v-for="btn in data.btns" :class="{'basic-btns':true, 'basic-add-btns':true,'baseic-sub-btn':btn.isSub}">{{btn.txt}}</span>
 		</div>
 		<div class="tree-level-1-info">
 			<ul>
 				<li>
 					<span>组织代码:</span>
-					<span>2345</span>
+					<span>{{data.info.id}}</span>
 				</li>
 				<li>
 					<span>组织名称:</span>
-					<span>2345</span>
+					<span>{{data.info.nodeName}}</span>
 				</li>
 				<li>
-					<span>组织所属层:</span>
-					<span>2345</span>
+					<span>父级组织代码:</span>
+					<span>{{data.info.parentId}}</span>
 				</li>
 				<li>
-					<span>组织代码:</span>
-					<span>2345</span>
+					<span>父级组织名称:</span>
+					<span>{{data.info.parentName}}</span>
 				</li>
-				<li>
-					<span>组织名称:</span>
-					<span>2345</span>
-				</li>
-				<li>
-					<span>组织所属层:</span>
-					<span>2345</span>
-				</li>
-				<li>
-					<span>组织所属层:</span>
-					<span>2345</span>
+				<li v-for="nodeAttr in data.info.nodeAttr">
+					<span>{{nodeAttr.name}}:</span>
+					<span>{{nodeAttr.value}}</span>
 				</li>
 			</ul>
 			<div class="btns-out-wrapper">

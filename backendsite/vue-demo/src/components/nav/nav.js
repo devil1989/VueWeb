@@ -62,7 +62,6 @@ export default {
             //父组件中手动调用子组件的更新，这个比较坑，没遇到vuex和vue，因为目录组件结构是未知的，不知道他丫的有几层
             var ele=document.querySelector(".internet-school-nav");
             var htmlStr=this.genarateTemplate(this.$data.data.nodeList);
-            debugger
             ele.innerHTML=htmlStr;
         }
 

@@ -178,18 +178,6 @@ h1 {
   /*margin-left: 0.3rem;*/ }
 
 /*隐藏加减符号的时候，需要拉伸对应的虚线*/
-/*.have-no-child.first-child .dashline-absolute-bottom{
-		height: 1rem;
-	}
-	.have-no-child.last-child .dashline-absolute-top{
-		height: 1rem;
-	}
-	.have-no-child  .dashline-absolute-top{
-		height: 1rem;
-	}
-	.have-no-child  .dashline-absolute-bottom{
-		height: 1rem;
-	}*/
 /*.have-no-child和last-child同层级*/
 /*最后一层或者虽然不是最后一层但是折叠了，就需要把上下的虚线隐藏*/
 .have-no-child .dashline-absolute-bottom, .have-no-child .dashline-absolute-top, .fold-item > .school-nav > .dashline-absolute-top, .fold-item > .school-nav > .dashline-absolute-bottom {
@@ -204,6 +192,20 @@ h1 {
   position: relative;
   overflow: hidden;
   margin-bottom: 1px; }
+
+.school-nav-sub1 > .school-content-item > li > .school-nav > .dashline-absolute-left {
+  display: none; }
+
+.line-start > .school-nav > .dashline-absolute-top, .line-end > .school-nav.have-no-child > .dashline-absolute-bottom {
+  display: none; }
+
+li > .school-nav > .reduce-icon, .fold-item > .school-nav > .plus-icon {
+  display: block;
+  font-size: 1rem;
+  line-height: 0.5rem; }
+
+fold-item > .school-nav > .reduce-icon, li > .school-nav > .plus-icon {
+  display: none !important; }
 
 .internet-school-nav-item {
   margin-bottom: 1px; }
@@ -271,7 +273,6 @@ h1 {
   float: left; }
 
 .internet-school-nav .current-nav {
-  padding-right: 3.6rem;
   background-color: #ECECEC; }
 
 .internet-school-nav .school-content-item {
@@ -299,11 +300,15 @@ h1 {
 .school-nav-sub1 {
   position: absolute;
   height: 100%;
-  width: 9rem;
+  width: auto;
   padding-left: 0.5rem;
   background-color: #F7F7F7;
   margin-bottom: 0rem;
-  margin-top: 0.1rem; }
+  margin-top: 0.1rem;
+  padding-right: 1rem; }
+
+.school-nav-sub1 > ul.school-content-item {
+  border-left: none; }
 
 /******左侧公共菜单栏目 具体业务 end******/
 /******左侧公共菜单栏目 end******/
@@ -327,31 +332,6 @@ h1 {
   height: 3rem;
   width: 13rem;
   text-align: left; }
-
-.btns-out-wrapper {
-  overflow: hidden;
-  text-align: center; }
-
-.btns-wrapper {
-  overflow: hidden;
-  height: 3rem;
-  width: 16rem;
-  margin: 2rem auto; }
-
-.basic-btns {
-  margin: 0.5rem;
-  border: 1px solid #EAEAEA;
-  border-radius: 0.3rem;
-  float: left;
-  height: 1.5rem;
-  width: 6rem;
-  line-height: 1.5rem;
-  text-align: center; }
-
-.basic-add-btns {
-  float: right;
-  background-color: #5E5E5E;
-  color: #ffffff; }
 .tree-level-1-title {
   overflow: hidden; }
 
@@ -362,7 +342,7 @@ h1 {
   float: left;
   margin-top: 0.2rem;
   padding-left: 1.2rem;
-  margin-left: 9rem;
+  margin-left: 11rem;
   height: 200rem; }
 
 .internet-school-content h2 {
@@ -404,7 +384,7 @@ h1 {
   border-radius: 0.3rem;
   float: left;
   height: 1.5rem;
-  width: 6rem;
+  padding: 0rem 1rem;
   line-height: 1.5rem;
   text-align: center; }
 

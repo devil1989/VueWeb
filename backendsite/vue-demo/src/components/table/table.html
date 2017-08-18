@@ -1,25 +1,28 @@
-<div class="table-wrapper">
+<div class="table-wrapper" v-if="hasInit">
     <div>本组织名称</div>
     <div class="table-list-detail">
         <ul>
-            <li class="table-attr-name"><div class="list-user-sname"><span>用户名</span></div><div class="list-user-name"><span>姓名</span></div><div class="list-user-classid"><span>班级</span></div></li>
-            <li><div class="list-user-sname"><span>uese</span></div><div class="list-user-name"><span>陈佳杰</span></div><div class="list-user-classid text-align-left"><span>302班</span></div></li>
+            <li class="table-attr-name">
+                <div class="list-user-sname"><span>用户名</span></div>
+                <div class="list-user-name"><span>姓名</span></div>
+                <div class="list-user-classid"><span>系统角色</span></div>
+            </li>
+
+            <li v-for="item in data.resultData">
+                <div class="list-user-sname"><span>{{item.userCode}}</span></div>
+                <div class="list-user-name"><span>{{item.userName}}</span></div>
+                <div class="list-user-classid text-align-left"><span v-for="role in item.roles">{{role.roleName}}</span></div>
+            </li>
         </ul>
     </div>
 
     <div class="table-list-extra">
-        <div class="table-list-extra-desc"><span>共6页,共219条</span></div>
+        <div class="table-list-extra-desc"><span>共{{ data.pagination.pageNum }}页,共{{data.pagination.totalCount}}条</span></div>
         <div class="table-list-extra-info">
             <div class="table-list-page-num">
                 <span class="page-prev page-direction">上一页</span>
-                <ul>
-                    <li class="current-page-index"><span>1</span></li>
-                    <li><span>2</span></li>
-                    <li><span>3</span></li>
-                    <li><span>4</span></li>
-                    <li><span>5</span></li>
-                    <li><span>...</span></li>
-                    <li><span>23</span></li>
+                <ul >
+                    <li v-for="pageItem in data.resultData" :class="{'current-page-index':pageItem.isCurrent}" v-if="pageItem.isShow" ><span>{{pageItem.txt}}</span></li>
                 </ul>
                 <span class="page-next page-direction">下一页</span>
             </div>
