@@ -18,11 +18,11 @@
 
     <div class="table-list-extra">
         <div class="table-list-extra-desc"><span>共{{ data.pagination.pageNum }}页,共{{data.pagination.totalCount}}条</span></div>
-        <div class="table-list-extra-info">
+        <div class="table-list-extra-info" v-on:click="youjumpijump" >
             <div class="table-list-page-num">
                 <span class="page-prev page-direction">上一页</span>
                 <ul >
-                    <li v-for="pageItem in data.resultData" :class="{'current-page-index':pageItem.isCurrent}" v-if="pageItem.isShow" ><span>{{pageItem.txt}}</span></li>
+                    <li v-for="pageItem in data.formatedInfo" :class="{'current-page-index':pageItem.isCurrent,'ismouse-hover':pageItem.noHover,'js_jump_to_page':pageItem.jumpClass }" v-if="pageItem.isShow" ><span>{{pageItem.txt}}</span></li>
                 </ul>
                 <span class="page-next page-direction">下一页</span>
             </div>
@@ -31,7 +31,7 @@
                 <span >跳到</span>
                 <input class="table-list-detail-page" type="text">
                 <span>页</span>
-                <span class="table-list-confirm">确定</span>
+                <span class="table-list-confirm js_jump_to_page">确定</span>
             </div>
         </div>
     </div>

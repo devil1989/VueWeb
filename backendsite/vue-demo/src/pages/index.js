@@ -54,6 +54,7 @@ var indexPage=(function(){
         },
         methods:{//this.$options.methods来获取
 
+
             //获取页面初始信息请求所需要的参数
             getParams:function(){
                 return {
@@ -123,11 +124,12 @@ var indexPage=(function(){
                 store.dispatch("getTableData",{"param":this.getTableParam()}).then(function(tableData){
                     var conData=tableData.data;
                     if(tableData.status==0){
-                        debugger;
+
+                        console.log(conData.pagination.currentPageIndex);
+                        //格式化传过来的数据
                         store.commit({
                             type:"updateTableContent",
-                            data:options.methods.formatData(conData)||{},
-                            store:store
+                            data:options.methods.formatData(conData)||{}
                         });
                     }
                     else{
@@ -138,39 +140,89 @@ var indexPage=(function(){
                 });//获取节点信息
             },
 
+            //获取分页信息,把服务端的数组按照页面size分成多个数组
+            getPageArray:function(data,pageSize){
+                var cloneData=JSON.parse(JSON.stringify(data));
+                var len=(cloneData||[]).length;
+                var targetArray=[];
+                var tempArray=[];
+                var tempPageIndex=0;
+
+                for(var i=0;i<len;i++){
+                    var pageIndex=Math.floor(i/pageSize);
+                    if(tempPageIndex!=pageIndex){
+                        targetArray.push({
+                            pageIndex:pageIndex,
+                            pageContent:tempArray
+                        });
+                        tempArray=[];
+                    }
+                    tempPageIndex=pageIndex;
+                    
+                    tempArray.push(cloneData[i]);
+                }
+
+                targetArray.push({
+                    pageIndex:pageIndex+1,
+                    pageContent:tempArray
+                });
+
+                return targetArray;
+            },
+
+
             //格式化数据，把需要展示的数据算出来
             formatData:function(data){
-                var pageNum = Math.ceil(data.pagination.totalCount/data.pagination.pageSize);
+                if(!data||!data.pagination||!data.resultData){
+                    return {};
+                }
+                else if(data.pagination.currentPageIndex>Math.ceil(data.resultData.length/data.pagination.pageSize)){//当前页码大于总的页数
+                    data.pagination.currentPageIndex=1;
+                }
+                var pageSize=data.pagination.pageSize;
+                var pageNum = Math.ceil(data.resultData.length/pageSize);
                 var currentPage=data.pagination.currentPageIndex;
                 var len=(data.resultData||[]).length;
+                var displayRange=1;
                 data.pagination.pageNum=pageNum;//一共有多少页
-                (data.resultData||[]).forEach(function(ele,index){
-                    var idx=index+1;
-                    ele.isCurrent=(idx==pageNum)?true:"";
-                    if(currentPage<4){//从1到currentPage之间没有...,展示1~currentPage+2，
-                        if(idx>0&&(idx<=currentPage+2)){
+                data.formatedInfo=data.formatedInfo||this.getPageArray(data.resultData,pageSize);
+                this.mapData(data,currentPage);
+                return data
+            },
+
+            mapData:function(data,currentPageIndex,displayRange=1){
+                var displayRange=displayRange;
+                var pageNum=data.formatedInfo.length;//一共有多少页
+                data.pagination.currentPageIndex = currentPageIndex;
+                
+                (data.formatedInfo||[]).forEach(function(tgs,index,input){
+                    var ele=input[index];
+                    var idx=index+1;//当前是第几页
+                    ele.jumpClass=true;//是否需要跳转的class
+                    ele.isCurrent=(idx==currentPageIndex)?true:"";//元素是否是当前页
+                    ele.noHover=false;//元素是否需要hover效果
+                    ele.isShow=false;//是否展示元素
+                    ele.txt="";//元素的展示内容
+
+                    if(currentPageIndex<=displayRange+2){//从1到currentPageIndex之间没有...,展示1~currentPageIndex+2，
+                        if(idx>0&&(idx<=currentPageIndex+displayRange)){
                             ele.txt=idx;
                             ele.isShow=true;
                         }
                         else{//看剩下的页码怎么展示
-                            if(currentPage+3<pageNum){//idx到最后一页之间有...
-                                if(pageNum==idx){//展示最后一页
-                                    ele.txt=idx;
-                                    ele.isShow=true;
-                                }else{
-                                    if(idx==pageNum-1){
-                                        ele.txt="...";
-                                        ele.isShow=true;
-                                    }
-                                    else{//中间隐藏的元素
-                                        ele.txt=idx;
-                                        ele.isShow=false;
-                                    }
-                                }
-                            }
-                            else{//所有idx都没有...
-                                ele.txt=idx;
+
+                            if(idx==pageNum-1){
+                                ele.txt="...";
+                                ele.noHover=true;
+                                ele.jumpClass="";
                                 ele.isShow=true;
+                            }
+                            else{//中间隐藏的元素
+                                ele.txt=idx;
+                                ele.isShow=false;
+                                if(idx==pageNum){
+                                    ele.isShow=true;
+                                }
                             }
                         }
                     }else{//大于4的时候，结构很稳定了1...current-2,current-1,current,current+1,current+2,
@@ -181,15 +233,19 @@ var indexPage=(function(){
                         else if(idx==2){
                             ele.txt="...";
                             ele.isShow=true;
+                            ele.noHover=true;
+                            ele.jumpClass="";
                         }
-                        else if((idx>=(currentPage-2)&&idx<=(currentPage+2))){//区间内都展示
+                        else if((idx>=(currentPageIndex-displayRange)&&idx<=(currentPageIndex+displayRange))){//区间内都展示
                             ele.txt=idx;
                             ele.isShow=true;
                         }else{//区间外，如果后面还有2个或以上元素，第一个元素变...
-                            if(pageNum>currentPage+3){//中间有...
+                            if(pageNum>currentPageIndex+displayRange+1){//currentPageIndex在页面中间，那么最后面有...和最后一页
                                 if(idx==pageNum-1){
                                     ele.txt="...";
+                                    ele.noHover=true;
                                     ele.isShow=true;
+                                    ele.jumpClass="";
                                 }
                                 else if(idx==pageNum){
                                     ele.txt=idx;
@@ -199,19 +255,21 @@ var indexPage=(function(){
                                     ele.txt=idx;
                                     ele.isShow=false;
                                 }
-                            }else{//中间没...
-                                ele.txt=idx;
-                                ele.isShow=true;
+                            }else{//currentPageIndex在页面最后3个元素中的其中一个，中间没...,,所以最后的数字展示比较特殊
+                                if((idx>=(currentPageIndex-displayRange)&&idx<=(currentPageIndex+displayRange+1))){
+                                    ele.txt=idx;
+                                    ele.isShow=true;
+                                }
+                                else{
+                                    ele.txt=idx;
+                                    ele.isShow=false;
+                                }
+                                    
                             }
                         }
                     }
 
                 });
-
-                console.log(data.resultData);
-                debugger
-
-                return data
             }
         }
 

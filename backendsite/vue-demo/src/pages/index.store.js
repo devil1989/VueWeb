@@ -35,10 +35,23 @@ const store = new Vuex.Store({
             state.Infos.hasInit=true;
             state.Infos.data=payload.data;
         },
-        "updateTableContent":function(state,payload){
+        "updateTableContent":function(state,payload){//第一次初始化的时候，tm必须把最详细的数据结构定义出来，后续操作添加的时候，会有各种问题，千奇百怪
             state.tables.hasInit=true;
             state.tables.data=payload.data;
+        },
+
+        /*
+         *desc：设置页码的展示区间，当前页面的左右2页都需要展示的话，displayRange设置为2
+         *@param
+            payload.data：页码数组
+            payload.currentPageIndex：当前是第几页
+            payload.displayRange ：展示当前左右的displayRange页都需要展示
+         */
+        "jumpToTargetPage":function(state,payload){
+            payload.callback(state.tables.data,payload.currentPageIndex);
         }
+
+        
     },
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
         getInitData:function(store,payload){
@@ -68,32 +81,9 @@ const store = new Vuex.Store({
         }
     },
     getters:{//getters里面的函数会自动调用 
-        // getParams:function(){
-        //     //因为getParams会自动执行，所以里面需要返回一个funciton，这样才能从外面传参数进来，而且传进来的参数只能有一个
-        //     return function (objA){//这个objA就是上面
-        //         return {
-        //             isMock:true,
-        //             mockUrl:"index-mock.js?case=case1",
-        //             url:"crm/org/CreateNode",
-        //             type:"get",
-        //             data:{userid:1},
-        //         };
-        //     } 
-        // }
     }
     
 });
-
-// store.watch(
-//     (state) => state.sessions,
-//     (val) => {
-//         console.log('CHANGE: ', val);
-//         localStorage.setItem('vue-chat-session', JSON.stringify(val));
-//     },
-//     {
-//         deep: true
-//     }
-// );
 
 
 export default {

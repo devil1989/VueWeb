@@ -16,6 +16,10 @@ var utils=(function(w) {
   var Obj = {
 
   	ajax:Ajax,
+
+    hasClass:function(ele,className){
+      return ele.className.indexOf(className)!=-1
+    },  
   	
     //深度克隆
     clone: function(tgObj) {
