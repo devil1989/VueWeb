@@ -62,14 +62,21 @@ h1{
 	.line-start>.school-nav>.dashline-absolute-top,.line-end>.school-nav.have-no-child>.dashline-absolute-bottom{//开始元素不需要向上虚线；底部如果没有子元素不需向下虚线
 		display:none;
 	}
-	li>.school-nav>.reduce-icon,.fold-item>.school-nav>.plus-icon{
-		display:block;
+
+	.unfold-item>.school-nav>.reduce-icon{
 		font-size:1rem;
 		line-height: 0.5rem;
 	}
-	fold-item>.school-nav>.reduce-icon,li>.school-nav>.plus-icon{
+	
+	.unfold-item>.school-nav>.reduce-icon,.fold-item>.school-nav>.plus-icon{
+		display:block;
+		
+	}
+
+	.fold-item>.school-nav>.reduce-icon,.unfold-item>.school-nav>.plus-icon{
 		display:none !important;
 	}
+
 	.internet-school-nav-item{
 		margin-bottom: 1px;
 	}

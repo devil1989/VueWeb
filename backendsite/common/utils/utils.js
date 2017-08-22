@@ -19,7 +19,20 @@ var utils=(function(w) {
 
     hasClass:function(ele,className){
       return ele.className.indexOf(className)!=-1
-    },  
+    },
+
+    addClass:function(ele,className){
+      debugger
+      ele.className+=" "+className;
+      return ele;
+    },
+
+    removeClass:function(ele,className){
+      debugger
+      var formatClassName=className.replace(/\-/g,"\\-").replace(/\_/g,"\\_");//正则需要转义-为\-
+      ele.className=ele.className.replace(new RegExp("\\b"+formatClassName+"\\b","g"),"");//"\b定义边界"
+      return ele
+    },
   	
     //深度克隆
     clone: function(tgObj) {
@@ -155,7 +168,7 @@ var utils=(function(w) {
 
     //构造函数，可以把“sdf=34&sdf=fd”这种类型的字符串（和location.search结构类似）转化为对象
     queryStringBuilder: function(baseQueryString) {
-      var me = arguments.callee;
+      var me = hj.queryStringBuilder;
       if (!(this instanceof me)) {
         return new me(baseQueryString);
       }
@@ -378,5 +391,6 @@ var utils=(function(w) {
   // "2016-03-02--20--49--37 周三"
 
 })();
+
 
 export default utils

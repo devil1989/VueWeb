@@ -342,8 +342,8 @@
 		"case1": {
 			"data": {
 				"pagination": { //页码相关信息
-					"currentPageIndex": 6, //当前页码
-					"pageSize": 1, //每页多少个
+					"currentPageIndex": 1, //当前页码
+					"pageSize": 4, //每页多少个
 					"sortEnum": 0, //排序
 					"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
 				},
@@ -368,7 +368,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "jiajiechen",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -384,7 +384,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅3",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -400,7 +400,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅4",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -416,7 +416,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅5",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -432,7 +432,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅6",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -448,7 +448,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅7",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -464,7 +464,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅8",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -480,7 +480,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅9",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -496,7 +496,7 @@
 					"email": "guoshuai@hujiang.com",
 					"userCode": "classbob",
 					"userId": 220,
-					"userName": "郭帅",
+					"userName": "郭帅10",
 					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
@@ -512,16 +512,10 @@
 			"message": "success",
 			"status": 0
 		},
-		"formated": {
-			"data": {
-				"pagination": { //页码相关信息
-					"currentPageIndex": 1, //当前页码
-					"pageSize": 10, //每页多少个
-					"sortEnum": 0, //排序
-					"totalCount": 36, //总条数
-					"pageNum":"总页数"
-				},
-				"resultData": [{
+		"formated": [//格式化以后的数据
+			{
+				pageIndex:1,
+				pageContent:[{
 					"businessRole": 1,
 					"email": "lixiaofei@hujiang.com",
 					"userCode": "up_snail", //用户名
@@ -539,9 +533,47 @@
 					}]
 				}]
 			},
-			"message": "success",
-			"status": 0
-		}
+			{
+				pageIndex:2,
+				pageContent:[{
+					"businessRole": 1,
+					"email": "lixiaofei@hujiang.com",
+					"userCode": "up_snail", //用户名
+					"userId": 205,
+					"userName": "李小飞", //姓名
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}]
+			},
+			{
+				pageIndex:3,
+				pageContent:[{
+					"businessRole": 1,
+					"email": "lixiaofei@hujiang.com",
+					"userCode": "up_snail", //用户名
+					"userId": 205,
+					"userName": "李小飞", //姓名
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}]
+			}
+		]
 	}
 }
 
