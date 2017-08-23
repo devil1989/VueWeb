@@ -178,7 +178,6 @@ export default {
     		var targetEle=e.target;
     		var hasClass=hj.hasClass;
     		var targetPageNum;
-    		debugger
     		//点击有js_jump_to_page的li元素或者它的子元素，或者是确定按钮
     		if(hasClass(targetEle,"js_confirm_btn")){
     			targetPageNum=targetEle.getAttribute("data-num")-0;

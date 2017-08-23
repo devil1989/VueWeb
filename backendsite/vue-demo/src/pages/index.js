@@ -9,7 +9,7 @@
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 import Nav from '../components/nav/nav.js';//左侧导航栏
-import Combine from '../components/combine/combine.js'//右侧内容模块
+// import Combine from '../components/combine/combine.js'//右侧内容模块
 
 // import SchoolTable from '../components/table/table.js';//页面需要的组件
 // import Contents from '../components/content/content.js';//页面需要的组件
@@ -24,8 +24,8 @@ var indexPage=(function(){
         el: '#app',
         store: storeInfo.store,
         components: {
-            "Navigation":Nav,
-            "Combine":Combine
+            "Navigation":Nav
+            // "Combine":Combine
         },
         data:function(){
             return {}
@@ -47,7 +47,8 @@ var indexPage=(function(){
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data.data.status==0){
                     self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
-                    self.$children[1].init(data.data);//右侧的内容组件
+                    self.changeHash(data.data);
+                    // self.$children[1].init(data.data);//右侧的内容组件
                 }else{
                     console.log("!!!请求导侧边航栏数据失败");
                 }
@@ -66,6 +67,24 @@ var indexPage=(function(){
                     type:"get",
                     data:{userid:1},
                 };
+            },
+
+            changeHash:function(data){
+                var SPA=hj.spa({wrapper:document.querySelector(".internet-school-content")});
+
+                if(!SPA.hasScene()){
+                    location.hash="#scene=combine-"+data.nodeList[0].id;//默认用combine类型场景，值为默认的第一个节点的key
+                }else{
+                    var obj=hj.buildUrl(location.hash).get();
+                    debugger
+                    if(obj.hashchange){
+                        location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
+                    }
+                    else{
+                        location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
+                    }
+                    
+                }
             }
         }
 

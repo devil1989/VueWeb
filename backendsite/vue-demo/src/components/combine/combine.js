@@ -4,7 +4,7 @@ var templates=require("./combine.html");
 import SchoolTable from '../table/table.js';//页面需要的组件
 import Contents from '../content/content.js';//页面需要的组件
 
-export default {
+var combine={
     data:function(){
     	return {};
     },
@@ -23,3 +23,4 @@ export default {
     template:templates
 };
 
+export default combine

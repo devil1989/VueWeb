@@ -2,6 +2,7 @@
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
+/* modify by chenjiajie :用于兼容webpack*/
 
 (function() {
 
@@ -9,7 +10,7 @@
   // --------------
 
   // Establish the root object, `window` in the browser, or `exports` on the server.
-  var root = this;
+  var root = this||window;
 
   // Save the previous value of the `_` variable.
   var previousUnderscore = root._;
@@ -36,7 +37,7 @@
   var Ctor = function(){};
 
   // Create a safe reference to the Underscore object for use below.
-  var _ = function(obj) {
+  root._ = function(obj) {
     if (obj instanceof _) return obj;
     if (!(this instanceof _)) return new _(obj);
     this._wrapped = obj;
@@ -1532,4 +1533,7 @@
       return _;
     });
   }
-}.call(this));
+}.call(window));
+
+
+export default {}

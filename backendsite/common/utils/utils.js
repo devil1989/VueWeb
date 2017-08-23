@@ -22,13 +22,11 @@ var utils=(function(w) {
     },
 
     addClass:function(ele,className){
-      debugger
       ele.className+=" "+className;
       return ele;
     },
 
     removeClass:function(ele,className){
-      debugger
       var formatClassName=className.replace(/\-/g,"\\-").replace(/\_/g,"\\_");//正则需要转义-为\-
       ele.className=ele.className.replace(new RegExp("\\b"+formatClassName+"\\b","g"),"");//"\b定义边界"
       return ele
@@ -140,35 +138,9 @@ var utils=(function(w) {
       return child;
     },
 
-    //支持多对象拓展,越后面的对象，他的属性的优先级越高
-    extend:function(){
-      var args = [].slice.call(arguments);
-      var source = args.shift() || {};
-
-      if (!source) {
-        return false;
-      }
-
-      for (var i = 0, l = args.length; i < l; i++) {
-        if (typeof args[i] === 'object') {
-          for (var key in args[i]) {
-            source[key] = args[i][key];
-          }
-        }
-      }
-
-      return source;
-    },
-
-    //查询URL后面的尾随参数值（因为正则中有变量，所以只能用new来创建正则表达式）
-    queryURL: function(name) {
-      var rst = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i")) || [];
-      return (rst.length == 2) ? rst[1] : "";
-    },
-
     //构造函数，可以把“sdf=34&sdf=fd”这种类型的字符串（和location.search结构类似）转化为对象
-    queryStringBuilder: function(baseQueryString) {
-      var me = hj.queryStringBuilder;
+    buildUrl: function(baseQueryString) {
+      var me = hj.buildUrl;
       if (!(this instanceof me)) {
         return new me(baseQueryString);
       }
@@ -386,9 +358,6 @@ var utils=(function(w) {
           return all;
       });
   };
-  //demo
-  //new Date().format("yyyy-MM-dd--HH--mm--ss 周e")
-  // "2016-03-02--20--49--37 周三"
 
 })();
 

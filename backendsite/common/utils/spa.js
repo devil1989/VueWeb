@@ -23,121 +23,148 @@
 
 //解析hash: 解析hash,获取所有scene，nav参数和值 > 根据scene和nav渲染左侧树（需要自己寻找路径） > 根据多个scene渲染当前展示的tab内容和隐藏tab的内容
 /*scene渲染: 每个scene=value的value值都不相同，每个value值作为localstorage中的key，该scene的当前内容作为value保存在localstorage中，用于缓存，没缓存就等于新开页面
-             url例子:scene=jeffrey-1--jeffrey2-1--jeffrey3-1; //当前场景,获取hash的值为1的最后一个scene，此时jeffrey3为当前场景， jeffrey3 作为场景名称，
-             会mapping一个对应的url地址的组件，引用jeffrey3这个场景，就是require.ensure对应的场景的url
+             url例子: #scene=combine-key1-key2|con-key3-key4&nav=0
+                  &符号为1级分隔符，分隔最大单元，scene是场景单元，nav是左侧导航单元，后续可以拓展其他单元
+                  |符号是2级分隔符，以scene的值为例，场景分为多中类型，combine是一种场景，con也是一种场景；
+                  -符号是3级分隔符，以combine-key1-key2为例，表示combine类型场景下的值有key1和key2两个相同类型的场景，最后的那个场景（key2）属于需要展示的场景，其他都隐藏
  */
 
 import Vue from 'vue';//vue框架的对象
 import storeInfo from '../../vue-demo/src/pages/index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 
 
-var SPA = function() {
+var SPA = function(opts) {
   var outputData = {};
+  var wrapper=opts.wrapper;//场景插入地址
+
   window.onhashchange = function(e) {
-    var oldUrl = e.oldURL;
-    var newUrl = e.newURL;
-    var obj = hj.queryStringBuilder(location.hash.substr(1)).get();
-    var sceneStr = obj.scene;
-    var sceneArray=[];
-    var currentScene="";
-
+    var obj = hj.buildUrl(location.hash.substr(1)).get();
     if (obj.scene) {
-      var arr = obj.scene.split("--");
-      for (var i = 0, len = arr.length; i < len; i++) {
-        var val = arr[i].split("-");
-        if(val[1]){
-          currentScene=val[0];
-        }
-        sceneArray.push({
-          key:val[0],//场景的类型
-          value:val[1]//场景对应的唯一的值
-        });
-      }
+      outputData.nav = obj.nav;
+      outputData.scene=getScene();
+      removeChild();
+      (outputData.scene&&outputData.scene.sceneArray||[]).forEach(function(ele){//渲染所有场景
+        renderScene(ele,outputData.scene.currentScene);
+      });
     }
-    outputData.nav = obj.nav;
-    outputData.scene=sceneArray;
-    sceneArray.forEach(function(ele){//渲染所有场景
-      renderScene(ele);
-    });
-
   }
-
 
   //history.go和history.back时候执行
-  window.onpopstate = function(e){
+  window.onpopstate = function(e){}
+
+
+  //删除页面中存在，但是在url中却不存在的场景，比如说我把combine-1-2修改为combine-1-3,那么原来的2场景还是继续展示，3场景也会展示，所以需要把原来的场景2场景删除，因为不在url里面
+  function removeChild(){
+    // wrapper=
   }
 
-  //渲染scene
-  function renderScene(ele){
+  //判断是否存在合法的场景str,不传参数表示，只要有任意一个场景即可
+  function hasScene(str){
+    debugger
+    var obj = hj.buildUrl(location.hash.substr(1)).get();
+    return obj.scene&&(obj.scene.split("|")||[]).some(function(unit){//场景类型-值
+      var arr2=unit.split("-")||[];
+      return (arr2.slice(1)||[]).some(function(subUnit){
+        return str?(subUnit==str):subUnit
+      });
+    });
+  }
 
-      var name=SPA.mapping[ele.key]?SPA.mapping[ele.key].replace(/\.js/g,""):"";
-      if(!name){return;}
-      var targetName=name[0].toUpperCase()+name.substr(1);
-      var wrapper=document.querySelector(".internet-school-content");//场景插入地址，暂时不做可配置
+  //获取所有场景
+  function getScene(){
+    var obj = hj.buildUrl(location.hash.substr(1)).get();
+    var arr = obj.scene.split("|");//combine等不同的场景类型，后续可扩展
+    var currentScene;
+    var sceneArray=[];
+    for (var i = 0, len = arr.length; i < len; i++) {
+        var val = arr[i].split("-");//combine-fdfuisuius-fdfuisuius-sd:场景类型combine，场景名称fdfuisuius（确保场景唯一性，多个场景用-连接），最后一个是需哟啊展示的场景
+        currentScene=val[val.length-1];
+        val[0]&&currentScene&&sceneArray.push({
+          key:val[0],//场景的类型
+          value:val.slice(1)
+        });
+    }
+
+    return {
+      sceneArray:sceneArray,
+      currentScene:currentScene||""
+    }
+  }
+
+  //给wrapper添加<div id="key"><combine></combine></div>元素
+  function addElement(wrapper,key,val,tagName){
+    if(wrapper){
       var divEle=document.createElement("div");
-      divEle.id=ele.value;
-      var innerEle=document.createElement("combine");
+      var innerEle=document.createElement(tagName);//创建的组件tag名称和js文件相同
+      divEle.id=key+"-"+val;
+      debugger
+      divEle.style.display="none";
       wrapper&&wrapper.appendChild(divEle);//插件命名是js文件名字的大写命名
       divEle&&divEle.appendChild(innerEle);
 
-      require.ensure([],function(require){
-        // debugger
-        var scenes=require('../../vue-demo/src/components/combine/'+SPA.mapping[ele.key]);
+      return divEle;
+    }
+  }
 
-        debugger
-        var conbineVue=new Vue({
-            el: '#'+ele.value,
-            store: storeInfo.store,//注入vuex的store
-            components: {
-                "combine":scenes.default
-            },
-            data:function(){
-                return {}
-            },
-            mounted:function(){
-                var self=this;
-                var options=this.$options;
-                var params=options.methods.getParams();
+  //渲染scene
+  function renderScene(ele,currentScene){
 
-                this.$store.dispatch("getInitData",{"param":params}).then(function(data){
-                    if(data.data.status==0){
-                        self.$children[0].init(data.data);
-                    }else{
-                        console.log("!!!请求导侧边航栏数据失败");
-                    }
-                },function(){
-                    console.log("网络原因请求导侧边航栏数据失败");
-                });
-            },
-            methods:{//this.$options.methods来获取
+      var name=SPA.mapping[ele.key]?SPA.mapping[ele.key].replace(/\.js/g,""):"";//文件名
+      if(!name){return;}//不存在对应mapping就不渲染
+      
+      var val=ele.value;
+      var warpperSelector=ele.key+"-";
 
-                //获取页面初始信息请求所需要的参数
-                getParams:function(){
-                    return {
-                        isMock:true,
-                        mockUrl:"index-mock.js?case=case1",
-                        url:"crm/org/CreateNode",
-                        type:"get",
-                        data:{userid:1},
-                    };
-                }
-            }
-        });
+      for (var i = 0; i < val.length; i++) {
+        var tgEle=document.getElementById(warpperSelector+val[i]);
+        if(!tgEle){
+          tgEle=addElement(wrapper,ele.key,val[i],name);//场景插入位置+场景类型+场景值
+          addVueComponent(ele.key,val[i],warpperSelector);
+        }
+
+        if(val[i]==currentScene){//展示当前场景
+          tgEle.style.display="";
+        }else{
+          tgEle.style.display="none";
+        }
+      }
+  }
+
+  function addVueComponent(key,value,warpperSelector){
+    require.ensure([],function(require){
+
+      var scenes=require('../../vue-demo/src/components/combine/'+SPA.mapping[key]);//
+
+      var conbineVue=new Vue({
+          el: "#"+warpperSelector+value,
+          store: storeInfo.store,//注入vuex的store
+          components: {
+              "combine":scenes.default
+          },
+          data:function(){
+              return {}
+          },
+          mounted:function(){
+            debugger
+              this.$children[0].init(value);
+          }
       });
+    });
   }
 
   //对外的接口
   return {
     data:outputData,
-    renderScene:renderScene
+    renderScene:renderScene,
+    getScene:getScene,
+    hasScene:hasScene
   };
 }
 
-SPA.mapping={//components下面的相对路径，这个异步加载器只加载此路径下，暂时不做可配置
-  "jeffrey":"combine.js",
-  "jeffreyss":"combine.js",
+SPA.mapping={//场景类型和js一一对应
+  "combine":"combine.js"
 }
 
-SPA();
+hj.spa=SPA;
 
 export default SPA

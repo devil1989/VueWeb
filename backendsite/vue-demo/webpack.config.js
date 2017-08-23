@@ -173,18 +173,20 @@ var cloneConfig=Object.assign({},commonConfig);//深度克隆
 
 
 if(isDev){
-    config = Object.assign(cloneConfig,{
-        plugins:HtmlWebpackPluginArray.concat([
-            new CopyWebpackPlugin([{//文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
-                from: copyImageFromPath,//拷贝图片
-                to:copyImageTargetPath
-                // ignor:["*.js"] 忽略.js文件
-            },{
-                from: copyCssFromPath,//拷贝css
-                to:copyCssTargetPath
+    config = Object.assign(cloneConfig, {
+        plugins: 
+
+        HtmlWebpackPluginArray.concat([
+            new CopyWebpackPlugin([{ //文件拷贝，如果拷贝了webpack其他插件（例如HtmlWebpackPlugin生成的html），它就会影响HtmlWebpackPlugin的执行，导致热替换失败
+                from: copyImageFromPath, //拷贝图片
+                to: copyImageTargetPath
+                    // ignor:["*.js"] 忽略.js文件
+            }, {
+                from: copyCssFromPath, //拷贝css
+                to: copyCssTargetPath
             }]),
             // extraCss,
-            extraSass//把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
+            extraSass //把js中引用require('./css/plan.css'支持.scss转义)的所有css都单独抽离出来成为一个css文件（存放地址和html同一级），插件还会在html文件中插入对应的css链接，css链接是 stylePath+"[name].css"（name指的是html的名称，stylePath是自定义的路径）
             // new webpack.HotModuleReplacementPlugin()//热插拔：配置2(最後需要在package.json的scripts中添加"start": "webpack-dev-server --progress --colors --hot --inline --content-base vue-demo/build/)
         ]),
 
@@ -192,7 +194,7 @@ if(isDev){
         // devServer:{//热插拔：
         //     contentBase:"./build/pages"//localhost：8080对应的地址
         // },
-        devtool: 'eval-source-map'//启用source-map方便调试
+        devtool: 'eval-source-map' //启用source-map方便调试
     })
 }else{
     config = Object.assign(commonConfig,{
@@ -213,6 +215,7 @@ if(isDev){
             new webpack.optimize.UglifyJsPlugin({//会对js包括js中require进去的css进行压缩（注意：不包括单独.css文件的压缩）
               compress: {warnings: false }
             }),
+
             // extraCss,
             extraSass
         ])
