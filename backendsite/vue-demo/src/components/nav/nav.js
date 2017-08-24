@@ -38,13 +38,13 @@ export default {
                     isFold = "unfold-item";//此逻辑后续不删 unfinish ||"fold-item"
 
                     htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+'">'+
-                                '<div class="school-nav '+isCurrent+' ">'+
+                                '<div class="school-nav js_current_scene'+isCurrent+' " data-id="'+ele.id +'" >'+
                                     '<i class="dashline-absolute-top"></i>'+
                                     '<i class="dashline-absolute-bottom"></i>'+
                                     '<i class="dashline-absolute-left"></i>'+
                                     '<span class="reduce-icon float-left fold-icon js_fold_icon js_reduce_icon">-</span>'+
                                     '<span class="plus-icon float-left fold-icon js_fold_icon js_plus_icon">+</span>'+
-                                    '<h3 class="float-left">'+ele.nodeName+'</h3>'+
+                                    '<h3 class="float-left js_current_scene" data-id="'+ ele.id +'">'+ele.nodeName+'</h3>'+
                                 '</div>'+
                                 '<ul class="school-content-item space-indent-1 ">';
                     htmlStr+=(hasChild?(this.getUnitHtml(ele.children||[])):"")+endStr;//递归调用，核心代码
@@ -69,23 +69,34 @@ export default {
         //绑定事件
         bindEvents:function(){
             var ele=document.querySelector(".internet-school-nav");
+            var self=this;
             ele.addEventListener("click",function(e){
-                debugger
-                var ele=e.target;
-                var parentLi=ele.parentNode.parentNode;
-                if(hj.hasClass(ele,"js_fold_icon")){
-                    parentLi=(parentLi.tagName.toUpperCase()=="LI")?parentLi:null;
-
-                    if(hj.hasClass(ele,"js_reduce_icon")&&parentLi){
-                        hj.addClass(parentLi,"fold-item");
-                        hj.removeClass(parentLi,"unfold-item");
-                    }else if(hj.hasClass(ele,"js_plus_icon")){
-                        hj.addClass(parentLi,"unfold-item");
-                        hj.removeClass(parentLi,"fold-item");
-                    }
-
-                }
+                self.toggleFold(e.target);
+                self.toggleScene(e);
             });
+        },
+
+        toggleFold:function(target){
+            var ele=target;
+            var parentLi=ele.parentNode.parentNode;
+            if(hj.hasClass(ele,"js_fold_icon")){
+                parentLi=(parentLi.tagName.toUpperCase()=="LI")?parentLi:null;
+
+                if(hj.hasClass(ele,"js_reduce_icon")&&parentLi){
+                    hj.addClass(parentLi,"fold-item");
+                    hj.removeClass(parentLi,"unfold-item");
+                }else if(hj.hasClass(ele,"js_plus_icon")){
+                    hj.addClass(parentLi,"unfold-item");
+                    hj.removeClass(parentLi,"fold-item");
+                }
+            }
+        },
+        toggleScene:function(e){
+            var target=e.target;
+            if(hj.hasClass(target,"js_current_scene")){
+                var sceneId=target.getAttribute("data-id")||"";
+                hj.spaIns.addScene(sceneId);
+            }
         }
 
     },

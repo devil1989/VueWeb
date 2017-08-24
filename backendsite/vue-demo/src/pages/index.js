@@ -70,13 +70,16 @@ var indexPage=(function(){
             },
 
             changeHash:function(data){
-                var SPA=hj.spa({wrapper:document.querySelector(".internet-school-content")});
+                var SPA=hj.spa({
+                    wrapper:document.querySelector(".internet-school-content"),
+                    maxNum:10
+                });
 
                 if(!SPA.hasScene()){
                     location.hash="#scene=combine-"+data.nodeList[0].id;//默认用combine类型场景，值为默认的第一个节点的key
                 }else{
                     var obj=hj.buildUrl(location.hash).get();
-                    debugger
+                    
                     if(obj.hashchange){
                         location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
                     }

@@ -13,32 +13,32 @@
 					"nodeName": "网校",
 					"nodeAttr": [],
 					"children": [{
-						"id": 1,
+						"id": 2,
 						"isActive": 1,
 						"nodeAttr": [],
 						"nodeName": "机构-沿途",
 						"parentId": 0,
 						"children": [{
-							"id": 1,
+							"id": 3,
 							"isActive": 1,
 							"nodeName": "业务单元A",
 							"nodeAttr": [],
 							"parentId": 0,
 							"children": [{
-									"id": 1,
+									"id": 4,
 									"isActive": 1,
 									"nodeName": "职能单元A",
 									"nodeAttr": [],
 									"parentId": 0,
 									"children": [{
-												"id": 1,
+												"id": 5,
 												"isActive": 1,
 												"nodeName": "职能组A",
 												"nodeAttr": [],
 												"parentId": 0,
 												"children": [
 													{
-														"id": 1,
+														"id": 6,
 														"isActive": 1,
 														"nodeAttr": [],
 														"nodeName": "职能小组1",
@@ -46,7 +46,7 @@
 														"children": []
 													},
 													{
-														"id": 1,
+														"id": 7,
 														"isActive": 1,
 														"nodeAttr": [],
 														"nodeName": "职能小组2",
@@ -55,7 +55,7 @@
 													}
 												]
 											}, {
-												"id": 1,
+												"id": 8,
 												"isActive": 1,
 												"nodeAttr": [],
 												"nodeName": "职能组B",
@@ -63,20 +63,20 @@
 												"children": []
 											}]
 								}, {
-									"id": 1,
+									"id": 9,
 									"isActive": 1,
 									"nodeAttr": [],
 									"nodeName": "职能单元B",
 									"parentId": 0,
 									"children": [{
-												"id": 1,
+												"id": 10,
 												"isActive": 1,
 												"nodeName": "职能组A",
 												"nodeAttr": [],
 												"parentId": 0,
 												"children": [
 													{
-														"id": 1,
+														"id": 11,
 														"isActive": 1,
 														"nodeAttr": [],
 														"nodeName": "职能小组1",
@@ -84,7 +84,7 @@
 														"children": []
 													},
 													{
-														"id": 1,
+														"id": 12,
 														"isActive": 1,
 														"nodeAttr": [],
 														"nodeName": "职能小组2",
@@ -93,7 +93,7 @@
 													}
 												]
 											}, {
-												"id": 1,
+												"id": 13,
 												"isActive": 1,
 												"nodeAttr": [],
 												"nodeName": "职能组B",
@@ -102,7 +102,7 @@
 											}]
 								}]
 						}, {
-							"id": 1,
+							"id": 14,
 							"isActive": 1,
 							"nodeAttr": [],
 							"nodeName": "业务单元B",
@@ -110,7 +110,7 @@
 							"children": []
 						}]
 					}, {
-						"id": 1,
+						"id": 15,
 						"isActive": 1,
 						"nodeAttr": [],
 						"nodeName": "机构-2",
@@ -198,147 +198,147 @@
 		}
 	},
 	"crm/org/GetMember":{//分页表结构请求，获取组织成员数据（用户名，姓名，系统角色）
-		// "case2": {
-		// 	"data": {
-		// 		"pagination": { //页码相关信息
-		// 			"currentPageIndex": 2, //当前页码
-		// 			"pageSize": 1, //每页多少个
-		// 			"sortEnum": 0, //排序
-		// 			"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
-		// 		},
-		// 		"resultData": [{
-		// 			"businessRole": 1,
-		// 			"email": "lixiaofei@hujiang.com",
-		// 			"userCode": "up_snail", //用户名
-		// 			"userId": 205,
-		// 			"userName": "李小飞", //姓名
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}, {
-		// 			"businessRole": 1,
-		// 			"email": "guoshuai@hujiang.com",
-		// 			"userCode": "classbob",
-		// 			"userId": 220,
-		// 			"userName": "郭帅",
-		// 			"userRole": 2,
-		// 			"roles": [{
-		// 				"roleName":"系统管理员A",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			},{
-		// 				"roleName":"系统管理员B",
-		// 				"roleId":1,
-		// 				"roleCode":"Administor"
-		// 			}]
-		// 		}]
-		// 	},
-		// 	"message": "success",
-		// 	"status": 0
-		// },
+		"case2": {
+			"data": {
+				"pagination": { //页码相关信息
+					"currentPageIndex": 2, //当前页码
+					"pageSize": 1, //每页多少个
+					"sortEnum": 0, //排序
+					"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
+				},
+				"resultData": [{
+					"businessRole": 1,
+					"email": "lixiaofei@hujiang.com",
+					"userCode": "up_snail", //用户名
+					"userId": 205,
+					"userName": "李小飞", //姓名
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}, {
+					"businessRole": 1,
+					"email": "guoshuai@hujiang.com",
+					"userCode": "classbob",
+					"userId": 220,
+					"userName": "郭帅",
+					"userRole": 2,
+					"roles": [{
+						"roleName":"系统管理员A",
+						"roleId":1,
+						"roleCode":"Administor"
+					},{
+						"roleName":"系统管理员B",
+						"roleId":1,
+						"roleCode":"Administor"
+					}]
+				}]
+			},
+			"message": "success",
+			"status": 0
+		},
 		"case1": {
 			"data": {
 				"pagination": { //页码相关信息
