@@ -49,6 +49,7 @@ import storeInfo from '../../vue-demo/src/pages/index.store.js';//包含了当�
   2.场景切换动画可配置没写
   3.nav展示隐藏功能没写
   4.很多可配置项没抽离出来
+  5.各个场景之间那些公用的资源抽离出来，做一个公共资源接口提供调用；各个场景的独立资源各自不相互影响
  */
 var SPA = function(opts) {
   var outputData = {};
@@ -82,20 +83,27 @@ var SPA = function(opts) {
   //删除页面中存在，但是在url中却不存在的场景，比如说我把combine-1-2修改为combine-1-3,那么原来的2场景还是继续展示，3场景也会展示，所以需要把原来的场景2场景删除，因为不在url里面
   function removeOtherChild(sceneArray,outerEle){
     var childNotes=wrapper.children||[];
-    var len=childNotes.length;
-    if(len){
+    if(childNotes.length){
       //outerEle中所有元素，一个个去匹配arr中的每个id（arr中的id是根据hash中的场景值列出来的，如果不在arr数组中，那么就应该删除）
-      for (var i = 0; i < len; i++) {
-        var tgEle=childNotes[i];
+      for (var i = 0; i < childNotes.length; i++) {
+        var tgEle=childNotes[i];//这个东西是nodeList，动态改变的，这里会有坑
         if(tgEle){
           var isInHash=sceneArray.some((unit)=>{
+
+            debugger
             //1.id名称中包含这个场景类型的字符串，因为id命名规则是：场景类型-场景值
             //2.unit.tagIdArray中有一个和tgEle.id相同，说明tgEle.id在url上
-            return ((tgEle&&tgEle.id || "").indexOf(unit.key) != -1) && (unit.tagIdArray || []).some(function(tgId) {
+            var hasSceneTyep=((tgEle&&tgEle.id || "").indexOf(unit.key) != -1);
+            var hasTargetId=(unit.value || []).some(function(tgId) {
               return ((unit.key+"-"+tgId)== tgEle.id)
             });
+
+            return hasSceneTyep&&hasTargetId;
           });
-          !isInHash&&wrapper.removeChild(tgEle);
+          if(!isInHash){//因为childNotes是nodeList，会动态改变
+            outerEle.removeChild(tgEle);
+            i--;
+          }
         }
       }
     }
@@ -216,24 +224,32 @@ var SPA = function(opts) {
       
       var val=ele.value;
       var warpperSelector=ele.key+"-";
-
       for (var i = 0; i < val.length; i++) {
+
         var tgEle=document.getElementById(warpperSelector+val[i]);
         if(!tgEle){
           tgEle=addElement(wrapper,ele.key,val[i],name);//场景插入位置+场景类型+场景值+标签名称（组件标签不是正常的html标签名）
-          addVueComponent(ele.key,val[i],warpperSelector,(val.length-1)==i);
+          addVueComponent(ele.key,val[i],warpperSelector);
         }
-
+        else{
+          window.hj.counter++;
+        }
         if(val[i]==currentScene){//展示当前场景
           tgEle.style.display="";
         }else{
           tgEle.style.display="none";
         }
+
+        if((val.length-1)==i){//到最后一个的时候，删除原来所有多出来的scene（在页面中有，但是url中没有）
+          setTimeout(function(){
+            removeOtherChild(outputData.scene.sceneArray,wrapper);
+          },0);
+        }
       }
   }
 
   //添加对应vue组件
-  function addVueComponent(key,value,warpperSelector,isLast){
+  function addVueComponent(key,value,warpperSelector){
     require.ensure([],function(require){
 
       var scenes=require('../../vue-demo/src/components/combine/'+SPA.mapping[key]);//
@@ -251,15 +267,6 @@ var SPA = function(opts) {
               this.$children[0].init(value);
           }
       });
-
-      if(isLast){
-        setTimeout(function(){
-          debugger
-          removeOtherChild(outputData.scene.sceneArray,wrapper);
-        },1);
-      }
-        
-
     });
   }
 

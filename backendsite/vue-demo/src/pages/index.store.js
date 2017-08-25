@@ -40,6 +40,11 @@ const store = new Vuex.Store({
             state.tables.data=payload.data;
         },
 
+        "initPop":function(state,payload){
+            state.pops.hasInit=true;
+            state.pops.data=payload.data;
+        },
+
         /*
          *desc：设置页码的展示区间，当前页面的左右2页都需要展示的话，displayRange设置为2
          *@param

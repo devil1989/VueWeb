@@ -9,6 +9,7 @@
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 import Nav from '../components/nav/nav.js';//左侧导航栏
+import Pop from '../components/pop/pop.js';
 // import Combine from '../components/combine/combine.js'//右侧内容模块
 
 // import SchoolTable from '../components/table/table.js';//页面需要的组件
@@ -24,8 +25,8 @@ var indexPage=(function(){
         el: '#app',
         store: storeInfo.store,
         components: {
-            "Navigation":Nav
-            // "Combine":Combine
+            "Navigation":Nav,//全局左侧导航
+            "Pop":Pop//全局的弹框
         },
         data:function(){
             return {}
@@ -46,9 +47,20 @@ var indexPage=(function(){
             //dispatch支持promise，但是前提是把initData这个action封装成promise
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data.data.status==0){
+                    var popData=self.formatedPopData({})||{};
                     self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
+                    self.$children[1].init({
+                        data:popData,//传入组件的数据
+                        callback:function(callbackData){//结果组件处理后返回的数据
+                            debugger
+                            self.$store.commit({
+                                type:"initPop",
+                                data:callbackData,
+                                store:self.$store
+                            });
+                        }
+                    });//弹框
                     self.changeHash(data.data);
-                    // self.$children[1].init(data.data);//右侧的内容组件
                 }else{
                     console.log("!!!请求导侧边航栏数据失败");
                 }
@@ -88,6 +100,12 @@ var indexPage=(function(){
                     }
                     
                 }
+            },
+
+            //格式化数据，变成弹框组件所需要的数据结构【当然，也可以不格式化数据，把数据格式化放到组件里面，只要定义的数据结构，格式化在组件里面做】
+            //不过组件内最好不要处理业务逻辑相关的东西，数据格式化最好也是在外面做掉，如果某个组件是个业务组件，数据可视化和所有其他处理倒可以在组件内做
+            formatedPopData:function(data){
+                return data
             }
         }
 

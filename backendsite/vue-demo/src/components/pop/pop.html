@@ -1,0 +1,18 @@
+<div style="height: 100%;width: 100%;position: absolute; overflow: hidden;">
+	<div class="ui-pop-alert">
+		<div class="ui-pop-alert-inner">
+			<div class="ui-pop-title ui-pop-center">
+				<span class="ui-pop-title-content">{{title}}</span>
+				<i class="ui-pop-close" @click="closePop">{{closeName}}</i>
+			</div>
+			<div class="ui-pop-content">
+				
+			</div>
+			<div class="ui-pop-btns-wrap">
+				<div class="ui-pop-btns-inner">
+						<span v-for="btn in btns" :class="{'ui-pop-btns':true,'ui-pop-btns-submit':btn.type=='submit'}" @click="btn.callback">{{btn.txt}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
