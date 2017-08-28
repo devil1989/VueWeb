@@ -23,36 +23,84 @@ export default {
                 type:"submit",//提交
                 txt:"默认确认",
                 callback:function(e){
-                    debugger
                     // this.hide()
                 }
             },{
                 type:"cancel",//取消
                 txt:"默认取消",
                 callback:function(e){
-                    debugger
                 }
             }],
-            content:{},//中间的数据
-            closePop:function(e){//关闭功能
-                debugger
-                // this.hide();
+            inheritContent:"",//中间的字符串数据，如果想拓展功能，具体看alert，他是pop的具体拓展的实现
+            // closePop:function(e){//关闭功能
+            //     // this.hide();
+            // },
+
+            //
+
+            //隐藏之前执行
+            beforeHide:function(e){
+
             },
-            isHide:true//默认隐藏
+            needShow:false//默认隐藏
         }
     },
 
+    /*生命和周期 start*/
+    // beforeCreate:function(){
+    //     // this.$data和this.$el为null
+    // },
+    // created:function(){
+    //     //this.$data 已经保存
+    // },
+    // //this.$el被初始化
+    // beforeMount:function(){
+    //     this.$data.closePop.bind(this);
+    // },
+    // mounted:function(){
+    //     this.$data.closePop.bind(this);
+    // },
+    // beforeUpdate:function(){
+
+    // },
+    // updated:function(){
+
+    // },
+    // beforeDestroy:function(){
+
+    // },
+    // destroyed:function(){
+
+    // },
+    /*生命和周期 end*/
+
     methods: {
 
+        //创建：
+            // beforeCreate：创建之前，this.$data和$el都为空
+            // created：this.$data采集数据偶家
+            // beforeMount：this.$el被初始化
+            // mounted：元素挂载结束
+            // beforeUpdate：
+            // updated：
+            // beforeDestroy
+            // destroyed
+
+
         init:function(opts){
-            debugger
             var data=opts.data;//保存传输的数据
             var targetObj=_.extend(this.$data,data);
+            
             opts.callback(targetObj);//调用回调函数
         },
 
-        hidePop:function(){
+        show:function(){
+            this.$el.hidden=false;
+        },
 
+        closePop:function(e){
+            this.$data.beforeHide&&this.$data.beforeHide.bind(this)(e);
+            this.$el.hidden=true;
         }
     },
     template:templates

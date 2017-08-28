@@ -247,6 +247,27 @@ var utils=(function(w) {
 
     },
 
+    inheritHtml:function (replaceContent,wrapper){
+      var matchs=wrapper.match(/\{\{inheritContent\}\}/g);
+      return matchs?wrapper.replace(/\{\{inheritContent\}\}/,replaceContent):wrapper;
+    },
+
+    //对vue的继承封装
+    extendVue:function(parent,_self){
+      var obj={};
+      var methods=parent.methods||{};
+      var tpl=hj.inheritHtml(_self.template,parent.template);
+      var methods=_.extend(parent.methods,_self.methods);
+      var datas=_.extend(parent.data(),_self.data());
+      obj=_.extend(parent,_self);
+      obj.template=tpl;
+      obj.methods=methods;//方法不能全部替换，需要逐个继承
+      obj.data=function(){
+        return datas;
+      };
+      return obj;
+    },
+
     //包裹ele元素，给该元素的所有事件句柄执行之前添加自己的track代码
     wrap:function(ele){
       var self=ele,i=0;

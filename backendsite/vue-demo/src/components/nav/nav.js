@@ -54,7 +54,7 @@ export default {
 
         init:function(options){
             this.$store.commit({//初始化的时候传入ajax数据，后期数据都通过this.$data获取
-                type:"initData",
+                type:"initNav",
                 initData:options,
                 store:this.$store
             });//执行mutations中的对应行为

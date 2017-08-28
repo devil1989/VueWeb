@@ -29,7 +29,7 @@ export default {
 
     		//格式化传过来的数据
             this.$store.commit({
-                type:"updateTableContent",
+                type:"initTable",
                 data:data||{}
             });
     	},

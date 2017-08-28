@@ -1,12 +1,13 @@
 <div style="height: 100%;width: 100%;position: absolute; overflow: hidden;">
-	<div class="ui-pop-alert">
+	<div :class="{'ui-pop-alert':true, 'hide':!needShow }"><!-- hide的class，后面的变量不能有Hide的驼峰命名 -->
 		<div class="ui-pop-alert-inner">
 			<div class="ui-pop-title ui-pop-center">
 				<span class="ui-pop-title-content">{{title}}</span>
 				<i class="ui-pop-close" @click="closePop">{{closeName}}</i>
 			</div>
 			<div class="ui-pop-content">
-				
+				<!-- 这个盒子里面放弹框拓展内容，因为弹框内容多种多样，所有具体的弹框得继承这个,js_extend_content是作为标记 -->
+				{{inheritContent}}
 			</div>
 			<div class="ui-pop-btns-wrap">
 				<div class="ui-pop-btns-inner">

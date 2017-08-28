@@ -26,22 +26,36 @@ const store = new Vuex.Store({
             data:null
         }//弹框（多个）
     },
+
+    /*注意了，store必须注册在所有的componnet的根节点上，如果是把store分开注入到各个组件中，那么就不能统一管理了*/
     mutations: {//store.commit
-        "initData":function(state,payload){
+
+        //初始化左侧导航栏信息（这个信息是基础，右侧信息都是根据左侧导航栏的点击id来请求对应的数据的
+        "initNav":function(state,payload){
             state.nav.hasInit=true;
             state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
         },
-        "updateContent":function(state,payload){
+
+        //初始化右侧页面基本信息数据
+        "initDetail":function(state,payload){
             state.Infos.hasInit=true;
             state.Infos.data=payload.data;
         },
-        "updateTableContent":function(state,payload){//第一次初始化的时候，tm必须把最详细的数据结构定义出来，后续操作添加的时候，会有各种问题，千奇百怪
+
+        //初始化表格数据
+        "initTable":function(state,payload){//第一次初始化的时候，tm必须把最详细的数据结构定义出来，后续操作添加的时候，会有各种问题，千奇百怪
             state.tables.hasInit=true;
             state.tables.data=payload.data;
         },
 
+        //初始化弹框
         "initPop":function(state,payload){
             state.pops.hasInit=true;
+            state.pops.data=payload.data;
+        },
+
+        //新增下级职能单元
+        "addSubPop":function(state,payload){
             state.pops.data=payload.data;
         },
 

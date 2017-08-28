@@ -170,10 +170,10 @@
 			"data": {
 				"btns": [{
 					"txt": "新增职能组",
-					"isSub": true
+					"isSub": false
 				}, {
 					"txt": "新增下级职能单元",
-					"isSub": false
+					"isSub": true
 				}],
 				"info": {
 					"id": 2,

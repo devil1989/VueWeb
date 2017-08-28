@@ -67,7 +67,6 @@ var SPA = function(opts) {
         changedHash(outputData.scene.sceneArray);//根据最新的array重新拼接hash
       }
       else{
-        console.log(outputData.scene.sceneArray);
         lastIndex=outputData.scene.sceneArray.length-1;
         (outputData.scene&&outputData.scene.sceneArray||[]).forEach(function(ele,idx){//渲染所有场景
           renderScene(ele,outputData.scene.currentScene);
@@ -90,7 +89,6 @@ var SPA = function(opts) {
         if(tgEle){
           var isInHash=sceneArray.some((unit)=>{
 
-            debugger
             //1.id名称中包含这个场景类型的字符串，因为id命名规则是：场景类型-场景值
             //2.unit.tagIdArray中有一个和tgEle.id相同，说明tgEle.id在url上
             var hasSceneTyep=((tgEle&&tgEle.id || "").indexOf(unit.key) != -1);
@@ -229,7 +227,7 @@ var SPA = function(opts) {
         var tgEle=document.getElementById(warpperSelector+val[i]);
         if(!tgEle){
           tgEle=addElement(wrapper,ele.key,val[i],name);//场景插入位置+场景类型+场景值+标签名称（组件标签不是正常的html标签名）
-          addVueComponent(ele.key,val[i],warpperSelector);
+          addVueComponent(ele.key,val[i],warpperSelector);//插入对应的标签以后，再创建对应的Vue实例
         }
         else{
           window.hj.counter++;

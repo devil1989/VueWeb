@@ -1,7 +1,7 @@
 	<div v-if="hasInit">
-		<div class="tree-level-1-title">
+		<div class="tree-level-1-title" v-on:click="createPop">
 			<h2>基本信息</h2>
-			<span v-for="btn in data.btns" :class="{'basic-btns':true, 'basic-add-btns':true,'baseic-sub-btn':btn.isSub}">{{btn.txt}}</span>
+			<span v-for="btn in data.btns" :class="{'basic-btns':true, 'basic-add-btns':true,'js_baseic_sub_btn':btn.isSub,'js_basic_btn':!btn.isSub}" :data-content="btn.txt">{{btn.txt}}</span>
 		</div>
 		<div class="tree-level-1-info">
 			<ul>

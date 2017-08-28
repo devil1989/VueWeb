@@ -26,7 +26,7 @@ export default {
 
         render:function(data){
         	this.$store.commit({
-                type:"updateContent",
+                type:"initDetail",
                 data:data||{},
                 store:this.$store
             });
@@ -40,6 +40,38 @@ export default {
                 url:"crm/org/GetNodeInfo",
                 nodeId:2//节点id
             };
+        },
+
+        createPop:function(e){
+            var target=e.target;
+            if(hj.hasClass(target,"js_baseic_sub_btn")){
+                var title=target.getAttribute("data-content")||"";
+                this.$store.commit("addSubPop",{
+                    data:{//传入最新的弹框的state数据
+                        title:title,
+                        btns:[{
+                            type:"submit",//提交
+                            txt:"新增",
+                            callback:function(e){
+                                // this.hide()
+                            }
+                        },{
+                            type:"cancel",//取消
+                            txt:"取消",
+                            callback:function(e){
+                            }
+                        }],
+                        needShow:true,
+                        // inheritContent:"",
+
+                        //隐藏之前执行
+                        beforeHide:function(e){
+
+                        },
+                    }
+                });
+            }else if(hj.hasClass(target,"js_basic_btn")){
+            }
         }
     },
     template:templates

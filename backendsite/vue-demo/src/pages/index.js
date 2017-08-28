@@ -9,7 +9,7 @@
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 import Nav from '../components/nav/nav.js';//左侧导航栏
-import Pop from '../components/pop/pop.js';
+import Alert from '../components/alert/alert.js';
 // import Combine from '../components/combine/combine.js'//右侧内容模块
 
 // import SchoolTable from '../components/table/table.js';//页面需要的组件
@@ -26,7 +26,7 @@ var indexPage=(function(){
         store: storeInfo.store,
         components: {
             "Navigation":Nav,//全局左侧导航
-            "Pop":Pop//全局的弹框
+            "Alert":Alert//全局的弹框
         },
         data:function(){
             return {}
@@ -44,7 +44,7 @@ var indexPage=(function(){
             var options=this.$options;
             var params=options.methods.getParams();
 
-            //dispatch支持promise，但是前提是把initData这个action封装成promise
+            //dispatch支持promise，但是前提是把getInitData这个action封装成promise
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data.data.status==0){
                     var popData=self.formatedPopData({})||{};
@@ -52,7 +52,6 @@ var indexPage=(function(){
                     self.$children[1].init({
                         data:popData,//传入组件的数据
                         callback:function(callbackData){//结果组件处理后返回的数据
-                            debugger
                             self.$store.commit({
                                 type:"initPop",
                                 data:callbackData,
