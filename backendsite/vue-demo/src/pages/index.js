@@ -9,7 +9,8 @@
 import Vue from 'vue';//vue框架的对象
 import storeInfo from './index.store.js';//包含了当前页面对应的store信息（以及记过了vue封装）
 import Nav from '../components/nav/nav.js';//左侧导航栏
-import Alert from '../components/alert/alert.js';
+import Alert from '../components/alert/alert.js';//弹框
+import Scenes from '../components/combine/combine.js';//中间场景集合（单页切换的就是这些场景）
 // import Combine from '../components/combine/combine.js'//右侧内容模块
 
 // import SchoolTable from '../components/table/table.js';//页面需要的组件
@@ -24,9 +25,12 @@ var indexPage=(function(){
     var IndexPageVue=new Vue({
         el: '#app',
         store: storeInfo.store,
+
+        //vuex的管理store，只存在一个store,所以即使某些组件的数据是需要异步获取的，也不能异步加载组件（异步加载组建的话，它的state没法用vuex管理，因为vuex包装的store是应该是就注入到根节点的vue的）
         components: {
             "Navigation":Nav,//全局左侧导航
-            "Alert":Alert//全局的弹框
+            "Alert":Alert,//全局的弹框
+            "Scenes":Scenes
         },
         data:function(){
             return {}
@@ -44,12 +48,16 @@ var indexPage=(function(){
             var options=this.$options;
             var params=options.methods.getParams();
 
+            debugger
+
             //dispatch支持promise，但是前提是把getInitData这个action封装成promise
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data.data.status==0){
                     var popData=self.formatedPopData({})||{};
+
                     self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
-                    self.$children[1].init({
+
+                    self.$children[2].init({
                         data:popData,//传入组件的数据
                         callback:function(callbackData){//结果组件处理后返回的数据
                             self.$store.commit({
@@ -59,7 +67,21 @@ var indexPage=(function(){
                             });
                         }
                     });//弹框
-                    self.changeHash(data.data);
+
+                    self.$children[1].init(data.data);//场景容器初始化，其实里面刚开始没啥东西，只是占个坑，以保证里面所有子组件都是和vuex的store绑定
+
+                    self.changeHash(data.data,function(outputData){
+                        debugger
+                        var data=outputData.scene;
+                        self.$store.commit({
+                            type:"initScenes",
+                            data:{
+                                sceneType:data.sceneArray[0].key,//场景类型
+                                sceneList:data.sceneArray[0].value,//场景id数组[8,1,2,3,4,7]
+                                currentScene:data.currentScene//当前场景
+                            }
+                        });
+                    });
                 }else{
                     console.log("!!!请求导侧边航栏数据失败");
                 }
@@ -80,10 +102,11 @@ var indexPage=(function(){
                 };
             },
 
-            changeHash:function(data){
+            changeHash:function(data,func){
                 var SPA=hj.spa({
                     wrapper:document.querySelector(".internet-school-content"),
-                    maxNum:10
+                    maxNum:10,
+                    callback:func
                 });
 
                 if(!SPA.hasScene()){

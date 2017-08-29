@@ -2,7 +2,7 @@ require("./table.scss");
 var templates=require("./table.html");
 export default {
     template:templates,
-    data:function(){
+    data:function(){//template中获取的是这个数据
         return this.$store.state.tables;
     },
     methods:{

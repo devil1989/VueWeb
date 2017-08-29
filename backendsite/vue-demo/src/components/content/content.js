@@ -5,6 +5,7 @@ export default {
     data:function(){
     	return this.$store.state.Infos;
     },
+    
 
     methods: {
     	//获取右侧节点信息并渲染

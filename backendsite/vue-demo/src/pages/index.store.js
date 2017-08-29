@@ -8,19 +8,27 @@ Vue.use(Vuex);
 
 // 一般而言，我们需要将store下的state放在computed中，将组件自身的state，不需要像vuex这样动态的、传递的放在 data 下即可。
 const store = new Vuex.Store({
+
+    //不用vuex的state的时候，组件的数据初始化是放在vue组件的data中的
     state: {//看看https://cn.vuejs.org/v2/guide/reactivity.html，别乱加默认值
         nav:{
             hasInit:false,//是否以及初始化，初始化以后会有data属性
             data:null
         },
-        tables:{
-            hasInit:false,
-            data:null//data里面是具体的ajax数据，这个ajax数据结构又是{data:""}这样的
-        },//底部table（多个）
-        Infos:{
+
+        //scenes是tables和Infos集合，组合组件如何使用，就拿这个为例子
+        scenes:{//data是一个list，里面每个item包含table和info
             hasInit:false,
             data:null
-        },//右侧具体信息（多个）
+        },
+        tables:{//底部table（多个）
+            hasInit:false,
+            data:null//data里面是具体的ajax数据，这个ajax数据结构又是{data:""}这样的
+        },
+        Infos:{//右侧具体信息（多个）
+            hasInit:false,
+            data:null
+        },
         pops:{
             hasInit:false,
             data:null
@@ -34,6 +42,12 @@ const store = new Vuex.Store({
         "initNav":function(state,payload){
             state.nav.hasInit=true;
             state.nav.data=payload.initData;//属性一定要存在，不存在没法变更
+        },
+
+        "initScenes":function(state,payload){
+            debugger
+            state.scenes.hasInit=true;
+            state.scenes.data=payload.data;
         },
 
         //初始化右侧页面基本信息数据
