@@ -27,9 +27,7 @@ var combine={
 
     updated:function(){
         var stateData=this.$data;
-        debugger
         if(this.$data.hasInit&&this.$data.data&&this.$data.data.sceneList){
-            debugger
             var dataArray=this.$data.data.sceneList||[];
             for (var i = 0; i < dataArray.length; i++) {
                 this.$children[0].init(dataArray[i]);//右上角内容块

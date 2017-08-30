@@ -45,7 +45,6 @@ const store = new Vuex.Store({
         },
 
         "initScenes":function(state,payload){
-            debugger
             state.scenes.hasInit=true;
             state.scenes.data=payload.data;
         },
@@ -62,15 +61,48 @@ const store = new Vuex.Store({
             state.tables.data=payload.data;
         },
 
-        //初始化弹框
-        "initPop":function(state,payload){
+        // //初始化弹框
+        // "initPop":function(state,payload){
+        //     state.pops.hasInit=true;
+        //     state.pops.data=payload.data;
+        // },
+
+        //新增下级单元弹框
+        "updateSubPop":function(state,payload){
             state.pops.hasInit=true;
-            state.pops.data=payload.data;
+            state.pops.data=_.extend(state.pops.data,payload.data);
         },
 
-        //新增下级职能单元
-        "addSubPop":function(state,payload){
-            state.pops.data=payload.data;
+        //新增当前单元弹框
+        "updatePop":function(state,payload){
+            state.pops.hasInit=true;
+            state.pops.data=_.extend(state.pops.data||{
+                title:"默认标题",
+                closeName:"×",
+                btns:[{
+                    type:"submit",
+                    txt:"默认确认",
+                    callback:function(e){
+                        // this.hide()
+                    }
+                },{
+                    type:"cancel",//取消
+                    txt:"默认取消",
+                    callback:function(e){
+                    }
+                }],
+                content:{
+                    hasInit:false,
+                    data:null
+                },//中间的数据，就是pop自己的template中需要的数据，pop的template是alert的壳+自己的template，数据支持重定义title等alert的基本信息，也支持内部内容拓展
+
+                //隐藏之前执行
+                beforeHide:function(e){
+                    
+                },
+                needShow:true
+            },payload.data);
+            console.log(state.pops.data);
         },
 
         /*
@@ -87,6 +119,8 @@ const store = new Vuex.Store({
         
     },
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
+        
+        //获取左侧导航数据
         getInitData:function(store,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
@@ -96,6 +130,7 @@ const store = new Vuex.Store({
             });
         },
 
+        //获取节点数据
         getNodeData:function(store,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
@@ -104,6 +139,8 @@ const store = new Vuex.Store({
                 hj.request(param);
             });
         },
+
+        //后去分页表格数据
         getTableData:function(store,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
@@ -111,7 +148,17 @@ const store = new Vuex.Store({
                 param.error=reject;
                 hj.request(param);
             });
-        }
+        },
+
+        //点击弹框，获取新增节点数据
+        getPopInfo:function(store,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
+        },
     },
     getters:{//getters里面的函数会自动调用 
     }

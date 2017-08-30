@@ -66,10 +66,6 @@ var SPA = function(opts) {
       }
       else{
         callbackFunc(outputData);
-
-        // (outputData.scene&&outputData.scene.sceneArray||[]).forEach(function(ele,idx){//渲染所有场景
-        //   renderScene(ele,outputData.scene.currentScene);
-        // });
       }
     }
   }
@@ -122,36 +118,6 @@ var SPA = function(opts) {
     location.hash="#"+targetHashArray.reverse().join("&");
   }
 
-  // //渲染scene(渲染某个类型场景下的所有场景)
-  // function renderScene(ele,currentScene){
-  //     var name=SPA.mapping[ele.key]?SPA.mapping[ele.key].replace(/\.js/g,""):"";//文件名
-  //     if(!name){return;}//不存在对应mapping就不渲染
-      
-  //     var val=ele.value;
-  //     var warpperSelector=ele.key+"-";
-  //     for (var i = 0; i < val.length; i++) {
-
-  //       var tgEle=document.getElementById(warpperSelector+val[i]);
-  //       if(!tgEle){
-  //         tgEle=addElement(wrapper,ele.key,val[i],name);//场景插入位置+场景类型+场景值+标签名称（组件标签不是正常的html标签名）
-  //         addVueComponent(ele.key,val[i],warpperSelector);//插入对应的标签以后，再创建对应的Vue实例
-  //       }
-  //       else{
-  //         window.hj.counter++;
-  //       }
-  //       if(val[i]==currentScene){//展示当前场景
-  //         tgEle.style.display="";
-  //       }else{
-  //         tgEle.style.display="none";
-  //       }
-
-  //       if((val.length-1)==i){//到最后一个的时候，删除原来所有多出来的scene（在页面中有，但是url中没有）
-  //         setTimeout(function(){
-  //           removeOtherChild(outputData.scene.sceneArray,wrapper);
-  //         },0);
-  //       }
-  //     }
-  // }
 
   //判断是否存在合法的场景str,不传参数表示，只要有任意一个场景即可
   function hasScene(str){
@@ -164,38 +130,7 @@ var SPA = function(opts) {
     });
   }
 
-
-
-  // //删除页面中存在，但是在url中却不存在的场景，比如说我把combine-1-2修改为combine-1-3,那么原来的2场景还是继续展示，3场景也会展示，所以需要把原来的场景2场景删除，因为不在url里面
-  // function removeOtherChild(sceneArray,outerEle){
-  //   var childNotes=wrapper.children||[];
-  //   if(childNotes.length){
-  //     //outerEle中所有元素，一个个去匹配arr中的每个id（arr中的id是根据hash中的场景值列出来的，如果不在arr数组中，那么就应该删除）
-  //     for (var i = 0; i < childNotes.length; i++) {
-  //       var tgEle=childNotes[i];//这个东西是nodeList，动态改变的，这里会有坑
-  //       if(tgEle){
-  //         var isInHash=sceneArray.some((unit)=>{
-
-  //           //1.id名称中包含这个场景类型的字符串，因为id命名规则是：场景类型-场景值
-  //           //2.unit.tagIdArray中有一个和tgEle.id相同，说明tgEle.id在url上
-  //           var hasSceneTyep=((tgEle&&tgEle.id || "").indexOf(unit.key) != -1);
-  //           var hasTargetId=(unit.value || []).some(function(tgId) {
-  //             return ((unit.key+"-"+tgId)== tgEle.id)
-  //           });
-
-  //           return hasSceneTyep&&hasTargetId;
-  //         });
-  //         if(!isInHash){//因为childNotes是nodeList，会动态改变
-  //           outerEle.removeChild(tgEle);
-  //           i--;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   
-
   //原来存在场景就，把场景拿到最后面作为展示场景；如果没有，就在后面添加
   function addScene(sceneId) {
     var obj = hj.buildUrl(location.hash.substr(1)).get();
@@ -231,56 +166,15 @@ var SPA = function(opts) {
 
   }
 
-  // //给wrapper添加<div id="key"><combine></combine></div>元素
-  // function addElement(wrapper,key,val,tagName){
-  //   if(wrapper){
-  //     var divEle=document.createElement("div");
-  //     var innerEle=document.createElement(tagName);//创建的组件tag名称和js文件相同
-  //     divEle.id=key+"-"+val;
-  //     divEle.style.display="none";
-  //     wrapper&&wrapper.appendChild(divEle);//插件命名是js文件名字的大写命名
-  //     divEle&&divEle.appendChild(innerEle);
-
-  //     return divEle;
-  //   }
-  // }
-
-  // //添加对应vue组件
-  // function addVueComponent(key,value,warpperSelector){
-  //   require.ensure([],function(require){
-  //     debugger
-
-  //     var scenes=require('../../vue-demo/src/components/combine/'+SPA.mapping[key]);//
-  //     debugger
-  //     var conbineVue=new Vue({
-  //         el: "#"+warpperSelector+value,
-  //         store: storeInfo.store,//注入vuex的store
-  //         components: {
-  //             "combine":scenes.default
-  //         },
-  //         data:function(){
-  //             return {}
-  //         },
-  //         mounted:function(){
-  //             this.$children[0].init(value);
-  //         }
-  //     });
-  //   });
-  // }
 
   var outPutApu=hj.spaIns = {
     data:outputData,
-    // renderScene:renderScene,
     getScene:getScene,
     hasScene:hasScene,//对外接口，是否存在某个场景
     addScene:addScene
   }
   //对外的接口
   return outPutApu;
-}
-
-SPA.mapping={//场景类型和js一一对应
-  "combine":"combine.js"
 }
 
 hj.spa=SPA;

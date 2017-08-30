@@ -259,13 +259,15 @@ var utils=(function(w) {
       var tpl=hj.inheritHtml(_self.template,parent.template);
       var methods=_.extend(parent.methods,_self.methods);
       var datas=_.extend(parent.data(),_self.data());
-      obj=_.extend(parent,_self);
-      obj.template=tpl;
-      obj.methods=methods;//方法不能全部替换，需要逐个继承
-      obj.data=function(){
+      for(var key in parent){
+        _self[key]=_self[key]||parent[key];
+      }
+      _self.template=tpl;
+      _self.methods=methods;//方法不能全部替换，需要逐个继承
+      _self.data=function(){
         return datas;
-      };
-      return obj;
+      }.bind(self);
+      return _self;
     },
 
     //包裹ele元素，给该元素的所有事件句柄执行之前添加自己的track代码

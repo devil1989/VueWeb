@@ -3,7 +3,7 @@
 
 
  	//获取左侧的树状结构
-	"crm/org/CreateNode": {
+	"crm/GetNodeByUserId": {
 
 		"case1": {
 			"data": {
@@ -574,11 +574,84 @@
 				}]
 			}
 		]
+	},
+
+	//新增职能单元
+	"crm/org/GetNodeExtAttr": {
+		'case1': {
+			//额外节点的拓展信息
+			"data": [{ //纯下拉
+						"name": "职能类型", //对应的属性名
+						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+						"sort": 0, //排序,大小,每个数值都不一样
+						// "parentId": null, //表示没有上级联动
+						"data": {
+							"type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
+							"content": [{ //下拉列表中的内容，和其他级有联动
+								"value": "1", //文本对应的唯一性 （上传时候需要）
+								"txt": "业务", //对应文本
+								"id": "2", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true
+							}, {
+								"value": "2", //文本对应的唯一性 （上传时候需要）
+								"txt": "内容", //对应文本
+								"id": "1", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true
+							}]
+						}
+					}, { //级联下拉，因为有parentId
+						"name": "组织类型", //对应的属性名
+						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+						"sort": 0, //排序
+						// "parentId": 2, //表示有联动，需要父元素的选中状态是2，这个才展示list，否则展示的是其他的list,最外级别没有
+						"data": [{
+							"parentId": [1, 2],
+							"type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
+							"content": [{
+								"value": "1", //文本对应的唯一性 （上传时候需要）
+								"txt": "业务", //对应文本
+								"id": "12", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true,
+							}, {
+
+							}],
+						}]
+					}, { //纯展示文本
+						"name": "管理组织", //对应的属性名
+						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+						"sort": 0, //排序??
+						"parentId": null, //没有上级联动
+						"data": {
+							"type": "string", ////下拉框，纯文本，【string,dropdownlist】
+							"content": "452", //data:[]
+						}
+					}],
+			"message": "",
+			"status": 0
+		}
+	},
+
+	"crm/org/CreateNode": {
+		'case1': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "",
+			"status": 0
+		}
 	}
 }
+
+
 
 
 export default {
 	data:data
 }
 
+
+
+
+					

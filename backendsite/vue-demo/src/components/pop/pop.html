@@ -1,19 +1,51 @@
-<div style="height: 100%;width: 100%;position: absolute; overflow: hidden;">
-	<div :class="{'ui-pop-alert':true, 'hide':!needShow }"><!-- hide的class，后面的变量不能有Hide的驼峰命名 -->
-		<div class="ui-pop-alert-inner">
-			<div class="ui-pop-title ui-pop-center">
-				<span class="ui-pop-title-content">{{title}}</span>
-				<i class="ui-pop-close" @click="closePop">{{closeName}}</i>
+<div class="ui-pop-content-wrapper" v-if="hasInit">
+	<ul>
+		<li>
+			<span class="content-key-name">组织名称 :</span>
+			<div class="content-value">
+				<input class="content-value-name" type="text" value="" placeholder="请输入组织名称">
 			</div>
-			<div class="ui-pop-content">
-				<!-- 这个盒子里面放弹框拓展内容，因为弹框内容多种多样，所有具体的弹框得继承这个,js_extend_content是作为标记 -->
-				{{inheritContent}}
+		</li>
+		<li>
+			<span class="content-key-name">父级组织名称 :</span>
+			<div class="content-value">
+				<span>网校</span>
 			</div>
-			<div class="ui-pop-btns-wrap">
-				<div class="ui-pop-btns-inner">
-						<span v-for="btn in btns" :class="{'ui-pop-btns':true,'ui-pop-btns-submit':btn.type=='submit'}" @click="btn.callback">{{btn.txt}}</span>
+		</li>
+		<li>
+			<span class="content-key-name">父级组织代码 :</span>
+			<div class="content-value">
+				<span>OA</span>
+			</div>
+		</li>
+		
+		<!-- 这里放拓展信息 start -->
+		<li >
+			<span class="content-key-name">职能类型 :</span>
+			<div class="content-value">
+				<select name="content-func-type"  class="content-func-type">
+					<option  selected="selected">职能类型1</option>
+					<option >职能类型2</option>
+					<option >职能类型职能类型3</option>
+					<option >职能类型4</option>
+				</select>
+			</div>
+		</li>
+		<!-- 这里放拓展信息 end -->
+
+		<li>
+			<span class="content-key-name">组织状态 :</span>
+			<div class="content-value content-radios">
+				<div class="content-is-active">
+					<input type="radio" name="isactive" value="启用" checked="checked">
+					<span>启用</span>
 				</div>
+				<div class="content-is-active">
+					<input type="radio" name="isactive" value="禁用" >
+					<span>禁用</span>
+				</div>
+				
 			</div>
-		</div>
-	</div>
+		</li>
+	</ul>
 </div>
