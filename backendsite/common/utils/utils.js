@@ -51,6 +51,52 @@ var utils=(function(w) {
       return obj;
     },
 
+    //深度赋值（找到最里面的基本数据类型进行赋值）,解决vue的state的赋值问题（因为不允许新对象替换旧对象）
+    /*解决的问题：
+        1.vue的state对象初始化以后，如果ajax请求再获取了结构相同的一个对象，因为原对象已经被监控，职能更新里面的非引用类型的值；把原对象整体替换不会触发vue的dom更新
+        2.vue的state对象初始化以后，如果ajax请求的新对象和原对象接口不同：
+            2.1有新增属性 ： this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+            2.2删除属性直接忽略，一般不会删除属性 ok
+            2.3改变属性值的时候（如果改变了值得类型）
+                2.3.1：基本类型改为引用类型 , 直接this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 }) ok
+                2.3.2：引用类型改为基本类型 , 直接修改（在template中，必须用v-if判断是否存在对应值是否存在） ok
+                2.3.3：基本类型改为基本类型 ， 直接修改 ok
+                2.3.4：引用类型改为引用类型 ， 递归调用，最后肯定是基本类型改为基本类型或者基本类型改为引用类型
+
+      缺陷：不支持“正则，日期，函数”的深度克隆
+    */
+    deepExtend: function(originObj, targetObj) {
+      function isObject(obj) {
+        var type = typeof obj;
+        return (type == "object" && obj != null) || type == "function";
+      }
+      if (isObject(originObj)) {//引用类型被替换
+
+        if (isObject(targetObj)) {//引用类型被引用类型替换
+          for (var key in targetObj) {
+            var value = targetObj[key];
+            var originVal = originObj[key];
+            if (isObject(originVal)) {//引用类型被替换
+
+              if(isObject(value)){//对象赋值对象
+                originVal = hj.deepExtend(originVal, value);
+              }else{//赋值是基础类型，
+                originVal=value;//原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+              }
+            } else {//简单类型被替换
+              originObj[key] = Object.assign({},originObj[key],value);
+            }
+          }
+        } else {//引用类型被简单类型替换
+          originObj = targetObj; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+        }
+      } else {//简单类型被替换
+        originObj = targetObj;
+      }
+
+      return originObj;
+    },
+
     /*
      *desc:把字符串转化成JOSN格式
      *dataStr:传入的字符串

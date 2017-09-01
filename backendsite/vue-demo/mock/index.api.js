@@ -245,8 +245,8 @@
 }
 // Response
 {
- status:0,
- message:""
+ status:0,//
+ message:""//包含错误信息
 }
 
 

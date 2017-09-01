@@ -1,3 +1,4 @@
+//一下子请求所有表格数据的逻辑
 require("./table.scss");
 var templates=require("./table.html");
 export default {
@@ -11,10 +12,9 @@ export default {
     	init:function(options){
     		var self=this;
     		var store=this.$store;
-            this.options=options;
-    		store.dispatch("getTableData",{"param":this.getTableParam()}).then(function(tableData){
+    		store.dispatch("getTableData",{"param":this.getTableParam(options)}).then(function(tableData){
                 if(tableData.status==0){
-                	self.render(tableData.data);
+                	self.render(options,tableData.data);
                 }
                 else{
                     console.log("!!!请求节点数据失败");
@@ -25,9 +25,8 @@ export default {
     	},
 
     	//请求数据直接render，如果有已经获取的数据，可以直接render
-    	render:function(originData){
+    	render:function(options,originData){
     		var data=this.formatData(originData);
-
 
     		//格式化传过来的数据
             this.$store.commit({
@@ -41,49 +40,49 @@ export default {
             if(!data||!data.pagination||!data.resultData){
                 return {};
             }
-            else if(this.options.pageNum>Math.ceil(data.pagination.totalCount/data.pagination.pageSize)){//当前页码大于总的页数
-                this.options.pageNum=1;
+            else if(data.pagination.currentPageIndex>Math.ceil(data.resultData.length/data.pagination.pageSize)){//当前页码大于总的页数
+                data.pagination.currentPageIndex=1;
             }
-
             var pageSize=data.pagination.pageSize;
-            var totalPageNum = Math.ceil(data.pagination.totalCount/pageSize);
-            var currentPage=this.options.pageNum;//第几页
-            data.pagination.currentPageIndex=currentPage;//一般接口返回的页码和请求的页码肯定相等
-            data.pagination.totalPageNum=totalPageNum;//一共有多少页
+            var pageNum = Math.ceil(data.resultData.length/pageSize);
+            var currentPage=data.pagination.currentPageIndex;
+            var len=(data.resultData||[]).length;
+            var displayRange=1;
+            data.pagination.pageNum=pageNum;//一共有多少页
             data.pagination.jumpNum=1;//想要跳转到哪一页，input框中的数据
-
-            data.formatedInfo=this.getPageArray(currentPage,data,totalPageNum);
-            this.mapData(data.formatedInfo,currentPage);
+            data.formatedInfo=this.getPageArray(data.resultData,pageSize);
+            this.mapData(data,currentPage);
             return data
         },
 
         //获取分页信息,把服务端的数组按照页面size分成多个数组
-        getPageArray:function(currentPage,data,totalPageNum){
-            var tgList=data.formatedInfo||[];
-            var len=tgList.length;
-            if(len>totalPageNum){
-                tgList.splice(totalPageNum,(len-totalPageNum));//删除多出来的
-            }
-            for (var i = 0; i < totalPageNum; i++) {//totalPageNum最终需要生成的元素个数
-                if(!tgList.length){
-                    tgList.push({
-                        pageIndex:i+1,
-                        pageContent:(i!=(currentPage-1))?[]:data.resultData
+        getPageArray:function(data,pageSize){
+            var cloneData=JSON.parse(JSON.stringify(data));
+            var len=(cloneData||[]).length;
+            var targetArray=[];
+            var tempArray=[];
+            var tempPageIndex=0;
+
+            for(var i=0;i<len;i++){
+                var pageIndex=Math.floor(i/pageSize);
+                if(tempPageIndex!=pageIndex){
+                    targetArray.push({
+                        pageIndex:pageIndex,
+                        pageContent:tempArray
                     });
-                }else{
-                    if(i>=len){
-                        tgList.push({
-                            pageIndex:i+1,
-                            pageContent:(i!=(currentPage-1))?[]:data.resultData
-                        });
-                    }
-                    else{
-                        tgList[i].pageIndex=i+1;
-                        tgList[i].pageContent=((i!=(currentPage-1)))?[]:data.resultData;
-                    }
+                    tempArray=[];
                 }
+                tempPageIndex=pageIndex;
+                
+                tempArray.push(cloneData[i]);
             }
-            return tgList
+
+            targetArray.push({
+                pageIndex:pageIndex+1,
+                pageContent:tempArray
+            });
+
+            return targetArray;
         },
 
         /*
@@ -93,12 +92,12 @@ export default {
 			currentPageIndex:当前页码
 			displayRange：当前页码左右展示几个可见得页码
          */
-        mapData:function(formatedInfo,currentPageIndex,displayRange=1){
+        mapData:function(data,currentPageIndex,displayRange=1){
             var displayRange=displayRange;
-            var totalPageNum=formatedInfo.length;//一共有多少页
-            this.options.pageNum = currentPageIndex;
+            var pageNum=data.formatedInfo.length;//一共有多少页
+            data.pagination.currentPageIndex = currentPageIndex;
             
-            (formatedInfo||[]).forEach(function(tgs,index,input){
+            (data.formatedInfo||[]).forEach(function(tgs,index,input){
                 var ele=input[index];
                 var idx=index+1;//当前是第几页
                 ele.jumpClass=true;//是否需要跳转的class
@@ -106,9 +105,6 @@ export default {
                 ele.noHover=false;//元素是否需要hover效果
                 ele.isShow=false;//是否展示元素
                 ele.txt="";//元素的展示内容
-                // if(!ele.pageContent){
-                //     ele.hasNoData=true;//这个用来判断是否有对应数据
-                // }
 
                 if(currentPageIndex<=displayRange+2){//从1到currentPageIndex之间没有...,展示1~currentPageIndex+2，
                     if(idx>0&&(idx<=currentPageIndex+displayRange)){
@@ -117,7 +113,7 @@ export default {
                     }
                     else{//看剩下的页码怎么展示
 
-                        if(idx==totalPageNum-1){
+                        if(idx==pageNum-1){
                             ele.txt="...";
                             ele.noHover=true;
                             ele.jumpClass="";
@@ -126,7 +122,7 @@ export default {
                         else{//中间隐藏的元素
                             ele.txt=idx;
                             ele.isShow=false;
-                            if(idx==totalPageNum){
+                            if(idx==pageNum){
                                 ele.isShow=true;
                             }
                         }
@@ -146,14 +142,14 @@ export default {
                         ele.txt=idx;
                         ele.isShow=true;
                     }else{//区间外，如果后面还有2个或以上元素，第一个元素变...
-                        if(totalPageNum>currentPageIndex+displayRange+1){//currentPageIndex在页面中间，那么最后面有...和最后一页
-                            if(idx==totalPageNum-1){
+                        if(pageNum>currentPageIndex+displayRange+1){//currentPageIndex在页面中间，那么最后面有...和最后一页
+                            if(idx==pageNum-1){
                                 ele.txt="...";
                                 ele.noHover=true;
                                 ele.isShow=true;
                                 ele.jumpClass="";
                             }
-                            else if(idx==totalPageNum){
+                            else if(idx==pageNum){
                                 ele.txt=idx;
                                 ele.isShow=true;
                             }
@@ -191,32 +187,26 @@ export default {
     			targetPageNum=e.target.innerHTML.match(/\d{1,}/g)[0]-0;
     		}
 
-    		if(targetPageNum&&targetPageNum>0&&targetPageNum<=this.data.pagination.totalPageNum){
-
-                //重新渲染table
-                this.init({
-                    id:hj.spaIns.getScene().currentScene,
-                    pageNum:targetPageNum
-                });
-				// this.$store.commit("jumpToTargetPage",{
-				// 	currentPageIndex:targetPageNum,
-				// 	callback:this.mapData
-				// });
+    		if(targetPageNum&&targetPageNum>0&&targetPageNum<=this.data.pagination.pageNum){
+				this.$store.commit("jumpToTargetPage",{
+					currentPageIndex:targetPageNum,
+					callback:this.mapData
+				});
     		}
 	    		
     	},
     	
 
     	//获取底部table请求所需要的参数
-        getTableParam:function(){
+        getTableParam:function(options){
             return {
                 "isMock":true,
                 "mockUrl":"index-mock.js?case=case1",
                 "url":"crm/org/GetMember",
-                "pageNum": this.options.pageNum,//页码
+                "pageNum": 1,//页码
                 "pageSize": 10,//每页多少个
                 "paramData": {
-                  "groupId": this.options.id //节点id
+                  "groupId": 2 //节点id
                 }
             }
         }

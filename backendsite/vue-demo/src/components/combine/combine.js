@@ -25,13 +25,19 @@ var combine={
         "Cont":SchoolTable
     },
 
+    //this.$store.state.scenes变回会触发updated函数，执行该函数来重新渲染所有场景（这个不好，不应该渲染所有场景，后续修改）
     updated:function(){
         var stateData=this.$data;
         if(this.$data.hasInit&&this.$data.data&&this.$data.data.sceneList){
             var dataArray=this.$data.data.sceneList||[];
             for (var i = 0; i < dataArray.length; i++) {
-                this.$children[0].init(dataArray[i]);//右上角内容块
-                this.$children[1].init(dataArray[i]);//右下角table
+                if(i==dataArray.length-1){//最后一个才是当前场景，只渲染当前场景
+                    this.$children[0].init(dataArray[i]);//右上角内容块
+                    this.$children[1].init({
+                        id:dataArray[i],//对应分页的id
+                        pageNum:1//请求第几页，默认请求第一页
+                    });//右下角table
+                }
             }
         }
     },

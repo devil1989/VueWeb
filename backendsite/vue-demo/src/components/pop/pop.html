@@ -1,5 +1,5 @@
-<div class="ui-pop-content-wrapper" v-if="hasInit">
-	<ul>
+<div class="ui-pop-content-wrapper" v-if="data.content">
+	<ul v-if="!data.content.isTxt">
 		<li>
 			<span class="content-key-name">组织名称 :</span>
 			<div class="content-value">
@@ -48,4 +48,5 @@
 			</div>
 		</li>
 	</ul>
+	<span  v-else >{{data.content.msg}}</span>
 </div>

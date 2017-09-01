@@ -195,13 +195,43 @@
 			},
 			"message": "success",
 			"status": 0
+		},
+		"case2":{
+			"data": {
+				"btns": [{
+					"txt": "新增机构",
+					"isSub": false
+				}, {
+					"txt": "新增下级机构",
+					"isSub": true
+				}],
+				"info": {
+					"id": 2,
+					"parentId": 0,
+					"nodeName": "jeffry",
+					"nodeAttr": [{
+						"id": 2,
+						"name": "沪江",
+						"value": "4",
+						"code": "nodeType",
+						"sort": 0,
+						"parentId": null,
+						"type": null,
+						"data": null
+					}],
+					"isActive": true,
+					"children": null
+				}
+			},
+			"message": "success",
+			"status": 0
 		}
 	},
 	"crm/org/GetMember":{//分页表结构请求，获取组织成员数据（用户名，姓名，系统角色）
 		"case2": {
 			"data": {
 				"pagination": { //页码相关信息
-					"currentPageIndex": 2, //当前页码
+					"currentPageIndex": 1, //当前页码（其实这个没什么用，请求的时候会发送请求第几页，所以返回的这个和请求的一样，没卵用）
 					"pageSize": 1, //每页多少个
 					"sortEnum": 0, //排序
 					"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
@@ -343,7 +373,7 @@
 			"data": {
 				"pagination": { //页码相关信息
 					"currentPageIndex": 1, //当前页码
-					"pageSize": 4, //每页多少个
+					"pageSize": 10, //每页多少个
 					"sortEnum": 0, //排序
 					"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
 				},
@@ -634,12 +664,19 @@
 		}
 	},
 
+	//保存信息
 	"crm/org/CreateNode": {
-		'case1': {
+		'case2': {
 			//额外节点的拓展信息
 			// "data": {},
 			"message": "",
 			"status": 0
+		},
+		'case1': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "本层组织内已有业务型组织需将该组织职能类型修改为管理型",
+			"status": 1
 		}
 	}
 }

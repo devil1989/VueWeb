@@ -54,6 +54,7 @@ export default {
                     if(rst.status==0&&rst.data){
                         var formatedData=self.formatData(rst.data);
 
+                        debugger
                         self.$store.commit("updatePop",{
                             data:{//传入最新的弹框的state数据
                                 title:title,
@@ -62,7 +63,6 @@ export default {
                                     txt:"保存",
                                     callback:function(e){
                                         this.saveUnit(e);
-                                        // this.hide()
                                     }.bind(pop)
                                 },{
                                     type:"cancel",//取消
@@ -93,7 +93,11 @@ export default {
             }
         },
         formatData:function(data){
-            return data;
+            return {
+                isTxt:false,
+                msg:"",
+                attrList:data||null
+            };
         },
         getParam:function(){
             return {
@@ -108,36 +112,9 @@ export default {
                 "nodeAttr": {},//?
                 "isSub”": true
             }
-        },
-
-        //点击保存
-        saveUnit:function(e){  
-            var param=this.getSaveParam();
-            this.$store.dispatch('saveUnit',{param:param}).then(function(rst){
-                if(rst.status==0&&rst.data){
-                    hj.spaIns.addScene(param.id);
-                }else{
-                    console.log("保存数据失败");
-                }
-            },function(){
-                console.log("网络原因请求数据失败");
-            });
-        },
-
-        getSaveParam:function(){
-            return {
-                'isMock':true,
-                'mockUrl':"index-mock.js?case=case1",
-                'url':"crm/org/CreateNode",
-                "id": 3,
-                "parentId": 0,
-                "nodeName": "string",
-                "isActive": true,
-                "updateuserId": 0,
-                "nodeAttr": [],
-                "isSub": true
-            }
         }
+
+        
     },
     template:templates
 };

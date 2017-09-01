@@ -37,6 +37,10 @@ const store = new Vuex.Store({
 
     /*注意了，store必须注册在所有的componnet的根节点上，如果是把store分开注入到各个组件中，那么就不能统一管理了*/
     mutations: {//store.commit
+        //vue不知添加和删除属性，一旦一个对象呗赋值给state，那么后续职能修改，不能添加或者删除
+        //this.someObject=Object.assign({}, this.someObject, { a: 1, b: 2 })添加属性，后者this.someObject=_.extend(this.someObject,{}) :添加属性兼容
+        //因为不能删除属性，所以一般都是把不需要的属性置为null，然后通过判断是否有该属性来显示对应的展示
+        //数组支持增加和删除，都会触发vue的属性检测，setter
 
         //初始化左侧导航栏信息（这个信息是基础，右侧信息都是根据左侧导航栏的点击id来请求对应的数据的
         "initNav":function(state,payload){
@@ -57,8 +61,16 @@ const store = new Vuex.Store({
 
         //初始化表格数据
         "initTable":function(state,payload){//第一次初始化的时候，tm必须把最详细的数据结构定义出来，后续操作添加的时候，会有各种问题，千奇百怪
-            state.tables.hasInit=true;
-            state.tables.data=payload.data;
+            if(!state.tables.hasInit){
+                state.tables.hasInit=true;
+                state.tables.data=_.extend(state.tables.data||{},payload.data);
+                console.log(state.tables.data);
+            }else{
+                console.log(state.tables.data);
+                state.tables.data=hj.deepExtend(state.tables.data,payload.data);
+                console.log(state.tables.data);
+            }
+
         },
 
         // //初始化弹框
@@ -75,8 +87,9 @@ const store = new Vuex.Store({
 
         //新增当前单元弹框
         "updatePop":function(state,payload){
+            debugger
             state.pops.hasInit=true;
-            state.pops.data=_.extend(state.pops.data||{
+            state.pops.data=_.extend(state.pops.data||{//pop默认数据结构
                 title:"默认标题",
                 closeName:"×",
                 btns:[{
@@ -92,8 +105,9 @@ const store = new Vuex.Store({
                     }
                 }],
                 content:{
-                    hasInit:false,
-                    data:null
+                    isTxt:false,
+                    msg:"",
+                    attrList:null
                 },//中间的数据，就是pop自己的template中需要的数据，pop的template是alert的壳+自己的template，数据支持重定义title等alert的基本信息，也支持内部内容拓展
 
                 //隐藏之前执行
@@ -102,8 +116,7 @@ const store = new Vuex.Store({
                 },
                 needShow:true
             },payload.data);
-            console.log(state.pops.data);
-        },
+        }
 
         /*
          *desc：设置页码的展示区间，当前页面的左右2页都需要展示的话，displayRange设置为2
@@ -112,11 +125,10 @@ const store = new Vuex.Store({
             payload.currentPageIndex：当前是第几页
             payload.displayRange ：展示当前左右的displayRange页都需要展示
          */
-        "jumpToTargetPage":function(state,payload){
-            payload.callback(state.tables.data,payload.currentPageIndex);
-        }
+        // "jumpToTargetPage":function(state,payload){
+        //     payload.callback(state.tables.data,payload.currentPageIndex);
+        // }
 
-        
     },
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
         
@@ -159,6 +171,17 @@ const store = new Vuex.Store({
                 hj.request(param);
             });
         },
+
+        //保存的action, 获取新增节点数据
+        "saveUnit":function(state,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
+        }
+
     },
     getters:{//getters里面的函数会自动调用 
     }
