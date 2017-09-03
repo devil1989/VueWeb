@@ -20,16 +20,41 @@
 		</li>
 		
 		<!-- 这里放拓展信息 start -->
-		<li >
-			<span class="content-key-name">职能类型 :</span>
-			<div class="content-value">
+		<li v-for="item in data.content.attrList" >
+			<span class="content-key-name">{{item.name}} :</span>
+			
+			<!-- 纯文本 -->
+			<div class="content-value" v-if="item.data&&item.data.type=='string' " >
+				<span>{{item.data.content}} </span>
+			</div>
+
+			<!-- 纯下拉菜单 -->
+			<div class="content-value" v-else-if="item.data&&item.data.type=='dropdownlist' " >
+				<select name="content-func-type"  class="content-func-type"  @change="selectedItem">
+					<!-- <option  selected="selected">职能类型1</option> -->
+					<option v-for="unit in item.data.content" :data-id="unit.id" :selected="unit.isSelected?'selected':'' " >{{unit.txt}}</option>
+				</select>
+			</div>
+			
+			<!-- 级联下拉菜单 -->
+			<div class="content-value" v-else-if="item.data&&!item.data.type">
+
+				<select name="content-func-type"  class="content-func-type" v-for="unit in item.data" v-show="unit.isSelected"  @change="selectedItem">
+					<!-- <option  selected="selected">职能类型1</option> -->
+
+					<option v-for="subUnit in unit.content" :selected="subUnit.isSelected?'selected':'' " >{{subUnit.txt}}</option>
+				</select>
+			</div>
+			
+			<!-- 级联下拉菜单 -->
+			<!-- <div class="content-value">
 				<select name="content-func-type"  class="content-func-type">
 					<option  selected="selected">职能类型1</option>
 					<option >职能类型2</option>
 					<option >职能类型职能类型3</option>
 					<option >职能类型4</option>
 				</select>
-			</div>
+			</div> -->
 		</li>
 		<!-- 这里放拓展信息 end -->
 

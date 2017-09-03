@@ -64,11 +64,9 @@ const store = new Vuex.Store({
             if(!state.tables.hasInit){
                 state.tables.hasInit=true;
                 state.tables.data=_.extend(state.tables.data||{},payload.data);
-                console.log(state.tables.data);
             }else{
-                console.log(state.tables.data);
+                debugger
                 state.tables.data=hj.deepExtend(state.tables.data,payload.data);
-                console.log(state.tables.data);
             }
 
         },
@@ -89,7 +87,7 @@ const store = new Vuex.Store({
         "updatePop":function(state,payload){
             debugger
             state.pops.hasInit=true;
-            state.pops.data=_.extend(state.pops.data||{//pop默认数据结构
+            state.pops.data=_.extend({//pop默认数据结构
                 title:"默认标题",
                 closeName:"×",
                 btns:[{
@@ -104,7 +102,7 @@ const store = new Vuex.Store({
                     callback:function(e){
                     }
                 }],
-                content:{
+                content:{//新怎了content节点判断是否为文本
                     isTxt:false,
                     msg:"",
                     attrList:null
@@ -115,7 +113,7 @@ const store = new Vuex.Store({
                     
                 },
                 needShow:true
-            },payload.data);
+            },state.pops.data||{},payload.data);
         }
 
         /*
@@ -174,6 +172,15 @@ const store = new Vuex.Store({
 
         //保存的action, 获取新增节点数据
         "saveUnit":function(state,payload){
+            return new Promise(function(resolve,reject){
+                var param=payload.param;//不用自动调用
+                param.success=resolve;
+                param.error=reject;
+                hj.request(param);
+            });
+        },
+
+        "deleteNode":function(state,payload){
             return new Promise(function(resolve,reject){
                 var param=payload.param;//不用自动调用
                 param.success=resolve;

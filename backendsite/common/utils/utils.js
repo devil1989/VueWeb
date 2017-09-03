@@ -83,8 +83,8 @@ var utils=(function(w) {
               }else{//赋值是基础类型，
                 originVal=value;//原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
               }
-            } else {//简单类型被替换
-              originObj[key] = Object.assign({},originObj[key],value);
+            } else {//简单类型被替换,说明是最后一层了
+              originObj= Object.assign({},originObj,targetObj);
             }
           }
         } else {//引用类型被简单类型替换

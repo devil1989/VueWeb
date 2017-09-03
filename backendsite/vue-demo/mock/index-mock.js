@@ -608,9 +608,19 @@
 
 	//新增职能单元
 	"crm/org/GetNodeExtAttr": {
-		'case1': {
+		'case2': {
 			//额外节点的拓展信息
-			"data": [{ //纯下拉
+			"data": [{ //纯展示文本
+						"name": "管理组织", //对应的属性名
+						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+						"sort": 0, //排序??
+						"parentId": null, //没有上级联动
+						"data": {
+							"type": "string", ////下拉框，纯文本，【string,dropdownlist】
+							"content": "452", //data:[]
+						}
+					},
+					{ //纯下拉
 						"name": "职能类型", //对应的属性名
 						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
 						"sort": 0, //排序,大小,每个数值都不一样
@@ -628,39 +638,59 @@
 								"txt": "内容", //对应文本
 								"id": "1", //和其他的parentId对应， added
 								"sort": 0, //大小，每个数值都不一样,排序用
-								"isSelected": true
+								"isSelected": false
 							}]
 						}
-					}, { //级联下拉，因为有parentId
+					},
+					{ //级联下拉，因为有parentId
 						"name": "组织类型", //对应的属性名
 						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
 						"sort": 0, //排序
 						// "parentId": 2, //表示有联动，需要父元素的选中状态是2，这个才展示list，否则展示的是其他的list,最外级别没有
 						"data": [{
+							"isSelected":true,//接口没有，需要自己转化数据添加 addinfo
 							"parentId": [1, 2],
 							"type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
 							"content": [{
 								"value": "1", //文本对应的唯一性 （上传时候需要）
-								"txt": "业务", //对应文本
+								"txt": "选择内容", //对应文本
+								"id": "12", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true
+							}, {
+								"value": "2", //文本对应的唯一性 （上传时候需要）
+								"txt": "选择内容2", //对应文本
 								"id": "12", //和其他的parentId对应， added
 								"sort": 0, //大小，每个数值都不一样,排序用
 								"isSelected": true,
+							}],
+						},{
+							"parentId": [1, 2],
+							"type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
+							"content": [{
+								"value": "1", //文本对应的唯一性 （上传时候需要）
+								"txt": "选择内容3", //对应文本
+								"id": "12", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true
 							}, {
-
+								"value": "2", //文本对应的唯一性 （上传时候需要）
+								"txt": "选择内容4", //对应文本
+								"id": "12", //和其他的parentId对应， added
+								"sort": 0, //大小，每个数值都不一样,排序用
+								"isSelected": true,
 							}],
 						}]
-					}, { //纯展示文本
-						"name": "管理组织", //对应的属性名
-						"code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
-						"sort": 0, //排序??
-						"parentId": null, //没有上级联动
-						"data": {
-							"type": "string", ////下拉框，纯文本，【string,dropdownlist】
-							"content": "452", //data:[]
-						}
-					}],
+					}
+					],
 			"message": "",
 			"status": 0
+		},
+		'case1': {
+			//额外节点的拓展信息
+			"data": null,
+			"message": "请求失败提示信息",
+			"status": 1
 		}
 	},
 
@@ -676,6 +706,21 @@
 			//额外节点的拓展信息
 			// "data": {},
 			"message": "本层组织内已有业务型组织需将该组织职能类型修改为管理型",
+			"status": 1
+		}
+	},
+
+	'crm/org/DeleteNodeInfo':{
+		'case2': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "",
+			"status": 0
+		},
+		'case1': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "删除节点失败",
 			"status": 1
 		}
 	}

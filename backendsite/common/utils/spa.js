@@ -71,6 +71,7 @@ var SPA = function(opts) {
   }
 
   //获取所有场景
+  /*超出限制就截取场景*/
   function getScene(){
     var obj = hj.buildUrl(location.hash.substr(1)).get();
     var arr = (obj.scene||"").split("|");//combine等不同的场景类型，后续可扩展
@@ -97,7 +98,14 @@ var SPA = function(opts) {
     }
   }
 
-  //场景数量超过最大值，需要重新设置hash
+  //传入新的scene数组，然后生成新的location.hash
+  /*
+    arr结构：
+      [{
+        key:"combine",//场景名称
+        value:["1","9","8","4","2"]//所有场景值
+      },{}]
+   */
   function changedHash(arr){
     var obj = hj.buildUrl(location.hash.substr(1)).get();
     var targetHashArray=[];
@@ -130,6 +138,24 @@ var SPA = function(opts) {
     });
   }
 
+  //删除某个场景,
+  function deleteScene(nodeId){
+    
+    if(hasScene(nodeId)){
+      var tgIndex;
+      var senceArray=getScene().sceneArray||[];
+      senceArray.forEach(function (ele,idx,input) {
+        if(input[idx].key=="combine"){
+          (input[idx].value||[]).forEach(function (unit,index) {
+            if(unit==nodeId){
+              input[idx].value.splice(index,1);
+            }
+          })
+        }
+      });
+      changedHash(senceArray);
+    }
+  }
   
   //原来存在场景就，把场景拿到最后面作为展示场景；如果没有，就在后面添加
   function addScene(sceneId) {
@@ -171,7 +197,8 @@ var SPA = function(opts) {
     data:outputData,
     getScene:getScene,
     hasScene:hasScene,//对外接口，是否存在某个场景
-    addScene:addScene
+    addScene:addScene,
+    deleteScene:deleteScene
   }
   //对外的接口
   return outPutApu;

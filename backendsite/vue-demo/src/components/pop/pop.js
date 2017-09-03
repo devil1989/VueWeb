@@ -65,7 +65,12 @@ var Pop={
 	            "nodeAttr": [],
 	            "isSub": true
 	        }
-	    }
+	    },
+
+        //选择弹框的下拉列表
+        selectedItem:function(e){
+            debugger
+        }
     },
     template:newTemplate//第一个是自己的template，后面的是继承父组件的tempalte，第三个参数表示，默认的继承都是把父组件中的{{content}}
 };

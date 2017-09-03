@@ -33,16 +33,6 @@ export default {
             });
         },
 
-        //获取右侧节点信息请求所需要的参数
-        getContetnParam:function(options){
-            return {
-                isMock:true,
-                mockUrl:"index-mock.js?case=case1",
-                url:"crm/org/GetNodeInfo",
-                nodeId:2//节点id
-            };
-        },
-
         createPop:function(e){
             var target=e.target;
             var self=this;
@@ -72,17 +62,31 @@ export default {
                                     }.bind(pop)
                                 }],
                                 needShow:true,
-                                content:formatedData,
-
-                                //隐藏之前执行
-                                beforeHide:function(e){
-
-                                },
+                                content:formatedData
                             }
                         });
-                    }else{
-                        console.log("请求弹框数据失败");
+                    }else if(rst.status!=0){//请求失败
+                        self.$store.commit("updatePop",{
+                            data:{//传入最新的弹框的state数据
+                                title:"提示",
+                                btns:[{
+                                    type:"submit",//提交
+                                    txt:"知道了",
+                                    callback:function(e){
+                                        this.hide();
+                                    }.bind(pop)
+                                }],
+                                needShow:true,
+                                content:{
+                                    isTxt:true,
+                                    msg:rst.message||"获取数据失败",
+                                    attrList:null
+                                }
+                            }
+                        });
 
+                    }else{
+                        console.log("返回数据为空");
                     }
 
                         
@@ -92,6 +96,48 @@ export default {
                     
             }
         },
+
+        //删除单元（可以使组织，机构，职能单元等）
+        deleteUnit:function(e){
+            debugger
+            var store=this.$store;
+            var self=this;
+            var pop=this.$root.$children[2];//pop组件
+            var param=this.getDeleteParam();
+            store.dispatch("deleteNode",{"param":param}).then(function(rst){
+                if(rst&&rst.status==0){
+                    hj.spaIns.deleteScene(param.nodeId);
+                }
+                else{
+                    self.$store.commit("updatePop",{
+                        data:{//传入最新的弹框的state数据
+                            title:"提示",
+                            btns:[{
+                                type:"submit",//提交
+                                txt:"知道了",
+                                callback:function(e){
+                                    this.hide();
+                                }.bind(pop)
+                            }],
+                            needShow:true,
+                            content:{
+                                isTxt:true,
+                                msg:rst.message||"删除节点失败",
+                                attrList:null
+                            }
+                        }
+                    });                }
+            },function(){
+                console.log("网络原因请求节点数据失败");
+            });//获取节点信息
+        },
+
+        editUnit:function(){
+
+        },
+
+
+        //格式化弹框数据
         formatData:function(data){
             return {
                 isTxt:false,
@@ -99,10 +145,11 @@ export default {
                 attrList:data||null
             };
         },
+
         getParam:function(){
             return {
                 'isMock':true,
-                'mockUrl':"index-mock.js?case=case1",
+                'mockUrl':"index-mock.js?case=case2",
                 'url':"crm/org/GetNodeExtAttr",
                 "id": 0,
                 "parentId": 0,
@@ -112,6 +159,30 @@ export default {
                 "nodeAttr": {},//?
                 "isSub”": true
             }
+        },
+        //获取右侧节点信息请求所需要的参数
+        getContetnParam:function(options){
+            return {
+                isMock:true,
+                mockUrl:"index-mock.js?case=case2",
+                url:"crm/org/GetNodeInfo",
+                nodeId:2//节点id
+            };
+        },
+
+        getDeleteParam:function(options){
+            return {
+                isMock:true,
+                mockUrl:"index-mock.js?case=case2",
+                url:"crm/org/DeleteNodeInfo",
+                nodeId:2//节点id
+            };
+        },
+
+        //选择弹框的下拉列表
+        selectedItem:function(e){
+            debugger
+            console.log(1)
         }
 
         
