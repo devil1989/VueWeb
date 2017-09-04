@@ -1,50 +1,47 @@
 <div class="ui-pop-content-wrapper" v-if="data.content">
 	<ul v-if="!data.content.isTxt">
+
+		<!-- 不管是新增还是编辑，都是输入框 start -->
 		<li>
 			<span class="content-key-name">组织名称 :</span>
+
 			<div class="content-value">
-				<input class="content-value-name" type="text" value="" placeholder="请输入组织名称">
+				<input class="content-value-name" type="text" :value="data.content.contentInfo.rowData.nodeName" placeholder="请输入组织名称">
 			</div>
 		</li>
+		<!-- 不管是新增还是编辑，都是输入框 end -->
+
+		<!-- 不管是新增还是编辑，都是直接展示文本，不能编辑内容 start -->
 		<li>
 			<span class="content-key-name">父级组织名称 :</span>
 			<div class="content-value">
-				<span>网校</span>
+				<span>{{data.content.contentInfo.rowData.parentName}}</span>
 			</div>
 		</li>
 		<li>
 			<span class="content-key-name">父级组织代码 :</span>
 			<div class="content-value">
-				<span>OA</span>
+				<span>{{data.content.contentInfo.rowData.parentId}}</span>
 			</div>
 		</li>
+		<!-- 不管是新增还是编辑，都是直接展示文本，不能编辑内容 end -->
 		
 		<!-- 这里放拓展信息 start -->
-		<li v-for="item in data.content.attrList" >
+		<li v-for="item in data.content.contentInfo.metaData.extendAttrs" >
 			<span class="content-key-name">{{item.name}} :</span>
 			
 			<!-- 纯文本 -->
-			<div class="content-value" v-if="item.data&&item.data.type=='string' " >
-				<span>{{item.data.content}} </span>
+			<div class="content-value" v-if="item.type=='string' " >
+				<span>{{item.data}} </span>
 			</div>
 
-			<!-- 纯下拉菜单 -->
-			<div class="content-value" v-else-if="item.data&&item.data.type=='dropdownlist' " >
+			<!-- 下拉菜单 -->
+			<div class="content-value" v-else-if="item.type=='dropdownList' " >
 				<select name="content-func-type"  class="content-func-type"  @change="selectedItem">
-					<!-- <option  selected="selected">职能类型1</option> -->
-					<option v-for="unit in item.data.content" :data-id="unit.id" :selected="unit.isSelected?'selected':'' " >{{unit.txt}}</option>
+					<option  v-for="unit in item.data" :data-value="unit.value" v-show="!unit.isHide" :selected="unit.isSelected?'selected':'' " >{{unit.text}}</option>
 				</select>
 			</div>
 			
-			<!-- 级联下拉菜单 -->
-			<div class="content-value" v-else-if="item.data&&!item.data.type">
-
-				<select name="content-func-type"  class="content-func-type" v-for="unit in item.data" v-show="unit.isSelected"  @change="selectedItem">
-					<!-- <option  selected="selected">职能类型1</option> -->
-
-					<option v-for="subUnit in unit.content" :selected="subUnit.isSelected?'selected':'' " >{{subUnit.txt}}</option>
-				</select>
-			</div>
 			
 			<!-- 级联下拉菜单 -->
 			<!-- <div class="content-value">
@@ -58,20 +55,22 @@
 		</li>
 		<!-- 这里放拓展信息 end -->
 
+		
 		<li>
 			<span class="content-key-name">组织状态 :</span>
 			<div class="content-value content-radios">
 				<div class="content-is-active">
-					<input type="radio" name="isactive" value="启用" checked="checked">
+					<input type="radio" name="isactive" value="启用" :checked="data.content.contentInfo.rowData.isActive?'checked':'' ">
 					<span>启用</span>
 				</div>
 				<div class="content-is-active">
-					<input type="radio" name="isactive" value="禁用" >
+					<input type="radio" name="isactive" value="禁用" :checked="data.content.contentInfo.rowData.isActive?'':'checked' ">
 					<span>禁用</span>
 				</div>
 				
 			</div>
 		</li>
+
 	</ul>
 	<span  v-else >{{data.content.msg}}</span>
 </div>

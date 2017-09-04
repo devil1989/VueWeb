@@ -74,21 +74,26 @@ var utils=(function(w) {
 
         if (isObject(targetObj)) {//引用类型被引用类型替换
           for (var key in targetObj) {
-            var value = targetObj[key];
-            var originVal = originObj[key];
-            if (isObject(originVal)) {//引用类型被替换
+            if (targetObj.hasOwnProperty(key)) {
+              var value = targetObj[key];
+              var originVal = originObj[key];
+              if (isObject(originVal)) { //引用类型被替换
 
-              if(isObject(value)){//对象赋值对象
-                originVal = hj.deepExtend(originVal, value);
-              }else{//赋值是基础类型，
-                originVal=value;//原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+                if (isObject(value)) { //对象赋值对象
+                  originVal = hj.deepExtend(originVal, value);
+                } else { //赋值是基础类型，
+                  originVal = value; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+                }
+              } else { //简单类型被替换,说明是最后一层了
+                originObj = Object.assign({}, originObj, targetObj);
               }
-            } else {//简单类型被替换,说明是最后一层了
-              originObj= Object.assign({},originObj,targetObj);
             }
           }
         } else {//引用类型被简单类型替换
-          originObj = targetObj; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+          if(targetObj){
+            originObj = targetObj; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+          }
+          
         }
       } else {//简单类型被替换
         originObj = targetObj;

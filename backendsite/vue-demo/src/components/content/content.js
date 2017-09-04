@@ -80,7 +80,7 @@ export default {
                                 content:{
                                     isTxt:true,
                                     msg:rst.message||"获取数据失败",
-                                    attrList:null
+                                    contentInfo:null
                                 }
                             }
                         });
@@ -108,25 +108,26 @@ export default {
                 if(rst&&rst.status==0){
                     hj.spaIns.deleteScene(param.nodeId);
                 }
-                else{
-                    self.$store.commit("updatePop",{
-                        data:{//传入最新的弹框的state数据
-                            title:"提示",
-                            btns:[{
-                                type:"submit",//提交
-                                txt:"知道了",
-                                callback:function(e){
+                else {
+                    self.$store.commit("updatePop", {
+                        data: { //传入最新的弹框的state数据
+                            title: "提示",
+                            btns: [{
+                                type: "submit", //提交
+                                txt: "知道了",
+                                callback: function(e) {
                                     this.hide();
                                 }.bind(pop)
                             }],
-                            needShow:true,
-                            content:{
-                                isTxt:true,
-                                msg:rst.message||"删除节点失败",
-                                attrList:null
+                            needShow: true,
+                            content: {
+                                isTxt: true,
+                                msg: rst.message || "删除节点失败",
+                                contentInfo: null
                             }
                         }
-                    });                }
+                    });
+                }
             },function(){
                 console.log("网络原因请求节点数据失败");
             });//获取节点信息
@@ -142,14 +143,14 @@ export default {
             return {
                 isTxt:false,
                 msg:"",
-                attrList:data||null
+                contentInfo:data||null
             };
         },
 
         getParam:function(){
             return {
                 'isMock':true,
-                'mockUrl':"index-mock.js?case=case2",
+                'mockUrl':"index-mock.js?case=case3",
                 'url':"crm/org/GetNodeExtAttr",
                 "id": 0,
                 "parentId": 0,

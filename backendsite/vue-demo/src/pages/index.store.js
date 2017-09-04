@@ -87,7 +87,7 @@ const store = new Vuex.Store({
         "updatePop":function(state,payload){
             debugger
             state.pops.hasInit=true;
-            state.pops.data=_.extend({//pop默认数据结构
+            var newState=_.extend({//pop默认数据结构
                 title:"默认标题",
                 closeName:"×",
                 btns:[{
@@ -105,7 +105,7 @@ const store = new Vuex.Store({
                 content:{//新怎了content节点判断是否为文本
                     isTxt:false,
                     msg:"",
-                    attrList:null
+                    contentInfo:null//这里放后端数据的data属性
                 },//中间的数据，就是pop自己的template中需要的数据，pop的template是alert的壳+自己的template，数据支持重定义title等alert的基本信息，也支持内部内容拓展
 
                 //隐藏之前执行
@@ -113,7 +113,11 @@ const store = new Vuex.Store({
                     
                 },
                 needShow:true
-            },state.pops.data||{},payload.data);
+            },state.pops.data,payload.data);
+
+            state.pops.data=hj.deepExtend(state.pops.data,newState);
+
+            debugger
         }
 
         /*
