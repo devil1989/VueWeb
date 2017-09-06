@@ -134,7 +134,7 @@ export default {
             return {
                 isMock:true,
                 mockUrl:"index-mock.js?case=case2",
-                url:"crm/org/DeleteNodeInfo",
+                url:"crm/org/deleteNode",
                 nodeId:2//节点id
             };
         },

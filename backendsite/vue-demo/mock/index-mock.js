@@ -1,9 +1,23 @@
+ //组织结构升级API
+ //nodeType:  1：业务域，2：机构，3：业务单元，4：职能单元，5：职能组，6：职能小组
+
  var data={
 
+ 	//？？？？
+ 	'crm/org/CheckChild':{
+		'case1':{
+			data:null,
+			status:0,
+			message:""
+		},
+		'case2':{}
+	},
 
-
- 	//获取左侧的树状结构
+ 	// 获取所有节点接口（给前端树形结构）
+	//http://local.backend.hujiang.com/crm/GetNodeByUserId?userid=1
 	"crm/GetNodeByUserId": {
+
+
 
 		"case1": {
 			"data": {
@@ -11,36 +25,31 @@
 					"id": 1,
 					"isActive": 1,
 					"nodeName": "网校",
-					"nodeAttr": [],
+					"nodeType":"1",// 1：业务域，2：机构，3：业务单元，4：职能单元，5：职能组，6：职能小组(后面没有添加)
 					"children": [{
 						"id": 2,
 						"isActive": 1,
-						"nodeAttr": [],
 						"nodeName": "机构-沿途",
 						"parentId": 0,
 						"children": [{
 							"id": 3,
 							"isActive": 1,
 							"nodeName": "业务单元A",
-							"nodeAttr": [],
 							"parentId": 0,
 							"children": [{
 									"id": 4,
 									"isActive": 1,
 									"nodeName": "职能单元A",
-									"nodeAttr": [],
 									"parentId": 0,
 									"children": [{
 												"id": 5,
 												"isActive": 1,
 												"nodeName": "职能组A",
-												"nodeAttr": [],
 												"parentId": 0,
 												"children": [
 													{
 														"id": 6,
 														"isActive": 1,
-														"nodeAttr": [],
 														"nodeName": "职能小组1",
 														"parentId": 0,
 														"children": []
@@ -48,7 +57,6 @@
 													{
 														"id": 7,
 														"isActive": 1,
-														"nodeAttr": [],
 														"nodeName": "职能小组2",
 														"parentId": 0,
 														"children": []
@@ -57,7 +65,6 @@
 											}, {
 												"id": 8,
 												"isActive": 1,
-												"nodeAttr": [],
 												"nodeName": "职能组B",
 												"parentId": 0,
 												"children": []
@@ -65,20 +72,17 @@
 								}, {
 									"id": 9,
 									"isActive": 1,
-									"nodeAttr": [],
 									"nodeName": "职能单元B",
 									"parentId": 0,
 									"children": [{
 												"id": 10,
 												"isActive": 1,
 												"nodeName": "职能组A",
-												"nodeAttr": [],
 												"parentId": 0,
 												"children": [
 													{
 														"id": 11,
 														"isActive": 1,
-														"nodeAttr": [],
 														"nodeName": "职能小组1",
 														"parentId": 0,
 														"children": []
@@ -86,7 +90,6 @@
 													{
 														"id": 12,
 														"isActive": 1,
-														"nodeAttr": [],
 														"nodeName": "职能小组2",
 														"parentId": 0,
 														"children": []
@@ -95,7 +98,6 @@
 											}, {
 												"id": 13,
 												"isActive": 1,
-												"nodeAttr": [],
 												"nodeName": "职能组B",
 												"parentId": 0,
 												"children": []
@@ -104,7 +106,6 @@
 						}, {
 							"id": 14,
 							"isActive": 1,
-							"nodeAttr": [],
 							"nodeName": "业务单元B",
 							"parentId": 0,
 							"children": []
@@ -112,7 +113,6 @@
 					}, {
 						"id": 15,
 						"isActive": 1,
-						"nodeAttr": [],
 						"nodeName": "机构-2",
 						"parentId": 0,
 						"children": []
@@ -165,33 +165,70 @@
 		}
 	},
 
-	"crm/org/GetNodeInfo":{//获取节点信息
+	//删除节点
+	// http://local.backend.hujiang.com/crm/org/deleteNode?nodeId=2
+	'crm/org/DeleteNodeInfo':{
+		'case2': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "",
+			"status": 0
+		},
+		'case1': {
+			//额外节点的拓展信息
+			// "data": {},
+			"message": "删除节点失败",
+			"status": 1
+		}
+	},
+
+
+
+	//获取节点信息
+	//http://local.backend.hujiang.com/crm/org/GetNodeInfo?nodeId=2 (这里的nodeId就是上面节点的id)
+	"crm/org/GetNodeInfo":{
 		"case1":{
 			"data": {
-				"btns": [{
+				"btns": [{//基本西右侧的btns
 					"txt": "新增职能组",
 					"isSub": false
 				}, {
 					"txt": "新增下级职能单元",
-					"isSub": true
+					"isSub": true//添加的是业务层级的下级
 				}],
 				"info": {
-					"id": 2,
-					"parentId": 0,
-					"nodeName": "沪江",
+
+					//这些都是基本信息
+					"id": 2,//组织代码
+					"nodeName": "沪江",//组织名称
+					"parentName":"父级",//父级组织名称
+					"parentId": 0,//父级组织代码
+					"isActive": true,//是否启用
 					'busTypeText':"机构",//机构，职能单元，组织等，中文表示
-					"nodeAttr": [{
+					"children": null,
+					"nodeAttr": [{//拓展信息
 						"id": 2,
-						"name": "沪江",
-						"value": "4",
-						"code": "nodeType",
-						"sort": 0,
-						"parentId": null,
-						"type": null,
-						"data": null
-					}],
-					"isActive": true,
-					"children": null
+						"name": "沪江",//key名称
+						"value": "4",//对应的值得名称（需要传给后端）
+						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
+						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
+						"parentId": null,//无用
+						"type": null,//无用
+						"data": {//相同拓展类型的浮层数据
+							"sameNode": [{//sameNode表示相同拓展类型，以防以后有其他数据在浮层展示，所以需要定义sameNode这个key
+								'data': [{
+									'name': "zuhzidaima",//组织代码
+									'value': 452//组织代码对应的值
+								}, {
+									'name': "zuzhimch",//组织名称
+									'value': 452//组织名称对应的值
+								},{
+									'name': 12,
+									'value': 452
+								}]
+							}]
+						}
+					}]
 				}
 			},
 			"message": "success",
@@ -199,37 +236,67 @@
 		},
 		"case2":{
 			"data": {
-				"btns": [{
-					"txt": "新增机构",
+				"btns": [{//基本西右侧的btns
+					"txt": "新增职能组",
 					"isSub": false
 				}, {
-					"txt": "新增下级机构",
-					"isSub": true
+					"txt": "新增下级职能单元",
+					"isSub": true//添加的是业务层级的下级
 				}],
 				"info": {
-					"id": 2,
-					"parentId": 0,
-					"nodeName": "jeffry",
+
+					//这些都是基本信息
+					"id": 2,//组织代码
+					"nodeName": "沪江",//组织名称
+					"parentName":"父级",//父级组织名称
+					"parentId": 0,//父级组织代码
+					"isActive": true,//是否启用
 					'busTypeText':"机构",//机构，职能单元，组织等，中文表示
-					"nodeAttr": [{
+					"children": null,
+					"nodeAttr": [{//拓展信息
 						"id": 2,
-						"name": "沪江",
-						"value": "4",
-						"code": "nodeType",
-						"sort": 0,
-						"parentId": null,
-						"type": null,
-						"data": null
-					}],
-					"isActive": true,
-					"children": null
+						"name": "沪江",//key名称
+						"value": "4",//对应的值得名称（需要传给后端）
+						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
+						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
+						"parentId": null,//无用
+						"type": null,//无用
+						"data": {//相同拓展类型的浮层数据
+							"sameNode": [{//sameNode表示相同拓展类型，以防以后有其他数据在浮层展示，所以需要定义sameNode这个key
+								'data': [{
+									'name': "zuhzidaima",//组织代码
+									'value': 452//组织代码对应的值
+								}, {
+									'name': "zuzhimch",//组织名称
+									'value': 452//组织名称对应的值
+								},{
+									'name': 12,
+									'value': 452
+								}]
+							}]
+						}
+					}]
 				}
 			},
 			"message": "success",
-			"status": 0
+			"status": 1
 		}
 	},
-	"crm/org/GetMember":{//分页表结构请求，获取组织成员数据（用户名，姓名，系统角色）
+
+
+	//5、获取节点成员接口 （分页表结构请求，获取组织成员数据（用户名，姓名，系统角色））
+	// Type:Post
+	// url:http://local.backend.hujiang.com/crm/org/GetMember
+	// Request {
+	//   {
+	//     "pageNum": 1,//页码
+	//     "pageSize": 10,//每页多少个
+	//     "paramData": {
+	//       "groupId": 10138 //节点id
+	//     }
+	//   }
+	// }
+	"crm/org/GetMember":{
 		"case2": {
 			"data": {
 				"pagination": { //页码相关信息
@@ -608,7 +675,20 @@
 		]
 	},
 
-	//新增职能单元
+
+
+	// 3、新增节点和编辑节点（业务域，机构，业务单元、职能单元、职能组、职能小组）
+	//subLevel标识是新增同业务层节点还是下级业务节点
+	// Request  {
+	//   "id": 0,
+	//   "parentId": 0,
+	//   "nodeName": "string",
+	//   "isActive": true,
+	//   "createuserId": 0 "nodeAttr": {},
+	//   "isSub”": true
+	// }
+	// type:Post
+	// url:http://local.backend.hujiang.com/crm/org/GetNodeExtAttr
 	"crm/org/GetNodeExtAttr": {
 		'case1': {
 			
@@ -623,7 +703,7 @@
 						"name": "职能类型",
 						"code": "functionalType", //需要上传的key
 						"sort": 1,
-						"type": "dropdownList",
+						"type": "dropdownList",//如果是string，那么data数组中只有一个对象，对象的text就是对应的字符串值
 						"id": 1,
 						"parentId": null,
 						"editable": true,
@@ -706,7 +786,8 @@
 				},
 
 			    "rowData": {//包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
-			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】
+			    	"id":0//对应的唯一的标识，新增的时候这个下发0
+			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
 				    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
 				    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
 				    "parentName":"父级组织A"//父级组织名称[这个服务端不会下发，需要自己赋值]！！
@@ -738,7 +819,6 @@
 						"id": 1,
 						"parentId": null,
 						"editable": true,
-						// "needHide":true,//这个后期添加
 						"data": [{
 							"id": 2,
 							"value": 1,
@@ -818,7 +898,8 @@
 				},
 
 			    "rowData": {//包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
-			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】
+			    	"id":0//对应的唯一的标识，新增的时候这个下发0
+			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
 				    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
 				    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
 				    "parentName":"父级组织A"//父级组织名称[这个服务端不会下发，需要自己赋值]！！
@@ -829,44 +910,37 @@
 		}
 	},
 
-	//保存信息
+
+
+	// 点击保存
+	// Request {
+	// 	"rowData": {//包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
+	//     	"id":0//对应的唯一的标识，新增的时候这个下发0
+	//     	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
+	// 	    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
+	// 	    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
+	// 	    "parentName":"父级组织A"//父级组织名称[这个服务端不会下发，需要自己赋值]！！
+	//     },
+	//     'extendAttrs':[{
+	//     	"code":4531,//新增和编辑请求接口的extendAttrs中的元素的code属性
+	//     	"value":45654//新增和编辑请求接口的extendAttrs中的data下拉选项数组中的选中元素的value
+	//     }]
+	// }
+	// type : Post
+	// url:http://local.backend.hujiang.com/crm/org/CreateNode
 	"crm/org/CreateNode": {
 		'case2': {
 			//额外节点的拓展信息
-			// "data": {},
+			"data": null,
 			"message": "",
 			"status": 0
 		},
 		'case1': {
 			//额外节点的拓展信息
-			// "data": {},
+			"data": null,
 			"message": "本层组织内已有业务型组织需将该组织职能类型修改为管理型",
 			"status": 1
 		}
-	},
-
-	'crm/org/DeleteNodeInfo':{
-		'case2': {
-			//额外节点的拓展信息
-			// "data": {},
-			"message": "",
-			"status": 0
-		},
-		'case1': {
-			//额外节点的拓展信息
-			// "data": {},
-			"message": "删除节点失败",
-			"status": 1
-		}
-	},
-
-	'crm/org/CheckChild':{
-		'case1':{
-			data:null,
-			status:0,
-			message:""
-		},
-		'case2':{}
 	}
 }
 
