@@ -11,10 +11,6 @@ import storeInfo from './index.store.js';//包含了当前页面对应的store�
 import Nav from '../components/nav/nav.js';//左侧导航栏
 import Pop from '../components/pop/pop.js';//弹框
 import Scenes from '../components/combine/combine.js';//中间场景集合（单页切换的就是这些场景）
-// import Combine from '../components/combine/combine.js'//右侧内容模块
-
-// import SchoolTable from '../components/table/table.js';//页面需要的组件
-// import Contents from '../components/content/content.js';//页面需要的组件
 require("../assets/styles/index.scss");//每个js对应该页面的一个css
 
 Vue.config.devtools = true;
@@ -54,17 +50,6 @@ var indexPage=(function(){
                     var popData=self.formatedPopData({})||{};
 
                     self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
-
-                    // self.$children[2].init({
-                    //     data:popData,//传入组件的数据
-                    //     callback:function(callbackData){//结果组件处理后返回的数据
-                    //         self.$store.commit({
-                    //             type:"initPop",
-                    //             data:callbackData,
-                    //             store:self.$store
-                    //         });
-                    //     }
-                    // });//弹框
 
                     self.$children[1].init(data.data);//场景容器初始化，其实里面刚开始没啥东西，只是占个坑，以保证里面所有子组件都是和vuex的store绑定
 
@@ -110,14 +95,16 @@ var indexPage=(function(){
                 if(!SPA.hasScene()){
                     location.hash="#scene=combine-"+data.nodeList[0].id;//默认用combine类型场景，值为默认的第一个节点的key
                 }else{
-                    var obj=hj.buildUrl(location.hash).get();
+
+                    hj.spaIns.updateScene();
+                    // var obj=hj.buildUrl(location.hash).get();
                     
-                    if(obj.hashchange){
-                        location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
-                    }
-                    else{
-                        location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
-                    }
+                    // if(obj.hashchange){
+                    //     location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
+                    // }
+                    // else{
+                    //     location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
+                    // }
                     
                 }
             },
@@ -135,32 +122,6 @@ var indexPage=(function(){
 })();
 
 export default {}
-
-
-
-//unfinish:
-// 2.点击新增后，默认选中新增业务单元，展示新增页面 ok
-// 9.分页表格信息前端改写 ok
-// 3.点击删除，判断逻辑（！！是否有子组织启用接口！！） ok
-// 5.职能单元新增职能组的额外逻辑：（新增职能单元组织中，是否已经有业务型组织，没有业务型组织提示“职能单元必须有一个职能类型为业务型”）（！！点击新增接口更新！！） ok
-// 6.职能单元新增下级职能单元，点击新增，如果当前是业务类型，需要判断所在同层组织师是否已经有业务型，如果有的话提示不能添加，只能添加管理型（！！点击新增保存接口更新！！） ok
-
-
-//10.弹框信息template
-// 4.点击编辑本组织（确定哪些能修改），点击保存（判断启用或者禁用组织逻辑），禁用后，右侧置灰（包括子元素）（！！是否有自组织启用接口！！）
-
-// 1.业务型职能单元，职能组，职能小组添加标记；拓展类型文字+hover效果；扩展类型+hover效果，选中效果，UI调整
-//11.请求参数拼接
-//和后端对接
-
-
-// //和翠翠定接口
-// 12.是否有启用的子组织接口，（翠翠） 用于删除和禁用
-// 13.点击新增职能组，判断是否能新增，以及对于返回信息（新增接口扩展信息）
-// 14.点击新增的保存功能，校验是否能保存，弹出消息（原接口返回对于信息）
-
-
-
 
 
 

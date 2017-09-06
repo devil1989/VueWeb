@@ -37,8 +37,8 @@
 
 			<!-- 下拉菜单 -->
 			<div class="content-value" v-else-if="item.type=='dropdownList' " >
-				<select name="content-func-type"  class="content-func-type"  @change="selectedItem">
-					<option  v-for="unit in item.data" :data-value="unit.value" v-show="!unit.isHide" :selected="unit.isSelected?'selected':'' " >{{unit.text}}</option>
+				<select name="content-func-type"  class="content-func-type"  @change="selectedItem" :data-id="item.id">
+					<option  v-for="unit in item.data" :data-value="unit.value" :data-optionid="unit.id" v-show="!unit.isHide" :selected="unit.isSelected?'selected':'' " >{{unit.text}}</option>
 				</select>
 			</div>
 			

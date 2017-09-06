@@ -126,6 +126,18 @@ var SPA = function(opts) {
     location.hash="#"+targetHashArray.reverse().join("&");
   }
 
+  //刷新页面作用相同，但是这里只是修改了hash来执行hashchange操作，这样也是刷新页面
+  function updateScene(){
+     var obj=hj.buildUrl(location.hash).get();
+      
+      if(obj.hashchange){
+          location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
+      }
+      else{
+          location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
+      }
+  }
+
 
   //判断是否存在合法的场景str,不传参数表示，只要有任意一个场景即可
   function hasScene(str){
@@ -198,7 +210,8 @@ var SPA = function(opts) {
     getScene:getScene,
     hasScene:hasScene,//对外接口，是否存在某个场景
     addScene:addScene,
-    deleteScene:deleteScene
+    deleteScene:deleteScene,
+    updateScene:updateScene
   }
   //对外的接口
   return outPutApu;

@@ -65,7 +65,6 @@ const store = new Vuex.Store({
                 state.tables.hasInit=true;
                 state.tables.data=_.extend(state.tables.data||{},payload.data);
             }else{
-                debugger
                 state.tables.data=hj.deepExtend(state.tables.data,payload.data);
             }
 
@@ -85,7 +84,6 @@ const store = new Vuex.Store({
 
         //新增当前单元弹框
         "updatePop":function(state,payload){
-            debugger
             state.pops.hasInit=true;
             var newState=_.extend({//pop默认数据结构
                 title:"默认标题",
@@ -116,8 +114,6 @@ const store = new Vuex.Store({
             },state.pops.data,payload.data);
 
             state.pops.data=hj.deepExtend(state.pops.data,newState);
-
-            debugger
         }
 
         /*
@@ -132,69 +128,54 @@ const store = new Vuex.Store({
         // }
 
     },
+
+    //写那么多相同内容的action，不写在一起是为以后接口差异化拆分做准备，万一action中需要脱离promise或者需要做额外逻辑，写在一起就完了
     actions:{//action支持异步；action中还是调用对应的mutations中的行为（mutations可以理解为所有的触发state突变的集合，每个key代表对state的某种操作） store.dispatch
         
         //获取左侧导航数据
-        getInitData:function(store,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+        getInitData:function(state,payload){
+            return state.getters.getPromise(payload);
         },
 
         //获取节点数据
-        getNodeData:function(store,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+        getNodeData:function(state,payload){
+            return state.getters.getPromise(payload);
         },
 
         //后去分页表格数据
-        getTableData:function(store,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+        getTableData:function(state,payload){
+            return state.getters.getPromise(payload);
         },
 
         //点击弹框，获取新增节点数据
-        getPopInfo:function(store,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+        getPopInfo:function(state,payload){
+            return state.getters.getPromise(payload);
         },
 
         //保存的action, 获取新增节点数据
         "saveUnit":function(state,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+            return state.getters.getPromise(payload);
         },
 
         "deleteNode":function(state,payload){
-            return new Promise(function(resolve,reject){
-                var param=payload.param;//不用自动调用
-                param.success=resolve;
-                param.error=reject;
-                hj.request(param);
-            });
+            return state.getters.getPromise(payload);
+        },
+        "editNode":function(state,payload){
+            return state.getters.getPromise(payload);
         }
 
     },
     getters:{//getters里面的函数会自动调用 
+        getPromise:function(){//获取promise的公共方法
+            return function(payload){
+                return new Promise(function(resolve,reject){
+                    var param=payload.param;//不用自动调用
+                    param.success=resolve;
+                    param.error=reject;
+                    hj.request(param);
+                });
+            }
+        }
     }
     
 });

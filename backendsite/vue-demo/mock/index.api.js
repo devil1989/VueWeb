@@ -85,6 +85,7 @@
       "parentName":"父级",//父级组织名称
       "parentId": 0,//父级组织代码
       "isActive": true,//是否启用
+      'busTypeText':"机构",//机构，职能单元，组织等，中文表示
 
       //拓展属性，基本信息展示只需要key和value，点击新增的时候才需要其他key的信息
       "nodeAttr": [{
@@ -177,48 +178,74 @@
   "parentId": 0,
   "nodeName": "string",
   "isActive": true,
-  "createuserId": 0 "nodeAttr": {}
-
+  "createuserId": 0
+  "nodeAttr":{},
+  "isSub”":true
 }
+
 // Response
 {
-	"data":{
-	  "infos": {//
+  "data": [{ //纯展示文本
+    "code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+    "name": "管理组织", //对应的属性名
+    "type": "string", ////下拉框，纯文本，【string,dropdownlist】
+    "sort": 0, //排序??
+    "id": 3, //自己的id，如果和其他元素的parentid相同的话，就是有联动
+    "parentId": null, //没有上级联动
+    "content": "452" //data:[]
+  }, { //下拉（包含级联和非级联，有parentId表示和其他的元素有级联）
+    "code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+    "name": "职能类型", //对应的属性名
+    "type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
+    "sort": 0, //排序,大小,每个数值都不一样
+    "id": 3,
+    "parentId": null, //表示没有上级联动
 
-	    "nodeName": "成人口语",//组织名称
-	    "parentId": 3//父级组织代码
-	    "isActive": true,//是否启用
-	    "parentName":""//父级组织名称
-	  },
-	  "attrs": [{//新增的时候拿这个
-	      "id": 2,//无用
-	      "name": "管理组织",//对应的属性名
-	      "code": "fff",//唯一标识符，某个标签内容的唯一性，保存的时候需要
-	      "sort": 0,//排序
-	      "parentId": null,//联动
-	      "data": {
-	        type:string,////下拉框，纯文本，【string,dropdownlist】
-	        content:"452",//data:[]
-	      }
-	    },{//新增的时候拿这个
-	      "id": 2,//无用
+    "content": [{ //下拉列表中的内容，(relateNext=null:和其他下级无联动);(relateCurrent=null:和其他上级无联动);
+      "id": "2", //没用到
+      "value": "1", //文本对应的唯一性 （上传时候需要）
+      "txt": "业务", //对应文本
+      "sort": 0, //大小，每个数值都不一样,排序用
+      "isSelected": false, //是否选中
+      "relateNext": "s", //和其他项的relateCurrent做联动，当前的relateNext和其他对象的relateCurrent相同，就展示那个相同的relateNext的内容
+      "relateCurrent": null
+    }, {
+      "id": "2", //没用到
+      "value": "1", //文本对应的唯一性 （上传时候需要）
+      "txt": "业务", //对应文本
+      "sort": 0, //大小，每个数值都不一样,排序用
+      "isSelected": false, //是否选中
+      "relateNext": "s", //和其他项的relateCurrent做联动，当前的relateNext和其他对象的relateCurrent相同，就展示那个相同的relateNext的内容
+      "relateCurrent": null
+    }]
+  }, { //下拉（包含级联和非级联，有parentId表示和其他的元素有级联）
+    "code": "fff", //唯一标识符，某个标签内容的唯一性，保存的时候需要
+    "name": "职能类型", //对应的属性名
+    "type": "dropdownlist", ////下拉框，纯文本，【string,dropdownlist】
+    "sort": 0, //排序,大小,每个数值都不一样
+    "id": 3,
+    "parentId": null, //表示没有上级联动
 
-	      "name": "管理组织",//对应的属性名
-	      "code": "fff",//唯一标识符，某个标签内容的唯一性，保存的时候需要
-	      "sort": 0,//排序
-	      "parentId": null,//联动
-	      "data": {
-	        type:dropdownlist,////下拉框，纯文本，【string,dropdownlist】
-	        content:[
-	          {
-	            value:"fsdfds"
-	            isSelected:true,
-
-	          }
-	        ]
-	    }]
-	},
-	"status": 0
+    "content": [{ //下拉列表中的内容，(relateNext=null:和其他下级无联动);(relateCurrent=null:和其他上级无联动);
+      "id": "2", //没用到
+      "value": "1", //文本对应的唯一性 （上传时候需要）
+      "txt": "业务", //对应文本
+      "sort": 0, //大小，每个数值都不一样,排序用
+      "isSelected": false, //是否选中
+      "relateNext": "s", //和其他项的relateCurrent做联动，当前的relateNext和其他对象的relateCurrent相同，就展示那个相同的relateNext的内容
+      "relateCurrent": "b"
+    }, {
+      "id": "2", //没用到
+      "value": "1", //文本对应的唯一性 （上传时候需要）
+      "txt": "业务", //对应文本
+      "sort": 0, //大小，每个数值都不一样,排序用
+      "isSelected": false, //是否选中
+      "relateNext": "s", //和其他项的relateCurrent做联动，当前的relateNext和其他对象的relateCurrent相同，就展示那个相同的relateNext的内容
+      "relateCurrent": "b"
+    }]
+  }],
+  "message": "",
+  "status": 0
 }
 
 // 3.2 获取节点信息  url:http://local.backend.hujiang.com/crm/org/GetNodeInfo??nodeId=1
@@ -239,6 +266,7 @@
 
 
 // 4、删除节点
+// http://local.backend.hujiang.com/crm/org/deleteNode?nodeId=2
 // Request
 {
  nodeId:1,

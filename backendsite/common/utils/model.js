@@ -94,6 +94,22 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
     }
 }
 
+model.error=function(text){//ajax请求数据失败(网络原因)
+	return function (e) {
+		console.log(text||"请求数据失败，请重新请求");
+	}
+}
+model.success=function(callback,errorCallback,options){//errorCallback服务器原因
+	return function(rst){
+		if(rst.status==0){//请求成功，status为0
+			callback(rst,options);
+		}else{
+			errorCallback(rst,options);
+		}
+	}
+}
+
 hj.request=model;
+
 
 export default model
