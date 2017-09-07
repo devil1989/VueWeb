@@ -5,10 +5,11 @@ var templates=require("./nav.html");
 
 export default {
     data:function(){
-    	return this.$store.state.nav;
+        return {}
+    	// return this.$store.state.nav;
     },
-
     methods: {
+        
         genarateTemplate:function(nodeList){//目录结构层数没有限制，所以得动态拼接了，这个导航的template太坑（用vue的template完全没法写）
             var startStr=''+
                 '<div class="school-nav school-nav-sub1">'+
@@ -16,11 +17,25 @@ export default {
                     '<ul class="school-content-item">';
 
             var endStr='</ul> </div>';
-            return startStr + this.getUnitHtml(nodeList[0].children||[]) + endStr;
+
+            return startStr + this.getUnitHtml(nodeList[0].children||[],this.getCurrentScene()) + endStr;
         },
-        getUnitHtml:function(nodeList){//树是递归嵌套的，html也需要递归嵌套
+
+        getCurrentScene:function (argument) {
+            var hash=location.hash;
+            var sceneId;
+            var match=hash.match(/combine(\-[\s\S]*)/);
+            if(match&&match[1]&&match[1].split("&")[0]){
+                var arr=match[1].split("&")[0].split("-")||[];
+                var len=arr.length;
+                sceneId=arr[len-1];
+            }
+            return sceneId;
+        },
+        getUnitHtml:function(nodeList,currentScene){//树是递归嵌套的，html也需要递归嵌套
                 var htmlStr="";
                 var len=nodeList.length;
+                
                 for (var i = 0; i < len; i++) {
                     var ele=nodeList[i];
                     var hasChild=ele.children&&ele.children.length;//没有子节点的时候，不需要展示+号
@@ -33,8 +48,7 @@ export default {
                     }else if(i==len-1){
                         liClass="line-end"
                     }
-
-                    isCurrent = "";//此逻辑后续不删 unfinish||"current-nav"
+                    isCurrent = (currentScene==ele.id )?" current-nav":"";//默认都选择第一个
                     isFold = "unfold-item";//此逻辑后续不删 unfinish ||"fold-item"
 
                     htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+'">'+
@@ -47,23 +61,35 @@ export default {
                                     '<h3 class="float-left js_current_scene" data-id="'+ ele.id +'">'+ele.nodeName+'</h3>'+
                                 '</div>'+
                                 '<ul class="school-content-item space-indent-1 ">';
-                    htmlStr+=(hasChild?(this.getUnitHtml(ele.children||[])):"")+endStr;//递归调用，核心代码
+
+                    this.$options.treeLevel++;
+                    htmlStr+=(hasChild?(this.getUnitHtml(ele.children||[],currentScene)):"")+endStr;//递归调用，核心代码
                 }
+
                 return htmlStr
         },
 
         init:function(options){
-            this.$store.commit({//初始化的时候传入ajax数据，后期数据都通过this.$data获取
-                type:"initNav",
-                initData:options,
-                store:this.$store
-            });//执行mutations中的对应行为
+            // this.$store.commit({//初始化的时候传入ajax数据，后期数据都通过this.$data获取
+            //     type:"initNav",
+            //     initData:options,
+            //     store:this.$store
+            // });//执行mutations中的对应行为
 
             //父组件中手动调用子组件的更新，这个比较坑，没遇到vuex和vue，因为目录组件结构是未知的，不知道他丫的有几层
-            var ele=document.querySelector(".internet-school-nav");
-            var htmlStr=this.genarateTemplate(this.$data.data.nodeList);
-            ele.innerHTML=htmlStr;
+            this.opts=options;
+            this.update(options);
             this.bindEvents();
+        },
+
+        //只更新内容，不绑定事件
+        update:function(){
+            var options=this.opts;
+            if(options){
+                var ele=document.querySelector(".internet-school-nav");
+                var htmlStr=this.genarateTemplate(options.nodeList);
+                ele.innerHTML=htmlStr;
+            }
         },
 
         //绑定事件

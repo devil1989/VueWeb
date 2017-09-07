@@ -13,6 +13,17 @@ import Pop from '../components/pop/pop.js';//弹框
 import Scenes from '../components/combine/combine.js';//中间场景集合（单页切换的就是这些场景）
 require("../assets/styles/index.scss");//每个js对应该页面的一个css
 
+/*
+ *执行流程：
+    1.mounted > dispatch("getInitData") [获取初始化的基础数据] > 初始化左侧树和右侧场景，
+    2.changeHash > hi.spa根据返回数据构建url的hash信息 ，同时传入修改location.hash的回调函数
+    3.changeHash修改hash值，触发hashchange事件，调用spa中的函数处理hash，把返回的数据传入commit("initScenes")
+    4.接下来多有的行为，都是修改hash,然后调用spa的函数处理hash，把返回的数据传入commit("initScenes")再次重新渲染场景
+
+ */
+
+
+
 Vue.config.devtools = true;
 
 
@@ -48,7 +59,6 @@ var indexPage=(function(){
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data.data.status==0){
                     var popData=self.formatedPopData({})||{};
-
                     self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
 
                     self.$children[1].init(data.data);//场景容器初始化，其实里面刚开始没啥东西，只是占个坑，以保证里面所有子组件都是和vuex的store绑定
@@ -56,6 +66,8 @@ var indexPage=(function(){
                     //传入data，根据data处理hash，触发onhashchange事件来获取所有场景信息，最后调用回调函数，触发场景更新
                     self.changeHash(data.data,function(outputData){
                         var data=outputData.scene;
+
+                        //重新渲染场景
                         self.$store.commit({
                             type:"initScenes",
                             data:{
@@ -64,6 +76,9 @@ var indexPage=(function(){
                                 currentScene:data.currentScene//当前场景
                             }
                         });
+
+                        //重新渲染左侧树
+                        self.$children[0].update();
                     });
                 }else{
                     console.log("!!!请求导侧边航栏数据失败");

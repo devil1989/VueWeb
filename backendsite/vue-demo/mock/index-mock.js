@@ -3,7 +3,8 @@
 
  var data={
 
- 	//？？？？
+ 	//校验是否有启用子组织
+ 	//http://local.backend.hujiang.com/crm/CheckChild?nodeid=1
  	'crm/org/CheckChild':{
 		'case1':{
 			data:null,
@@ -13,7 +14,7 @@
 		'case2':{}
 	},
 
- 	// 获取所有节点接口（给前端树形结构）
+ 	// 树形结构:获取所有节点接口（给前端）
 	//http://local.backend.hujiang.com/crm/GetNodeByUserId?userid=1
 	"crm/GetNodeByUserId": {
 
@@ -209,6 +210,25 @@
 					"nodeAttr": [{//拓展信息
 						"id": 2,
 						"name": "沪江",//key名称
+						"value": "沪江网校",//对应的值得名称（需要传给后端）
+						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
+						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
+						"parentId": null,//无用
+						"type": null,//无用
+						"data": {//相同拓展类型的浮层数据
+							"sameNode": [{//sameNode表示相同拓展类型，以防以后有其他数据在浮层展示，所以需要定义sameNode这个key
+								'data': [{
+									'name': "组织代码",//组织代码
+									'value': 452//组织代码对应的值
+								}, {
+									'name': "组织名称",//组织名称
+									'value': 452//组织名称对应的值
+								}]
+							}]
+						}
+					},{//拓展信息
+						"id": 2,
+						"name": "沪江2",//key名称
 						"value": "4",//对应的值得名称（需要传给后端）
 						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
 						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
@@ -279,7 +299,7 @@
 				}
 			},
 			"message": "success",
-			"status": 1
+			"status": 0
 		}
 	},
 
@@ -311,7 +331,6 @@
 					"userCode": "up_snail", //用户名
 					"userId": 205,
 					"userName": "李小飞", //姓名
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -327,7 +346,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -343,7 +361,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -359,7 +376,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -375,7 +391,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -391,7 +406,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -407,7 +421,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -423,7 +436,6 @@
 					"userCode": "classbob",
 					"userId": 220,
 					"userName": "郭帅",
-					"userRole": 2,
 					"roles": [{
 						"roleName":"系统管理员A",
 						"roleId":1,
@@ -786,7 +798,7 @@
 				},
 
 			    "rowData": {//包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
-			    	"id":0//对应的唯一的标识，新增的时候这个下发0
+			    	"id":0,//对应的唯一的标识，新增的时候这个下发0
 			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
 				    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
 				    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
@@ -898,7 +910,7 @@
 				},
 
 			    "rowData": {//包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
-			    	"id":0//对应的唯一的标识，新增的时候这个下发0
+			    	"id":0,//对应的唯一的标识，新增的时候这个下发0
 			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
 				    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
 				    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
@@ -927,8 +939,8 @@
 	//     }]
 	// }
 	// type : Post
-	// url:http://local.backend.hujiang.com/crm/org/CreateNode
-	"crm/org/CreateNode": {
+	// url:http://local.backend.hujiang.com/crm/org/SaveNode
+	"crm/org/SaveNode": {
 		'case2': {
 			//额外节点的拓展信息
 			"data": null,

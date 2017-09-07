@@ -41,6 +41,9 @@ h1{
 		/*margin-left: 0.3rem;*/
 	}
 
+	.have-no-child .school-nav{
+		padding-right:1rem;
+	}
 	/*隐藏加减符号的时候，需要拉伸对应的虚线*/
 	/*.have-no-child和last-child同层级*/
 	/*最后一层或者虽然不是最后一层但是折叠了，就需要把上下的虚线隐藏*/
@@ -132,6 +135,7 @@ h1{
 	.internet-school-nav h2{
 		height: 2.5rem;
 		line-height: 2.5rem;
+		padding-left:0.5rem;
 	}
 	.internet-school-nav .school-conten-title{
 		float:left;
@@ -177,11 +181,9 @@ h1{
 		float:left;
 		height: 100%;
 		width: auto;
-		padding-left: 0.5rem;
 		background-color: #F7F7F7;
 		margin-bottom:0rem;
 		margin-top: 0.1rem;
-		padding-right:1rem;
 	}
 	.school-nav-sub1>ul.school-content-item{
 		border-left:none;

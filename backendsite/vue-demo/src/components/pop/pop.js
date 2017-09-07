@@ -157,7 +157,7 @@ var Pop={
 	        return {
 	            'isMock':true,
 	            'mockUrl':"index-mock.js?case=case2",
-	            'url':"crm/org/CreateNode",
+	            'url':"crm/org/SaveNode",
 	            "id": 3,
 	            "parentId": 0,
 	            "nodeName": "string",

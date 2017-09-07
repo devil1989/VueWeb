@@ -124,7 +124,7 @@ export default {
         getContetnParam:function(options){
             return {
                 isMock:true,
-                mockUrl:"index-mock.js?case=case2",
+                mockUrl:"index-mock.js?case=case1",
                 url:"crm/org/GetNodeInfo",
                 nodeId:2//节点id
             };
