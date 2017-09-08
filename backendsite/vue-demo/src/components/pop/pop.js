@@ -13,7 +13,6 @@ var Pop={
     methods: {
     	 //点击保存
 	    saveUnit:function(e,isAdd){
-            debugger
             this.isAdd=isAdd;
 	        var param=this.getSaveParam();
 	        var self=this;

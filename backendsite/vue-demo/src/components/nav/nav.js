@@ -42,23 +42,27 @@ export default {
                     var isCurrent;//是否当前选中tab
                     var isFold;//该栏目是否折叠
                     var liClass;//是否是第一个元素
+                    var activeClass;
                     var endStr="</ul></li>";
+                    var typeClass=this.getTypeClass(ele.nodeType).className||"";//获取类型对应的class
                     if(i==0){
                         liClass="line-start";
                     }else if(i==len-1){
                         liClass="line-end"
                     }
-                    isCurrent = (currentScene==ele.id )?" current-nav":"";//默认都选择第一个
-                    isFold = "unfold-item";//此逻辑后续不删 unfinish ||"fold-item"
+                    isCurrent = (currentScene==ele.id )?" current-nav":"";//url没有sceneid，默认都选择第一个否则根据url还判断选中哪个
+                    
+                    isFold = ele.isFold?"fold-item":"unfold-item";
+                    activeClass=ele.isActive==1?"":" unactive"
 
-                    htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+'">'+
-                                '<div class="school-nav js_current_scene'+isCurrent+' " data-id="'+ele.id +'" >'+
-                                    '<i class="dashline-absolute-top"></i>'+
-                                    '<i class="dashline-absolute-bottom"></i>'+
-                                    '<i class="dashline-absolute-left"></i>'+
-                                    '<span class="reduce-icon float-left fold-icon js_fold_icon js_reduce_icon">-</span>'+
-                                    '<span class="plus-icon float-left fold-icon js_fold_icon js_plus_icon">+</span>'+
-                                    '<h3 class="float-left js_current_scene" data-id="'+ ele.id +'">'+ele.nodeName+'</h3>'+
+                    htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+activeClass+'">'+
+                                '<div class="school-nav js_current_scene'+activeClass+isCurrent+typeClass+' " data-id="'+ele.id +'" >'+
+                                    '<i class="dashline-absolute-top'+activeClass+'"></i>'+
+                                    '<i class="dashline-absolute-bottom'+activeClass+'"></i>'+
+                                    '<i class="dashline-absolute-left'+activeClass+'"></i>'+
+                                    '<span class="reduce-icon float-left fold-icon'+activeClass+' js_fold_icon js_reduce_icon">-</span>'+
+                                    '<span class="plus-icon float-left fold-icon'+activeClass+' js_fold_icon js_plus_icon">+</span>'+
+                                    '<h3 class="float-left js_current_scene'+activeClass+'" data-id="'+ ele.id +'">'+ele.nodeName+'</h3>'+
                                 '</div>'+
                                 '<ul class="school-content-item space-indent-1 ">';
 
@@ -68,6 +72,31 @@ export default {
 
                 return htmlStr
         },
+
+        // 1： 业务域 ，2： 机构 ，3： 业务单元 ，4： 职能单元 ，5： 职能组 ，6： 职能小组
+        getTypeClass:(nodeType)=>{
+            var nameMapping={
+                "1":"业务域",
+                "2":"机构",
+                "3":"业务单元",
+                "4":"职能单元",
+                "5":"职能组",
+                "6":"职能小组"
+            };
+            var classMapping={
+                "1":" ",
+                "2":"",
+                "3":"",
+                "4":" tagIcon",
+                "5":" tagIcon",
+                "6":" tagIcon"
+            }
+            return {
+                name:nameMapping[nodeType],
+                className:classMapping[nodeType]
+            };
+        },
+
 
         init:function(options){
             // this.$store.commit({//初始化的时候传入ajax数据，后期数据都通过this.$data获取
@@ -86,35 +115,52 @@ export default {
         update:function(){
             var options=this.opts;
             if(options){
+                this.formatData(options.nodeList||[]);
                 var ele=document.querySelector(".internet-school-nav");
                 var htmlStr=this.genarateTemplate(options.nodeList);
                 ele.innerHTML=htmlStr;
             }
         },
 
+        //递归调用，把父元素isActive为0 ，则设置所有子元素isAcitve 为0
+        formatData:function(nodeList){
+            var self=this;
+            nodeList.forEach(function(ele,idx,input){
+                var hasChild=input[idx].children&&input[idx].children.length;//没有子节点的时候，不需要展示+号
+                if(hasChild){
+                    if(!input[idx].isActive){//禁用所有子元素
+                        input[idx].children.forEach(function(unit,index,subInput){
+                            subInput[index].isActive=0;
+                        });
+                    }
+                    self.formatData(input[idx].children);
+                }
+            });
+        },
+
+        checkValidClick:function(e){
+            var target=e.target;
+            return !hj.hasClass(target,"unactive");
+        },
         //绑定事件
         bindEvents:function(){
             var ele=document.querySelector(".internet-school-nav");
             var self=this;
             ele.addEventListener("click",function(e){
-                self.toggleFold(e.target);
-                self.toggleScene(e);
+                if(self.checkValidClick(e)){
+                    self.toggleFold(e.target);
+                    self.toggleScene(e);
+                }
             });
         },
 
         toggleFold:function(target){
             var ele=target;
-            var parentLi=ele.parentNode.parentNode;
+            var id=ele.parentNode.getAttribute("data-id");
             if(hj.hasClass(ele,"js_fold_icon")){
-                parentLi=(parentLi.tagName.toUpperCase()=="LI")?parentLi:null;
-
-                if(hj.hasClass(ele,"js_reduce_icon")&&parentLi){
-                    hj.addClass(parentLi,"fold-item");
-                    hj.removeClass(parentLi,"unfold-item");
-                }else if(hj.hasClass(ele,"js_plus_icon")){
-                    hj.addClass(parentLi,"unfold-item");
-                    hj.removeClass(parentLi,"fold-item");
-                }
+                var isFold=hj.hasClass(ele,"js_plus_icon")?false:true
+                this.updateOptions(this.opts.nodeList,id,isFold);
+                this.update();
             }
         },
         toggleScene:function(e){
@@ -122,6 +168,21 @@ export default {
             if(hj.hasClass(target,"js_current_scene")){
                 var sceneId=target.getAttribute("data-id")||"";
                 hj.spaIns.addScene(sceneId);
+            }
+        },
+
+        //把树结构中所有节点id为传入id的时候，设置这个节点为折叠
+        updateOptions:function(nodeList,id,isFold){
+            var self=this;
+            if(nodeList||[]){
+                nodeList.forEach(function(ele,idx,input){
+                    if (ele.id==id) {
+                        input[idx].isFold=isFold;
+                    }
+                    if(ele.children&&ele.children.length){
+                        self.updateOptions(ele.children,id,isFold);
+                    }
+                });
             }
         }
 

@@ -17,6 +17,9 @@ h1{
 	font-size:0.8rem;
 }
 
+.unactive{
+	color:#ababab;
+}
 .page-wrapper{
 	height:100%;
 	width:100%;
@@ -42,8 +45,9 @@ h1{
 	}
 
 	.have-no-child .school-nav{
-		padding-right:1rem;
+		padding-right:0rem;
 	}
+
 	/*隐藏加减符号的时候，需要拉伸对应的虚线*/
 	/*.have-no-child和last-child同层级*/
 	/*最后一层或者虽然不是最后一层但是折叠了，就需要把上下的虚线隐藏*/
@@ -149,7 +153,7 @@ h1{
 
 	.internet-school-nav .current-nav{
 		
-		background-color: #ECECEC;
+		background-color: #DCDCDC;
 	}
 	
 	.internet-school-nav .school-content-item{
@@ -192,3 +196,29 @@ h1{
 
 
 /******左侧公共菜单栏目 end******/
+
+.tagIcon:after {
+	display:block;
+	float:right;
+	height:0.6rem;
+	width:0.6rem;
+	margin-top:0.7rem;
+	line-height:2rem;
+	content:"";
+	border:0.1rem solid #939395;
+	border-radius:0.3rem;
+	margin-right:0.3rem;
+}
+
+.current-nav:after {
+	display:block;
+	float:right;
+	height:0px;
+	width:0px;
+	margin-top:0.8rem;
+	line-height:2rem;
+	content:"";
+	border:0.3rem solid #DCDCDC;
+	border-right:0.4rem solid #ffffff;
+	background-color:#DCDCDC;
+}

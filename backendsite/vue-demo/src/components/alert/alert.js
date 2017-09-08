@@ -17,7 +17,6 @@ var Alert={
     /*生命和周期 start*/
     // beforeCreate:function(){
     //     // this.$data和this.$el为null
-    //     debugger
     // },
     // created:function(){
     //     //this.$data 已经保存
@@ -62,7 +61,6 @@ var Alert={
         },
 
         hide:function(){
-            debugger
             this.$store.commit("updatePop",{
                 data:{//传入最新的弹框的state数据
                     needShow:false

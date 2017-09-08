@@ -32,6 +32,7 @@
 						"isActive": 1,
 						"nodeName": "机构-沿途",
 						"parentId": 0,
+						"nodeType":"4",// 1：业务域，2：机构，3：业务单元，4：职能单元，5：职能组，6：职能小组(后面没有添加)
 						"children": [{
 							"id": 3,
 							"isActive": 1,
@@ -39,7 +40,7 @@
 							"parentId": 0,
 							"children": [{
 									"id": 4,
-									"isActive": 1,
+									"isActive": 0,
 									"nodeName": "职能单元A",
 									"parentId": 0,
 									"children": [{
