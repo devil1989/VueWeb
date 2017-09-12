@@ -12,9 +12,9 @@ export default {
     		var self=this;
     		var store=this.$store;
             this.options=options;
-    		store.dispatch("getTableData",{"param":this.getTableParam()}).then(function(tableData){
-                if(tableData.status==0){
-                	self.render(tableData.data);
+    		store.dispatch("getTableData",{"param":this.getTableParam()}).then(function(rst){
+                if(rst.Status==0){
+                	self.render(rst.Data);
                 }
                 else{
                     console.log("!!!请求节点数据失败");
@@ -27,7 +27,6 @@ export default {
     	//请求数据直接render，如果有已经获取的数据，可以直接render
     	render:function(originData){
     		var data=this.formatData(originData);
-
 
     		//格式化传过来的数据
             this.$store.commit({
@@ -208,15 +207,18 @@ export default {
     	
 
     	//获取底部table请求所需要的参数
-        getTableParam:function(){
+        getTableParam:function(options){
             return {
-                "isMock":true,
+                "isMock":false,
                 "mockUrl":"index-mock.js?case=case1",
-                "url":"crm/org/GetMember",
-                "pageNum": this.options.pageNum,//页码
-                "pageSize": 10,//每页多少个
-                "paramData": {
-                  "groupId": this.options.id //节点id
+                "url":"crm/OrganizationV2/GetMember",
+                "type":"post",
+                "data":{
+                    "pageNum": this.options.pageNum||1,//页码
+                    "pageSize": 10,//每页多少个
+                    "paramData": {
+                      "groupId": this.options.id //节点id
+                    }
                 }
             }
         }

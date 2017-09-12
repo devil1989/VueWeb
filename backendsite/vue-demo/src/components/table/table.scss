@@ -24,6 +24,10 @@
     border:1px solid #E4E4E4;
     border-right: none;
     border-top: none;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
 }
 .list-user-sname{
     width: 7rem;
@@ -37,6 +41,9 @@
 .table-list-detail div.list-user-classid{
     width: 26.8rem;
     border-right: 1px solid #E4E4E4;
+}
+.role-detail-info{
+    margin-right:0.4rem;
 }
 .table-list-extra{
     overflow: hidden;

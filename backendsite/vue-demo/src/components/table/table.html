@@ -11,7 +11,7 @@
             <li v-for="item in data.formatedInfo[data.pagination.currentPageIndex-1].pageContent">
                 <div class="list-user-sname"><span>{{item.userCode}}</span></div>
                 <div class="list-user-name"><span>{{item.userName}}</span></div>
-                <div class="list-user-classid text-align-left"><span v-for="role in item.roles">{{role.roleName}}</span></div>
+                <div class="list-user-classid text-align-left"><span class="role-detail-info" v-for="role in item.roles">{{role.roleName}}</span></div>
             </li>
         </ul>
     </div>

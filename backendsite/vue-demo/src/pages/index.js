@@ -57,14 +57,14 @@ var indexPage=(function(){
 
             //dispatch支持promise，但是前提是把getInitData这个action封装成promise
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
-                if(data.data.status==0){
+                if(data&&data.Data&&data.Status==0){
                     var popData=self.formatedPopData({})||{};
-                    self.$children[0].init(data.data);//左侧树组件：调用子元素的更新方法更新左边导航栏
+                    self.$children[0].init(data.Data);//左侧树组件：调用子元素的更新方法更新左边导航栏
 
-                    self.$children[1].init(data.data);//场景容器初始化，其实里面刚开始没啥东西，只是占个坑，以保证里面所有子组件都是和vuex的store绑定
+                    self.$children[1].init(data.Data);//场景容器初始化，其实里面刚开始没啥东西，只是占个坑，以保证里面所有子组件都是和vuex的store绑定
 
                     //传入data，根据data处理hash，触发onhashchange事件来获取所有场景信息，最后调用回调函数，触发场景更新
-                    self.changeHash(data.data,function(outputData){
+                    self.changeHash(data.Data,function(outputData){
                         var data=outputData.scene;
 
                         //重新渲染场景
@@ -92,11 +92,12 @@ var indexPage=(function(){
             //获取页面初始信息请求所需要的参数
             getParams:function(){
                 return {
-                    isMock:true,
+                    isMock:false,
                     mockUrl:"index-mock.js?case=case1",
-                    url:"crm/GetNodeByUserId",
+                    // url:"crm/GetNodeByUserId",
+                    url:"crm/OrganizationV2/GetNodeByUserId",//实际url
                     type:"get",
-                    data:{userid:1},
+                    data:{userid:330}
                 };
             },
 
@@ -110,17 +111,7 @@ var indexPage=(function(){
                 if(!SPA.hasScene()){
                     location.hash="#scene=combine-"+data.nodeList[0].id;//默认用combine类型场景，值为默认的第一个节点的key
                 }else{
-
                     hj.spaIns.updateScene();
-                    // var obj=hj.buildUrl(location.hash).get();
-                    
-                    // if(obj.hashchange){
-                    //     location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
-                    // }
-                    // else{
-                    //     location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
-                    // }
-                    
                 }
             },
 

@@ -11,7 +11,7 @@
 	var url=location.host||"";
 	if(url.indexOf("localhost:")==0){
 		hj.env="dev";//本地开发环境
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="http://local.backend.hujiang.com/";
 	}
 	else if(url.match(/qa\d{1}backend\.hujiang.com/gi)){
 		hj.env="branch";//分支环境
@@ -40,6 +40,39 @@
  *mock数据用法：hj.request()
  */
 function model(opts){//对ajax进行二次封装，添加环境区分和mock请求
+
+	//解析后端数据类型或者跳转
+	var baforeAction=function (xhr,error) {
+		var responseText=xhr.responseText;
+		if(xhr.responseURL&&responseText&&responseText.match(/\<\!DOCTYPE html\>/gi)){//需要重定向【一般是因为页面没有登录或者没权限访问】
+			location.href=xhr.responseURL.replace(/returnurl\=[\s\S]*/,"returnurl="+encodeURIComponent(location.href));
+		}else{
+			return parseData(xhr);
+		}
+	}
+
+	//解析后端数据
+	var parseData=function(xhr){
+		var type=xhr.responseType.toUpperCase();
+		if(type=="JSON"){
+			if(xhr.responseText){//没有数据
+				return hj.parseJSON(xhr.responseText)//解析JSON
+			}else{
+				return xhr.responseText
+			}
+		}else if(type=="XML"){
+			if(xhr.responseXML){
+				return xhr.responseXML//解析XML，需要一个解析xml的函数，还没写
+			}else{
+				return xhr.responseXML
+			}
+		}else{//字符串
+			return hj.parseJSON(xhr.responseText);//由于服务端返回responseType为空，所以只能这样修复bug了
+		}
+	}
+
+	
+
 	if(opts.isMock){//是否需要mock
 
 		//mockUrl是直接到pages文件夹下，只要指定文件名加参数即可，例如
@@ -85,23 +118,26 @@ function model(opts){//对ajax进行二次封装，添加环境区分和mock请�
     }
     else{
     	if(Object.prototype.toString.call(opts.buildUrl) === "[object Function]"){
-			opts.url=opts.buildUrl(opts);index.store.js
+			opts.url=opts.buildUrl(opts);
 		}
 		else{
 			opts.url=hj.baseUrl+opts.url;
-			hj.ajax&&hj.ajax(opts);
 		}
+		opts.beforeAction=baforeAction;
+		hj.ajax&&hj.ajax(opts);
     }
 }
+
 
 model.error=function(text){//ajax请求数据失败(网络原因)
 	return function (e) {
 		console.log(text||"请求数据失败，请重新请求");
 	}
 }
+
 model.success=function(callback,errorCallback,options){//errorCallback服务器原因
 	return function(rst){
-		if(rst.status==0){//请求成功，status为0
+		if(rst.Status==0){//请求成功，status为0
 			callback(rst,options);
 		}else{
 			errorCallback(rst,options);

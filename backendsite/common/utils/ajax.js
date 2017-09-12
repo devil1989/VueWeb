@@ -129,8 +129,18 @@ function ajax(options) {
                     clearTimeout(timeout_flag);
                 }
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
-
-                    success(xhr.responseText);
+                    if(!options.needNotPare&&options.beforeAction&&typeof options.beforeAction=="function"){
+                        success(options.beforeAction(xhr));
+                    }else{
+                        success(xhr.responseText);
+                    }
+                    
+                    // if(xhr.responseType=="JSON"){
+                        
+                    // }else{
+                    //     success(xhr.responseText);
+                    // }
+                    
                 } else {
                     error(xhr.status, xhr.statusText);
                 }
@@ -140,7 +150,6 @@ function ajax(options) {
         xhr.send(type === "get" ? null : data);
         setTime(); //请求超时
     }
-
     var url = options.url || "", //请求的链接
         type = (options.type || "get").toLowerCase(), //请求的方法,默认为get
         data = options.data || null, //请求的数据

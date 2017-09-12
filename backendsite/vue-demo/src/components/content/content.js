@@ -12,8 +12,9 @@ export default {
         init:function(options){//options中包含getNodeParam的中素有需要的数据
         	var store=this.$store;
         	var self=this;
+            var pop=this.$root.$children[2];//pop组件
             store.dispatch("getNodeData",{"param":this.getContetnParam(options)}).then(
-                hj.request.success(this.render,this.requestFail),//this.requestFail:服务端接口返回失败的code，即status!=0
+                hj.request.success(this.render,this.requestFail,{pop:pop}),//this.requestFail:服务端接口返回失败的code，即status!=0
                 hj.request.error("网络原因请求弹框数据失败"))//原因导致失败
         },
 
@@ -26,36 +27,18 @@ export default {
             var self=this;
             var pop=this.$root.$children[2];//pop组件
             var title=e.target.getAttribute("data-title")||"";
-            var param=this.getDeleteParam();
-            store.commit("updatePop",{
-                data:{//传入最新的弹框的state数据
-                    title:title,
-                    btns:[{
-                        type:"submit",//提交
-                        txt:"删除",
-                        callback:function(e){
-                            this.hide();
-                            store.dispatch("deleteNode",{"param":param}).then(
-                                hj.request.success(self.deleteSceneSucceed,self.requestFail,{nodeId:param.nodeId,title:title}),
-                                hj.request.error("网络原因请求弹框数据失败")
-                            )
-                        }.bind(pop)
-                    },{
-                        type:"cancel",//取消
-                        txt:"取消",
-                        callback:function(e){
-                            this.hide();
-                        }.bind(pop)
-                    }],
-                    needShow:true,
-                    content:{
-                        isTxt:true,
-                        msg:"删除本组织后将不能回复,确定删除本组织吗？",
-                        contentInfo:null
-                    }
-                }
-            });
-                        
+            var currentNodeId=e.target.parentNode.getAttribute("data-id");
+            var delParam=this.getDeleteParam(currentNodeId);
+            var checkParam=this.getCheckParam(currentNodeId);
+            var extendObj={
+                pop:pop,
+                title:title,
+                param:delParam
+            };
+            store.dispatch("checkChildActive",{param:checkParam}).then(
+                hj.request.success(this.checkSuccess,this.checkFail,extendObj),
+                hj.request.error("网络原因请求弹框数据失败")
+            )
         },
 
         //编辑单元
@@ -65,22 +48,29 @@ export default {
             var pop=this.$root.$children[2];//pop组件
             var param=this.getEditParam();
             var title=e.target.getAttribute("data-title")||"";
+            var nodeName=e.target.getAttribute("data-parent-name")||"";
 
             store.dispatch("editNode",{"param":param}).then(
-                hj.request.success(this.getEditUnitSuccess,this.requestFail,{title:title,pop:pop,title:title}),//this.requestFail:服务端接口返回失败的code，即status!=0
+                hj.request.success(this.getEditUnitSuccess,this.requestFail,{title:title,pop:pop,title:title,nodeName:nodeName}),//this.requestFail:服务端接口返回失败的code，即status!=0
                 hj.request.error("网络原因请求弹框数据失败"))
         },
 
         //点击pop事件
         createPop:function(e){
+            debugger
             var target=e.target;
             var self=this;
             var title=target.getAttribute("data-content")||"";
+            var nodeName=target.getAttribute("data-name")||"";
             var isSub=hj.hasClass(target,"js_baseic_sub_btn");
+            var nodeId=target.getAttribute("data-id");
             var pop=this.$root.$children[2];//pop组件
             if(isSub||hj.hasClass(target,"js_basic_btn")){
-                this.$store.dispatch("getPopInfo",{"param":this.getParam()}).then(
-                    hj.request.success(this.getPopDataSuccess,this.requestFail,{title:title,pop:pop}),
+                this.$store.dispatch("getPopInfo",{"param":this.getParam({
+                    isSub:isSub,
+                    id:nodeId
+                })}).then(
+                    hj.request.success(this.getPopDataSuccess,this.requestFail,{title:title,pop:pop,nodeName:nodeName}),
                     hj.request.error("网络原因请求弹框数据失败")
                 )
             }
@@ -105,37 +95,52 @@ export default {
             }
         },
 
-        getParam:function(){
+        getParam:function(opts){
             return {
-                'isMock':true,
+                'isMock':false,
                 'mockUrl':"index-mock.js?case=case3",
-                'url':"crm/org/GetNodeExtAttr",
-                "id": 0,
-                "parentId": 0,
-                "nodeName": "string",
-                "isActive": true,//新增的时候，都为true，添加的时候默认启用组织
-                "createuserId": 0,
-                "nodeAttr": {},//?
-                "isSub”": true
+                'url':"crm/OrganizationV2/GetNodeExtAttr",
+                "type":"get",
+                "data":{
+                    "nodeId": 0,//新增为0
+                    "parentId": opts.id,//其实就是当前所在层的id，该层新增按钮添加的都是子节点
+                    "isSub": opts.isSub
+                }
             }
         },
 
         //获取右侧节点信息请求所需要的参数
-        getContetnParam:function(options){
+        getContetnParam:function(id){
             return {
-                isMock:true,
+                isMock:false,
                 mockUrl:"index-mock.js?case=case1",
-                url:"crm/org/GetNodeInfo",
-                nodeId:2//节点id
+                type:"get",
+                url:"crm/OrganizationV2/GetNodeInfo",
+                data:{nodeId:id}//节点id
             };
         },
 
-        getDeleteParam:function(options){
+        getCheckParam:function(nodeId){
             return {
-                isMock:true,
+                'isMock':false,
+                'mockUrl':"index-mock.js?case=case1",
+                'url':"crm/OrganizationV2/CheckChild",
+                'type':'get',
+                "data":{
+                    nodeid:nodeId
+                }
+            }
+        },
+
+        getDeleteParam:function(nodeId){
+            return {
+                isMock:false,
                 mockUrl:"index-mock.js?case=case2",
-                url:"crm/org/deleteNode",
-                nodeId:2//节点id
+                url:"crm/OrganizationV2/deleteNode",
+                type:"post",
+                data:{
+                    nodeId:nodeId//节点id
+                }
             };
         },
 
@@ -148,21 +153,21 @@ export default {
         render:function(rst){
             this.$store.commit({
                 type:"initDetail",
-                data:rst.data||{},
+                data:rst.Data||{},
                 store:this.$store
             });
         },
 
         //点击新增按钮成功获取数据
         getPopDataSuccess:function(rst,opts){
-            if(!rst.data){//这个是服务端接口返回有问题的时候才出现；status为成功，但是却没有返回对应的data
+            if(!rst.Data){//这个是服务端接口返回有问题的时候才出现；status为成功，但是却没有返回对应的data
                 this.showAlert({
                     title:"提示",
-                    message:rst.message||"获取数据失败",
+                    message:rst.Message||"获取数据失败",
                     pop:opts.pop
                 });
             }else{
-                var formatedData=opts.pop.formatPopState(rst.data);
+                var formatedData=opts.pop.formatPopState(rst.Data,opts.nodeName);//这个是新增的元素的父级节点（也就是节点本身）
                 this.$store.commit("updatePop",{
                     data:{//传入最新的弹框的state数据
                         title:opts.title,
@@ -170,7 +175,7 @@ export default {
                             type:"submit",//提交
                             txt:"保存",
                             callback:function(e){
-                                this.saveUnit(e,true);
+                                this.saveUnitAction(e,true);
                             }.bind(opts.pop)
                         },{
                             type:"cancel",//取消
@@ -190,6 +195,42 @@ export default {
             }
         },
 
+        checkSuccess:function(rst,opts){
+            var pop=this.$root.$children[2];//pop组件
+            var store=this.$store;
+            var self=this;
+
+            store.commit("updatePop",{
+                data:{//传入最新的弹框的state数据
+                    title:opts.title,
+                    btns:[{
+                        type:"submit",//提交
+                        txt:"删除",
+                        callback:function(e){
+                            this.hide();
+                            store.dispatch("deleteNode",{"param":opts.param}).then(
+                                hj.request.success(self.deleteSceneSucceed,self.requestFail,{nodeId:opts.param.nodeId,title:opts.title,pop:opts.pop}),
+                                hj.request.error("网络原因请求弹框数据失败")
+                            )
+                        }.bind(pop)
+                    },{
+                        type:"cancel",//取消
+                        txt:"取消",
+                        callback:function(e){
+                            this.hide();
+                        }.bind(pop)
+                    }],
+                    needShow:true,
+                    content:{
+                        isTxt:true,
+                        msg:"删除本组织后将不能回复,确定删除本组织吗？",
+                        contentInfo:null
+                    }
+                }
+            });
+
+        },
+
         //删除节点成功
         deleteSceneSucceed:function(rst,opts){
             hj.spaIns.deleteScene(opts.nodeId);
@@ -197,14 +238,14 @@ export default {
 
         //点击编辑获取数据成功
         getEditUnitSuccess:function(rst,opts){
-            if(!rst.data){
+            if(!rst.Data){
                 this.showAlert({
                     title:"提示",
-                    message:rst.message||"获取数据失败",
+                    message:rst.Message||"获取数据失败",
                     pop:opts.pop
                 });
             }else{
-                var formatedData=opts.pop.formatPopState(rst.data);
+                var formatedData=opts.pop.formatPopState(rst.Data,opts.nodeName);//opts.nodeName是他父节点的nodeName
                 this.$store.commit("updatePop",{
                     data:{//传入最新的弹框的state数据
                         title:opts.title,
@@ -212,7 +253,7 @@ export default {
                             type:"submit",//提交
                             txt:"保存",
                             callback:function(e){
-                                this.saveUnit(e);
+                                this.saveUnitAction(e);
                             }.bind(opts.pop)
                         },{
                             type:"cancel",//取消
@@ -235,8 +276,8 @@ export default {
         //获取pop数据失败
         requestFail:function(rst,opts){
             this.showAlert({
-                title:"提示",
-                message:rst.message,
+                title:opts.title,
+                msg:rst.Message,
                 pop:opts.pop
             });
         },
@@ -264,6 +305,14 @@ export default {
                         contentInfo: null
                     }
                 }
+            });
+        },
+
+        checkFail:function(rst,opts) {
+            this.showAlert({
+                title:"提示",
+                pop:opts.pop,
+                msg:rst.Message
             });
         }
 

@@ -51,9 +51,9 @@ export default {
                         liClass="line-end"
                     }
                     isCurrent = (currentScene==ele.id )?" current-nav":"";//url没有sceneid，默认都选择第一个否则根据url还判断选中哪个
-                    
+
                     isFold = ele.isFold?"fold-item":"unfold-item";
-                    activeClass=ele.isActive==1?"":" unactive"
+                    activeClass=ele.isActive?"":" unactive"
 
                     htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+activeClass+'">'+
                                 '<div class="school-nav js_current_scene'+activeClass+isCurrent+typeClass+' " data-id="'+ele.id +'" >'+
@@ -130,7 +130,7 @@ export default {
                 if(hasChild){
                     if(!input[idx].isActive){//禁用所有子元素
                         input[idx].children.forEach(function(unit,index,subInput){
-                            subInput[index].isActive=0;
+                            subInput[index].isActive=false;
                         });
                     }
                     self.formatData(input[idx].children);

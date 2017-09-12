@@ -1,7 +1,7 @@
 	<div v-if="hasInit">
 		<div class="tree-level-1-title" v-on:click="createPop">
 			<h2>基本信息</h2>
-			<span v-for="btn in data.btns" :class="{'basic-btns':true, 'basic-add-btns':true,'js_baseic_sub_btn':btn.isSub,'js_basic_btn':!btn.isSub}" :data-content="btn.txt">{{btn.txt}}</span>
+			<span v-for="btn in data.btns" :class="{'basic-btns':true, 'basic-add-btns':true,'js_baseic_sub_btn':btn.isSub,'js_basic_btn':!btn.isSub}" :data-content="btn.txt" :data-id="data.info.id" :data-name="data.info.nodeName">{{btn.txt}}</span>
 		</div>
 		<div class="tree-level-1-info">
 			<ul class="content-item-wrapper">
@@ -44,8 +44,8 @@
 
 			</ul>
 			<div class="btns-out-wrapper">
-				<div class="btns-wrapper">
-					<span class="basic-btns" :data-title="'删除'+data.info.busTypeText" @click="editUnit" >编辑本组织</span>
+				<div class="btns-wrapper" :data-id="data.info.id">
+					<span class="basic-btns" :data-parent-name="data.info.parentName" :data-title="'删除'+data.info.busTypeText" @click="editUnit" >编辑本组织</span>
 					<span class="basic-btns" :data-title="'删除'+data.info.busTypeText" @click="deleteUnit">删除本组织</span>
 				</div>
 			</div>

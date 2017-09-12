@@ -3,9 +3,9 @@
 
  var data={
 
- 	//校验是否有启用子组织
- 	//http://local.backend.hujiang.com/crm/CheckChild?nodeid=1
- 	'crm/org/CheckChild':{
+ 	//校验是否有启用子组织  ok
+ 	//http://local.backend.hujiang.com/crm/OrganizationV2/CheckChild?nodeid=1
+ 	'crm/OrganizationV2/CheckChild':{
 		'case1':{
 			data:null,
 			status:0,
@@ -14,9 +14,9 @@
 		'case2':{}
 	},
 
- 	// 树形结构:获取所有节点接口（给前端）
-	//http://local.backend.hujiang.com/crm/GetNodeByUserId?userid=1
-	"crm/GetNodeByUserId": {
+ 	// 树形结构:获取所有节点接口（给前端） ok
+	//http://local.backend.hujiang.com/crm/OrganizationV2/GetNodeByUserId?userid=1
+	"crm/OrganizationV2/GetNodeByUserId": {
 
 
 
@@ -167,9 +167,13 @@
 		}
 	},
 
-	//删除节点
-	// http://local.backend.hujiang.com/crm/org/deleteNode?nodeId=2
-	'crm/org/DeleteNodeInfo':{
+	//删除节点 ok
+	//type:post
+		// Request:{
+		// 	nodeId:2
+		// }
+	// http://local.backend.hujiang.com/crm/OrganizationV2/deleteNode
+	'crm/OrganizationV2/DeleteNodeInfo':{
 		'case2': {
 			//额外节点的拓展信息
 			// "data": {},
@@ -186,9 +190,9 @@
 
 
 
-	//获取节点信息
-	//http://local.backend.hujiang.com/crm/org/GetNodeInfo?nodeId=2 (这里的nodeId就是上面节点的id)
-	"crm/org/GetNodeInfo":{
+	//获取节点信息 ok
+	//http://local.backend.hujiang.com/crm/OrganizationV2/GetNodeInfo?nodeId=2 (这里的nodeId就是上面节点的id)
+	"crm/OrganizationV2/GetNodeInfo":{
 		"case1":{
 			"data": {
 				"btns": [{//基本西右侧的btns
@@ -213,9 +217,7 @@
 						"name": "沪江",//key名称
 						"value": "沪江网校",//对应的值得名称（需要传给后端）
 						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
-						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
-						"parentId": null,//无用
-						"type": null,//无用
+						"sort": 0,//排序，哪个前面哪个后面根据sort的大小 【后端没传给我，所以按照后端顺序排序】
 						"data": {//相同拓展类型的浮层数据
 							"sameNode": [{//sameNode表示相同拓展类型，以防以后有其他数据在浮层展示，所以需要定义sameNode这个key
 								'data': [{
@@ -233,8 +235,6 @@
 						"value": "4",//对应的值得名称（需要传给后端）
 						"code": "nodeType",//对应的值得唯一标记（需要传给后端）
 						"sort": 0,//排序，哪个前面哪个后面根据sort的大小
-						"parentId": null,//无用
-						"type": null,//无用
 						"data": {//相同拓展类型的浮层数据
 							"sameNode": [{//sameNode表示相同拓展类型，以防以后有其他数据在浮层展示，所以需要定义sameNode这个key
 								'data': [{
@@ -305,9 +305,9 @@
 	},
 
 
-	//5、获取节点成员接口 （分页表结构请求，获取组织成员数据（用户名，姓名，系统角色））
+	//5、获取节点成员接口 （分页表结构请求，获取组织成员数据（用户名，姓名，系统角色）） ok
 	// Type:Post
-	// url:http://local.backend.hujiang.com/crm/org/GetMember
+	// url:http://local.backend.hujiang.com/crm/OrganizationV2/GetMember
 	// Request {
 	//   {
 	//     "pageNum": 1,//页码
@@ -317,7 +317,7 @@
 	//     }
 	//   }
 	// }
-	"crm/org/GetMember":{
+	"crm/OrganizationV2/GetMember":{
 		"case2": {
 			"data": {
 				"pagination": { //页码相关信息
@@ -327,8 +327,8 @@
 					"totalCount": 36, //总条数[用不到，自己获取resultData.length最准确]
 				},
 				"resultData": [{
-					"businessRole": 1,
-					"email": "lixiaofei@hujiang.com",
+					// "businessRole": 1,
+					// "email": "lixiaofei@hujiang.com",
 					"userCode": "up_snail", //用户名
 					"userId": 205,
 					"userName": "李小飞", //姓名
@@ -690,19 +690,16 @@
 
 
 
-	// 3、新增节点和编辑节点（业务域，机构，业务单元、职能单元、职能组、职能小组）
+	// 3、新增节点和编辑节点（业务域，机构，业务单元、职能单元、职能组、职能小组）ok
 	//subLevel标识是新增同业务层节点还是下级业务节点
 	// Request  {
-	//   "id": 0,
-	//   "parentId": 0,
-	//   "nodeName": "string",
-	//   "isActive": true,
-	//   "createuserId": 0 "nodeAttr": {},
-	//   "isSub”": true
+	//   "nodeId": 0,//新增的时候nodeId为0
+	//   "parentId": 0,//父级节点id
+	//   "isSub”": true//是否是新增子级
 	// }
-	// type:Post
-	// url:http://local.backend.hujiang.com/crm/org/GetNodeExtAttr
-	"crm/org/GetNodeExtAttr": {
+	// type:Get
+	// url:http://local.backend.hujiang.com/crm/OrganizationV2/GetNodeExtAttr
+	"crm/OrganizationV2/GetNodeExtAttr": {
 		'case1': {
 			
 			"data": {
@@ -717,8 +714,8 @@
 						"code": "functionalType", //需要上传的key
 						"sort": 1,
 						"type": "dropdownList",//如果是string，那么data数组中只有一个对象，对象的text就是对应的字符串值
-						"id": 1,
-						"parentId": null,
+						"id": 1,//和下级做级联
+						"parentId": null,//和上级做级联
 						"editable": true,
 						"data": [{
 							"id": 2,
@@ -803,7 +800,10 @@
 			    	"nodeName": "成人口语",//组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
 				    "parentId": 3,//父级组织代码【这个服务端不会下发，需要赋值】！！
 				    "isActive": true,//是否启用【这个服务端不会下发，需要自己赋值】！！
-				    "parentName":"父级组织A"//父级组织名称[这个服务端不会下发，需要自己赋值]！！
+				    // "parentName":"父级组织A",//父级组织名称[这个服务端不会下发，需要自己赋值]！！
+				    'nodeType':12,//类型
+				    'nodeCode':null,//
+				    'children':null//子集
 			    }
 			},
 			"message": "请求失败提示信息",
@@ -940,8 +940,8 @@
 	//     }]
 	// }
 	// type : Post
-	// url:http://local.backend.hujiang.com/crm/org/SaveNode
-	"crm/org/SaveNode": {
+	// url:http://local.backend.hujiang.com/crm/OrganizationV2/SaveNode
+	"crm/OrganizationV2/SaveNode": {
 		'case2': {
 			//额外节点的拓展信息
 			"data": null,

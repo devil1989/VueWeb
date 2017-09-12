@@ -1,7 +1,11 @@
 import Alert from '../alert/alert.js'
 require("./pop.scss");
-var templates=require("./pop.html");
+/*
+ 流程: saveUnit[点击事件] > checkValid[验证是否可以保存,有的节点不能禁用] >
+       checkSuccess>saveUnitRequest[发送保存请求] > saveSuccess
+ */
 
+var templates=require("./pop.html");
 var newTemplate=hj.inheritHtml(templates,Alert.template);
 var Pop={
     extends:Alert,//继承自Alert
@@ -11,10 +15,10 @@ var Pop={
 
 
     methods: {
-    	 //点击保存
-	    saveUnit:function(e,isAdd){
+    	 //点击保存事件
+	    saveUnitAction:function(e,isAdd){
             this.isAdd=isAdd;
-	        var param=this.getSaveParam();
+	        var param=this.getSaveParam(isAdd);
 	        var self=this;
             this.checkValid(param);
 	    },
@@ -151,20 +155,30 @@ var Pop={
             }
         },
 
-	    //保存参数
-	    getSaveParam:function(){
+	    //保存参数[后续数据统一放到localstorage中，操作数据也是，写一个统一的数据中心]
+	    getSaveParam:function(opts){
+            var id,nodeName,parentId,isActive,parentName,extendAttrs,isSub;
+            isSub=opts?opts.isSub:false;
+            id=isSub?0:hj.spaIns.getScene().currentScene;
+            var unitData=hj.getDataById(id);//
+
 	        return {
-	            'isMock':true,
+	            'isMock':false,
 	            'mockUrl':"index-mock.js?case=case2",
-	            'url':"crm/org/SaveNode",
-	            "id": 3,
-	            "parentId": 0,
-	            "nodeName": "string",
-	            "isActive": true,
-	            "updateuserId": 0,
-	            "nodeAttr": [],
-	            "isSub": true
-	        }
+	            'url':"crm/OrganizationV2/SaveNode",
+                "data": { //包含了基本数据:组织名称,父级组织代码,是否启用,父级组织名称(这个的key前端写死，编辑的时候只有组织名称和组织状态可改，也是前端写死)
+                    "id": id, //对应的唯一的标识，新增的时候这个下发0
+                    "nodeName": nodeName, //组织名称，【通用可编辑，服务端会下发】：新增的时候下发为0
+                    "parentId": parentId, //父级组织代码【这个服务端不会下发，需要赋值】！！
+                    "isActive": isActive, //是否启用【这个服务端不会下发，需要自己赋值】！！
+                    "parentName": parentName, //父级组织名称[这个服务端不会下发，需要自己赋值]！！
+                    'isSub':isSub
+                },
+                'extendAttrs': [{
+                    "code": 4531, //新增和编辑请求接口的extendAttrs中的元素的code属性
+                    "value": 45654 //新增和编辑请求接口的extendAttrs中的data下拉选项数组中的选中元素的value
+                }]
+            }
 	    },
 
         //选择弹框的下拉列表
@@ -203,9 +217,12 @@ var Pop={
         //2.父级没有选中||没有父级，隐藏所有子项
         //给extendAttrs的对象单元添加needHide，控制是否展示这个元素节点
         //给extendAttrs的对象单元中的data的单元添加isHide，控制option元素是否展示
-        formatPopState:function(cloneData){
+        formatPopState:function(cloneData,parentNodeName){
         	var extendAttrs=cloneData.metaData.extendAttrs||[];//请求返回的data
         	var tgOption=this.getNextOptionCode(extendAttrs);
+            if(parentNodeName&&cloneData.rowData){//因为后台不会返回父节点名称，需要从之前的请求获取，然后到这里赋值
+                cloneData.rowData.parentName=parentNodeName;
+            }
         	if(tgOption){
         		this.displaySubUnit(extendAttrs,tgOption);
         	}

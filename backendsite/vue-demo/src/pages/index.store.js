@@ -162,6 +162,10 @@ const store = new Vuex.Store({
         },
         "editNode":function(state,payload){
             return state.getters.getPromise(payload);
+        },
+
+        "checkChildActive":function(state,payload){
+            return state.getters.getPromise(payload);
         }
 
     },
@@ -170,6 +174,8 @@ const store = new Vuex.Store({
             return function(payload){
                 return new Promise(function(resolve,reject){
                     var param=payload.param;//不用自动调用
+                    // param.contentType="application/json";
+                    // param.data=param.data||null; //参数中自己构造
                     param.success=resolve;
                     param.error=reject;
                     hj.request(param);

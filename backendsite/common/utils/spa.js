@@ -49,6 +49,7 @@
   4.很多可配置项没抽离出来
   5.各个场景之间那些公用的资源抽离出来，做一个公共资源接口提供调用；各个场景的独立资源各自不相互影响
  */
+var SceneConst="combine";
 var SPA = function(opts) {
   var outputData = {};
   var wrapper=opts.wrapper;//场景插入地址
@@ -62,6 +63,7 @@ var SPA = function(opts) {
       outputData.scene=getScene();
       
       if(outputData.scene.isOutOfRange){
+        formatLocalStorage(outputData.cutArray);//每次超出的时候，需要把多出来的id的场景数据从localstorage删除
         changedHash(outputData.scene.sceneArray);//根据最新的array重新拼接hash
       }
       else{
@@ -78,6 +80,7 @@ var SPA = function(opts) {
     var currentScene;
     var sceneArray=[];
     var isOutOfRange=false;
+    var cutArray;
     for (var i = 0, len = arr.length; i < len; i++) {
         var val = arr[i].split("-");//combine-fdfuisuius-fdfuisuius-sd:场景类型combine，场景名称fdfuisuius（确保场景唯一性，多个场景用-连接），最后一个是需哟啊展示的场景
         var itemOutOfRange=(val.slice(1).length>maxNum);
@@ -85,6 +88,9 @@ var SPA = function(opts) {
         currentScene=val[val.length-1];
         isOutOfRange=isOutOfRange||itemOutOfRange;
 
+        if(itemOutOfRange){//保存删除的那几个，需要在localstorage中删除
+          cutArray=val.slice(1).slice(0,len2-maxNum);
+        }
         val[0]&&currentScene&&sceneArray.push({
           key:val[0],//场景的类型
           value:(maxNum&&itemOutOfRange)?val.slice(1).slice(len2-maxNum):val.slice(1)
@@ -92,6 +98,7 @@ var SPA = function(opts) {
     }
 
     return {
+      cutArray:cutArray,//被切掉的scene
       sceneArray:sceneArray,//所有场景类型
       currentScene:currentScene||"",//combine类型对应的场景id
       isOutOfRange:isOutOfRange//任何一个类型的场景的场景数量超过maxNum，就设为ture，超过最大场景数限制
@@ -150,16 +157,16 @@ var SPA = function(opts) {
     });
   }
 
-  //删除某个场景,
+  //删除某个combine场景,
   function deleteScene(nodeId){
-    
     if(hasScene(nodeId)){
       var tgIndex;
       var senceArray=getScene().sceneArray||[];
       senceArray.forEach(function (ele,idx,input) {
-        if(input[idx].key=="combine"){
+        if(input[idx].key==SceneConst){
           (input[idx].value||[]).forEach(function (unit,index) {
             if(unit==nodeId){
+              removeDataById(nodeId,SceneConst);
               input[idx].value.splice(index,1);
             }
           })
@@ -204,6 +211,36 @@ var SPA = function(opts) {
 
   }
 
+  /**********************localstorage操作函数 start**********************/
+  //通过节点的id，找到对应它的所有数据（每次请求以后，需要把数据存到localstorage里面，localstorage存的场景数量有限制，超出限制会删除之前的场景，同时清楚场景对应的localstorage）
+  function getDataById(id,sceneName) {
+    var key=(sceneName||SceneConst)+"-"+id;
+    var val=localStorage[key];
+    return val.match(/\{[\s\S]*\}/)?hj.parse(val):val;
+  }
+
+  function removeDataById(id,sceneName){
+    if(!id){
+        localStorage.clear()
+    }else{
+        var key=(sceneName||SceneConst)+"-"+id;
+        localStorage.removeItem(key);
+        localStorage[key]='';
+    }
+  }
+
+  function setDataById(id,obj,sceneName){
+    var key=(sceneName||SceneConst)+"-"+id;
+    localStorage[key]=typeof obj=="object"?JSON.stringify(obj):obj;
+  }
+
+  //
+  function formatLocalStorage(cutArray){
+    (cutArray||[]).forEach(function(id){
+      removeDataById(id)
+    });
+  }
+  /**********************localstorage操作函数 end**********************/
 
   var outPutApu=hj.spaIns = {
     data:outputData,
@@ -220,3 +257,5 @@ var SPA = function(opts) {
 hj.spa=SPA;
 
 export default SPA
+
+
