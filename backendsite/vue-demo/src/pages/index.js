@@ -54,7 +54,6 @@ var indexPage=(function(){
             var self=this;
             var options=this.$options;
             var params=options.methods.getParams();
-
             //dispatch支持promise，但是前提是把getInitData这个action封装成promise
             this.$store.dispatch("getInitData",{"param":params}).then(function(data){//传入需要更新的插件this.$children[0]，左侧导航栏结构太复杂需要递归调用，不适合用vue的template写
                 if(data&&data.Data&&data.Status==0){
@@ -109,7 +108,7 @@ var indexPage=(function(){
                 });
 
                 if(!SPA.hasScene()){
-                    location.hash="#scene=combine-"+data.nodeList[0].id;//默认用combine类型场景，值为默认的第一个节点的key
+                    location.hash="#scene=combine-"+data.nodeList[0].id+"&hashchange=0";//默认用combine类型场景，值为默认的第一个节点的key
                 }else{
                     hj.spaIns.updateScene();
                 }

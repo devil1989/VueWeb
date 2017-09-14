@@ -38,6 +38,7 @@ function resolveEntry (globpath, suffix, context) {
 
 function getAllHtmlWebpackPlugin (){//多个页面入口，需要有新建多个HtmlWebpackPlugin插件对象
     var arr=[];
+    debugger
     entrysInfo=resolveEntry('./src/pages/*.js', '.js', __dirname);//resolveEntry('./scripts/!(ui|mock|_)*.js', '.js', __dirname);【可以忽略某些，也可以多选】
     /*entrysInfo的内容格式是
     {

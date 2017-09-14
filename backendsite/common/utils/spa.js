@@ -49,7 +49,6 @@
   4.很多可配置项没抽离出来
   5.各个场景之间那些公用的资源抽离出来，做一个公共资源接口提供调用；各个场景的独立资源各自不相互影响
  */
-var SceneConst="combine";
 var SPA = function(opts) {
   var outputData = {};
   var wrapper=opts.wrapper;//场景插入地址
@@ -59,6 +58,9 @@ var SPA = function(opts) {
   window.onhashchange = function(e) {
     var obj = hj.buildUrl(location.hash.substr(1)).get();
     if (obj.scene) {
+      if(delRepeat()){//有重复就return，自动changehash，再次调用hashchange事件
+        return;
+      }
       outputData.nav = obj.nav;
       outputData.scene=getScene();
       
@@ -71,6 +73,12 @@ var SPA = function(opts) {
       }
     }
   }
+
+  function getCurrentScene(){
+    var arr=location.hash.match(/\=combine[\s\S]*?(?=\&)/)[0].substring(9).split("-");
+    return arr[arr.length-1];
+  }
+
 
   //获取所有场景
   /*超出限制就截取场景*/
@@ -136,13 +144,27 @@ var SPA = function(opts) {
   //刷新页面作用相同，但是这里只是修改了hash来执行hashchange操作，这样也是刷新页面
   function updateScene(){
      var obj=hj.buildUrl(location.hash).get();
-      
       if(obj.hashchange){
           location.hash=location.hash.replace(/hashchange\=[\d]{1,}/g,"hashchange="+(obj.hashchange-0+1));
       }
       else{
           location.hash+="&hashchange=0";//只是hash刷新触发对应onhashchange事件
       }
+  }
+
+  function delRepeat(){
+    var hasRepeat=false;
+    var match=location.hash.match(/\=combine[\s\S]*?(?=\&)/);
+    if(match){
+      var arr=match[0].substring(9).split("-");
+      var newArr=_.uniq(arr.reverse()).reverse();
+      if(arr.length!=newArr.length){
+        hasRepeat=true;
+        var str="=combine-"+newArr.join("-");  
+        location.hash=location.hash.replace(match[0],str);
+      }
+    }
+    return hasRepeat
   }
 
 
@@ -211,44 +233,15 @@ var SPA = function(opts) {
 
   }
 
-  /**********************localstorage操作函数 start**********************/
-  //通过节点的id，找到对应它的所有数据（每次请求以后，需要把数据存到localstorage里面，localstorage存的场景数量有限制，超出限制会删除之前的场景，同时清楚场景对应的localstorage）
-  function getDataById(id,sceneName) {
-    var key=(sceneName||SceneConst)+"-"+id;
-    var val=localStorage[key];
-    return val.match(/\{[\s\S]*\}/)?hj.parse(val):val;
-  }
-
-  function removeDataById(id,sceneName){
-    if(!id){
-        localStorage.clear()
-    }else{
-        var key=(sceneName||SceneConst)+"-"+id;
-        localStorage.removeItem(key);
-        localStorage[key]='';
-    }
-  }
-
-  function setDataById(id,obj,sceneName){
-    var key=(sceneName||SceneConst)+"-"+id;
-    localStorage[key]=typeof obj=="object"?JSON.stringify(obj):obj;
-  }
-
-  //
-  function formatLocalStorage(cutArray){
-    (cutArray||[]).forEach(function(id){
-      removeDataById(id)
-    });
-  }
-  /**********************localstorage操作函数 end**********************/
-
   var outPutApu=hj.spaIns = {
     data:outputData,
     getScene:getScene,
     hasScene:hasScene,//对外接口，是否存在某个场景
     addScene:addScene,
     deleteScene:deleteScene,
-    updateScene:updateScene
+    updateScene:updateScene,
+    getCurrentScene:getCurrentScene,
+    defaultSceneType:'combine'
   }
   //对外的接口
   return outPutApu;

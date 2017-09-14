@@ -1,4 +1,4 @@
-<div class="table-wrapper" v-if="hasInit">
+<div class="table-wrapper" v-if="hasInit&&data.formatedInfo.length">
     <div>本组织名称</div>
     <div class="table-list-detail">
         <ul>
@@ -36,4 +36,8 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="table-wrapper" v-else="" style="text-align: center;border:1px solid #000;padding: 0.5rem;">
+    表格数据下发为空
 </div>

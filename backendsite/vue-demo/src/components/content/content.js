@@ -46,18 +46,17 @@ export default {
             var store=this.$store;
             var self=this;
             var pop=this.$root.$children[2];//pop组件
-            var param=this.getEditParam();
+            var nodeId=e.target.parentNode.getAttribute("data-id")||"";
+            var param=this.getEditParam(nodeId);
             var title=e.target.getAttribute("data-title")||"";
             var nodeName=e.target.getAttribute("data-parent-name")||"";
-
             store.dispatch("editNode",{"param":param}).then(
-                hj.request.success(this.getEditUnitSuccess,this.requestFail,{title:title,pop:pop,title:title,nodeName:nodeName}),//this.requestFail:服务端接口返回失败的code，即status!=0
+                hj.request.success(this.getEditUnitSuccess,this.requestFail,{title:title,pop:pop,title:title,nodeName:nodeName,nodeId:nodeId}),//this.requestFail:服务端接口返回失败的code，即status!=0
                 hj.request.error("网络原因请求弹框数据失败"))
         },
 
         //点击pop事件
-        createPop:function(e){
-            debugger
+        createUnit:function(e){
             var target=e.target;
             var self=this;
             var title=target.getAttribute("data-content")||"";
@@ -66,11 +65,11 @@ export default {
             var nodeId=target.getAttribute("data-id");
             var pop=this.$root.$children[2];//pop组件
             if(isSub||hj.hasClass(target,"js_basic_btn")){
-                this.$store.dispatch("getPopInfo",{"param":this.getParam({
+                this.$store.dispatch("getPopInfo",{"param":this.getCreateParam({
                     isSub:isSub,
                     id:nodeId
                 })}).then(
-                    hj.request.success(this.getPopDataSuccess,this.requestFail,{title:title,pop:pop,nodeName:nodeName}),
+                    hj.request.success(this.getPopDataSuccess,this.requestFail,{title:title,pop:pop,nodeName:nodeName,isSub:isSub}),
                     hj.request.error("网络原因请求弹框数据失败")
                 )
             }
@@ -80,22 +79,34 @@ export default {
 
         /*************请求参数相关方法 start*************/
 
-        getEditParam:function(){
+        getEditParam:function(nodeId){
+            var nodeInfo=hj.getDataById(nodeId);
             return {
-                'isMock':true,
+                'isMock':false,
                 'mockUrl':"index-mock.js?case=case3",
-                'url':"crm/org/GetNodeExtAttr",
-                "id": 0,
-                "parentId": 0,
-                "nodeName": "string",
-                "isActive": true,
-                "createuserId": 0,
-                "nodeAttr": {},
-                "isSub”": true
+                'url':"crm/OrganizationV2/GetNodeExtAttr",
+                'type':'get',
+                'data':{
+                    "nodeId": nodeId,//新增的时候nodeId为0
+                    "parentId": nodeInfo.info.parentId,//父级节点id
+                    "isSub": false//是否是新增子级
+                }
             }
         },
 
-        getParam:function(opts){
+        getDeleteParam:function(nodeId){
+            return {
+                'isMock':false,
+                'mockUrl':"index-mock.js?case=case2",
+                'url':"crm/OrganizationV2/deleteNode",
+                'type':"post",
+                'data':{
+                    'nodeId':nodeId//节点id
+                }
+            };
+        },
+
+        getCreateParam:function(opts){
             return {
                 'isMock':false,
                 'mockUrl':"index-mock.js?case=case3",
@@ -112,11 +123,11 @@ export default {
         //获取右侧节点信息请求所需要的参数
         getContetnParam:function(id){
             return {
-                isMock:false,
-                mockUrl:"index-mock.js?case=case1",
-                type:"get",
-                url:"crm/OrganizationV2/GetNodeInfo",
-                data:{nodeId:id}//节点id
+                'isMock':false,
+                'mockUrl':"index-mock.js?case=case1",
+                'type':"get",
+                'url':"crm/OrganizationV2/GetNodeInfo",
+                'data':{nodeId:id}//节点id
             };
         },
 
@@ -127,22 +138,11 @@ export default {
                 'url':"crm/OrganizationV2/CheckChild",
                 'type':'get',
                 "data":{
-                    nodeid:nodeId
+                    'nodeid':nodeId
                 }
             }
         },
-
-        getDeleteParam:function(nodeId){
-            return {
-                isMock:false,
-                mockUrl:"index-mock.js?case=case2",
-                url:"crm/OrganizationV2/deleteNode",
-                type:"post",
-                data:{
-                    nodeId:nodeId//节点id
-                }
-            };
-        },
+        
 
         /*************请求参数相关方法 end*************/
 
@@ -151,11 +151,17 @@ export default {
 
         //初始化请求成功后的render函数
         render:function(rst){
-            this.$store.commit({
-                type:"initDetail",
-                data:rst.Data||{},
-                store:this.$store
-            });
+            if(rst.Data&&rst.Status==0){
+                hj.setDataById(rst.Data.info.id,rst.Data);//保存数据到localstorage里面，后面统一从这里获取数据
+                rst.Data.btns=rst.Data.btns||[];//以防template报错
+                this.$store.commit({
+                    type:"initDetail",
+                    data:rst.Data||{},
+                    store:this.$store
+                });
+            }else{
+                console.log("获取节点数据失败");
+            }
         },
 
         //点击新增按钮成功获取数据
@@ -175,7 +181,8 @@ export default {
                             type:"submit",//提交
                             txt:"保存",
                             callback:function(e){
-                                this.saveUnitAction(e,true);
+                                var popInfo=this.getPopInfo(false,opts.isSUb);
+                                this.saveUnitAction(e,popInfo);
                             }.bind(opts.pop)
                         },{
                             type:"cancel",//取消
@@ -238,7 +245,7 @@ export default {
 
         //点击编辑获取数据成功
         getEditUnitSuccess:function(rst,opts){
-            if(!rst.Data){
+            if(!rst.Data||rst.Status!=0){
                 this.showAlert({
                     title:"提示",
                     message:rst.Message||"获取数据失败",
@@ -253,7 +260,8 @@ export default {
                             type:"submit",//提交
                             txt:"保存",
                             callback:function(e){
-                                this.saveUnitAction(e);
+                                var popInfo=this.getPopInfo(true,false);
+                                this.saveUnitAction(e,popInfo);
                             }.bind(opts.pop)
                         },{
                             type:"cancel",//取消
@@ -270,6 +278,19 @@ export default {
                         }
                     }
                 });
+            }
+        },
+
+        /* unfinish
+         isEdit:是否是编辑框
+         isSub：是否是新增子节点
+         */
+        getPopInfo:function(isEdit,isSub){
+            return {
+                isSub:false,
+                id:hj.spaIns.getCurrentScene(),
+                code:43,
+                value:4354
             }
         },
 

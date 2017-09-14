@@ -695,7 +695,7 @@
 	// Request  {
 	//   "nodeId": 0,//新增的时候nodeId为0
 	//   "parentId": 0,//父级节点id
-	//   "isSub”": true//是否是新增子级
+	//   "isSub": true//是否是新增子级
 	// }
 	// type:Get
 	// url:http://local.backend.hujiang.com/crm/OrganizationV2/GetNodeExtAttr
@@ -717,6 +717,7 @@
 						"id": 1,//和下级做级联
 						"parentId": null,//和上级做级联
 						"editable": true,
+						// "needHide":true,//这个后期添加
 						"data": [{
 							"id": 2,
 							"value": 1,

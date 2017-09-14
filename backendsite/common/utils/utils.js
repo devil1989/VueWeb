@@ -12,7 +12,6 @@ import Ajax from "./ajax.js"
 var utils=(function(w) {
   var toString = Object.prototype.toString;
 
-
   var Obj = {
 
   	ajax:Ajax,
@@ -342,7 +341,37 @@ var utils=(function(w) {
           }
       }
       return self;
+    },
+
+    /**********************localstorage操作函数 start**********************/
+
+    //通过节点的id，找到对应它的所有数据（每次请求以后，需要把数据存到localstorage里面，localstorage存的场景数量有限制，超出限制会删除之前的场景，同时清楚场景对应的localstorage）
+    getDataById: function(id, sceneName) {
+      var key = (sceneName || hj.spaIns.defaultSceneType) + "-" + id;
+      var val = localStorage[key];
+      return val.match(/\{[\s\S]*\}/) ? hj.parseJSON(val) : val;
+    },
+    removeDataById: function(id, sceneName) {
+      if (!id) {
+        localStorage.clear()
+      } else {
+        var key = (sceneName || hj.spaIns.defaultSceneType) + "-" + id;
+        localStorage.removeItem(key);
+        localStorage[key] = '';
+      }
+    },
+    setDataById: function(id, obj, sceneName) {
+      var key = (sceneName || hj.spaIns.defaultSceneType) + "-" + id;
+      localStorage[key] = typeof obj == "object" ? JSON.stringify(obj) : obj;
+    },
+
+    formatLocalStorage: function(cutArray) {
+      (cutArray || []).forEach(function(id) {
+        removeDataById(id)
+      });
     }
+
+    /**********************localstorage操作函数 end**********************/
 
   };
 
@@ -350,7 +379,6 @@ var utils=(function(w) {
 
   return w;
 })(window);
-
 
 
 //拓展日期

@@ -27,7 +27,7 @@
 		<!-- 不管是新增还是编辑，都是直接展示文本，不能编辑内容 end -->
 		
 		<!-- 这里放拓展信息 start -->
-		<li v-for="item in data.content.contentInfo.metaData.extendAttrs" >
+		<li v-for="item in data.content.contentInfo.metaData.extendAttrs" v-if="!item.needHide" >
 			<span class="content-key-name">{{item.name}} :</span>
 			
 			<!-- 纯文本 -->
@@ -38,7 +38,8 @@
 			<!-- 下拉菜单 -->
 			<div class="content-value" v-else-if="item.type=='dropdownList' " >
 				<select name="content-func-type"  class="content-func-type"  @change="selectedItem" :data-id="item.id">
-					<option  v-for="unit in item.data" :data-value="unit.value" :data-optionid="unit.id" v-show="!unit.isHide" :selected="unit.isSelected?'selected':'' " >{{unit.text}}</option>
+					<option style="display:none;">请您选择</option>
+					<option  v-for="unit in item.data" :data-val="unit.value" :data-optionid="unit.id" v-show="!unit.isHide" :selected="unit.isSelected?'selected':'' " >{{unit.text}}</option>
 				</select>
 			</div>
 			

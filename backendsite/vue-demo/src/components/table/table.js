@@ -194,7 +194,7 @@ export default {
 
                 //重新渲染table
                 this.init({
-                    id:hj.spaIns.getScene().currentScene,
+                    id:hj.spaIns.getCurrentScene(),
                     pageNum:targetPageNum
                 });
 				// this.$store.commit("jumpToTargetPage",{

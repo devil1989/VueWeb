@@ -25,7 +25,7 @@ var combine={
         "Cont":SchoolTable
     },
 
-    //this.$store.state.scenes变回会触发updated函数，执行该函数来重新渲染所有场景（这个不好，不应该渲染所有场景，后续修改）
+    //this.$store.state.scenes改变会触发updated函数，执行该函数来重新渲染所有场景（这个不好，不应该渲染所有场景，后续修改）
     updated:function(){
         var stateData=this.$data;
         if(this.$data.hasInit&&this.$data.data&&this.$data.data.sceneList){
