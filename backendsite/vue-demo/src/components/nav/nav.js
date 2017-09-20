@@ -52,7 +52,7 @@ export default {
                     }
                     isCurrent = (currentScene==ele.id )?" current-nav":"";//url没有sceneid，默认都选择第一个否则根据url还判断选中哪个
 
-                    isFold = ele.isFold?"fold-item":"unfold-item";
+                    isFold = ele.isFold?"fold-item":"unfold-item";//后端没下发，所以都展开
                     activeClass=ele.isActive?"":" unactive"
 
                     htmlStr+='<li class="'+liClass+' '+isFold+(!hasChild?" have-no-child":"")+activeClass+'">'+
@@ -126,6 +126,7 @@ export default {
         formatData:function(nodeList){
             var self=this;
             nodeList.forEach(function(ele,idx,input){
+                input[idx].isFold=(input[idx].isFold==undefined)?true:input[idx].isFold;//默认为折叠
                 var hasChild=input[idx].children&&input[idx].children.length;//没有子节点的时候，不需要展示+号
                 if(hasChild){
                     if(!input[idx].isActive){//禁用所有子元素
@@ -142,6 +143,7 @@ export default {
             var target=e.target;
             return !hj.hasClass(target,"unactive");
         },
+
         //绑定事件
         bindEvents:function(){
             var ele=document.querySelector(".internet-school-nav");
@@ -163,6 +165,7 @@ export default {
                 this.update();
             }
         },
+        
         toggleScene:function(e){
             var target=e.target;
             if(hj.hasClass(target,"js_current_scene")){

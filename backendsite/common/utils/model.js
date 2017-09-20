@@ -11,27 +11,27 @@
 	var url=location.host||"";
 	if(url.indexOf("localhost:")==0){
 		hj.env="dev";//本地开发环境
-		hj.baseUrl="http://local.backend.hujiang.com/";
+		hj.baseUrl="http://local.backend.baidu.com/";
 	}
-	else if(url.match(/qa\d{1}backend\.hujiang.com/gi)){
+	else if(url.match(/qa\d{1}backend\.baidu.com/gi)){
 		hj.env="branch";//分支环境
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="192.168.0.1";
 	}
-	else if(url.indexOf("qa.backend.hujiang.com")!=-1){
+	else if(url.indexOf("qa.backend.baidu.com")!=-1){
 		hj.env="qa";//测试环境
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="192.168.0.1";
 	}
-	else if(url.indexOf("yz.backend.hujiang.com")!=-1){
+	else if(url.indexOf("yz.backend.baidu.com")!=-1){
 		hj.env="yz";//验证环境（生产环境数据，数据和线上一样）
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="192.168.0.1";
 	}
-	else if(url.indexOf("backend.hujiang.com")==0){
+	else if(url.indexOf("backend.baidu.com")==0){
 		hj.env="online";//生产环境（线上环境）
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="192.168.0.1";
 	}
 	else{
 		hj.env="dev";//本地开发环境
-		hj.baseUrl="192.168.132.23";
+		hj.baseUrl="192.168.0.1";
 	}
 })();
 

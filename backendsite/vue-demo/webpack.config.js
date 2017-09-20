@@ -130,8 +130,8 @@ var commonConfig = {
             {
                 test: /\.(scss|sass|css)$/,  //.scss|sass|css文件使用 style-loader css-loader 和 sass-loader 来编译处理
                 loader: extraSass.extract({//如果js中require了多个css文件，nameExtractTextPlugin会把多个css文件合并成一个，这个css是否压缩，主要看use里面的第一个匹配项的设置是否压缩
-                    fallback: "style-loader",//!postcss-loader
-                    use: [{
+                    fallback: "style-loader",//编译后用什么loader来提取css文件
+                    use: [{//需要什么样的loader去编译文件
                         loader:"css-loader",//"css-loader!sass-loader?sourceMap"
                         options:{
                             minimize: isDev?false:true //.css文件的css压缩

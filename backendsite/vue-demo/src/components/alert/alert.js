@@ -68,7 +68,6 @@ var Alert={
             });
         },
 
-        //unfinish
         destroy:function(){
 
         },

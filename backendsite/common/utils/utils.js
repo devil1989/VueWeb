@@ -57,47 +57,42 @@ var utils=(function(w) {
             2.1有新增属性 ： this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
             2.2删除属性直接忽略，一般不会删除属性 ok
             2.3改变属性值的时候（如果改变了值得类型）
-                2.3.1：基本类型改为引用类型 , 直接this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 }) ok
+                2.3.1：基本类型改为引用类型 , 直接修改 ok
                 2.3.2：引用类型改为基本类型 , 直接修改（在template中，必须用v-if判断是否存在对应值是否存在） ok
                 2.3.3：基本类型改为基本类型 ， 直接修改 ok
                 2.3.4：引用类型改为引用类型 ， 递归调用，最后肯定是基本类型改为基本类型或者基本类型改为引用类型
-
+                
+                //这是更具业务的特殊处理：得仔细查看
+                2.3.5：function虽然是引用类型，但是按照值类型做替换操作，不需要递归调用
+                2.3.6：对象里面的数据，新对象只是替换旧对象的值，旧对象有但是新对象没有的值，就沿用旧对象
+                2.3.7：数组里面的数据，如果新数组长度小于旧数组，就把久数组截断到新数组长度，不沿用就数组的数据
       缺陷：不支持“正则，日期，函数”的深度克隆
     */
     deepExtend: function(originObj, targetObj) {
-      function isObject(obj) {
+      var getTypeFunc=Object.prototype.toString;
+      function isObject(obj) {//这里没把function算进来，因为function在这里只要直接赋值，不需要再递归调用
         var type = typeof obj;
-        return (type == "object" && obj != null) || type == "function";
+        return (type == "object" && obj != null) ;//|| type == "function"
       }
-      if (isObject(originObj)) {//引用类型被替换
-
-        if (isObject(targetObj)) {//引用类型被引用类型替换
+      if (isObject(originObj)&&isObject(targetObj)) {//引用类型被引用类型替换
           for (var key in targetObj) {
             if (targetObj.hasOwnProperty(key)) {
-              var value = targetObj[key];
-              var originVal = originObj[key];
-              if (isObject(originVal)) { //引用类型被替换
 
-                if (isObject(value)) { //对象赋值对象
-                  originVal = hj.deepExtend(originVal, value);
-                } else { //赋值是基础类型，
-                  originVal = value; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
+              //都是引用类型&&类型相同才做替换
+              if (isObject(originObj[key])&&isObject(targetObj[key])&&getTypeFunc.call(originObj[key])===getTypeFunc.call(targetObj[key])) { //引用类型引用类型替换
+                
+                if(getTypeFunc.call(originObj[key])==="[object Array]"&&originObj[key].length>targetObj[key].length){//都是数组，得直接截取原来的
+                  originObj[key].length=targetObj[key].length;//截断原来的数组，把多出来的删除
                 }
-              } else { //简单类型被替换,说明是最后一层了
-                originObj = Object.assign({}, originObj, targetObj);
+                originObj[key] = hj.deepExtend(originObj[key], targetObj[key]);
+              } else {
+                originObj[key]=targetObj[key];//千万别脑残地写originVal=value;
               }
             }
           }
-        } else {//引用类型被简单类型替换
-          if(targetObj){
-            originObj = targetObj; //原来数据是对象，新数据改为数值（例如ajax请求原来有data对象，请求失败的时候data对象为null，这时候template中必须做判断值是否存在处理）
-          }
-          
-        }
-      } else {//简单类型被替换
+      }else{
         originObj = targetObj;
       }
-
       return originObj;
     },
 

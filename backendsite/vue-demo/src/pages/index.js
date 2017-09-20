@@ -286,4 +286,3 @@ export default {}
 // })
 // </script>
 
-//unfinish： vue组件定义时的数据结构（和创建vue对象一样，多了props属性,少了el）
